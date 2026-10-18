@@ -1,0 +1,485 @@
+/**
+ * Hero landscape — an industrial Dhaka river bend in the brand's black / cream / red.
+ *
+ * Composition: the hero text sits in the open sky at the centre. The river winds up from the
+ * foreground to the horizon; the industrial bank (factory, warehouse) rises on the left and the
+ * city bank (towers, mosque, port crane) on the right, so both sides of the screen are used.
+ * The Agentiq mark floats over the river — the *core* — and thin cable-like red spokes run from it
+ * to every part of the business.
+ *
+ * Plain SVG + CSS, so it's a server component with no JS cost. Tall elements (chimneys, towers)
+ * are kept outside the text column (roughly x 420–1180) so they never sit behind copy.
+ */
+
+const FAR = '#DDDDCF';
+const MID = '#B4B4AA';
+const PLANT = '#2A2A2F';
+const PLANT_LIGHT = '#3C3C43';
+const DARK = '#17171A';
+const RED = '#E84F3D';
+const PAPER = '#FCFCF4';
+
+const HORIZON = 566;
+const HUB = { x: 800, y: 660, size: 134 };
+
+function rng(seed: number) {
+  let s = seed;
+  return () => (s = (s * 16807) % 2147483647) / 2147483647;
+}
+
+// [x, width, height]
+const horizonCity: [number, number, number][] = [];
+{
+  const r = rng(5);
+  for (let x = -320; x < 2000; ) {
+    const w = 22 + Math.floor(r() * 26);
+    let h = 14 + Math.floor(r() * 36);
+    if (x > 680 && x < 930) h = Math.min(h, 12);
+    horizonCity.push([x, w, h]);
+    x += w + 2 + Math.floor(r() * 6);
+  }
+}
+const rightCity: [number, number, number][] = [];
+{
+  const r = rng(11);
+  for (let x = 1000; x < 1800; ) {
+    const w = 34 + Math.floor(r() * 28);
+    let h = x < 1190 ? 28 + Math.floor(r() * 36) : 90 + Math.floor(r() * (90 + (x - 1190) * 0.26));
+    if (x > 1200 && r() > 0.82) h += 50;
+    rightCity.push([x, w, h]);
+    x += w + 3 + Math.floor(r() * 8);
+  }
+}
+const midRight: [number, number, number][] = [];
+{
+  const r = rng(23);
+  for (let x = 1030; x < 1800; ) {
+    const w = 50 + Math.floor(r() * 30);
+    midRight.push([x, w, x < 1190 ? 36 + Math.floor(r() * 44) : 70 + Math.floor(r() * 90)]);
+    x += w + 6 + Math.floor(r() * 14);
+  }
+}
+const midLeft: [number, number, number][] = [];
+{
+  const r = rng(37);
+  for (let x = -120; x < 380; ) {
+    const w = 38 + Math.floor(r() * 24);
+    midLeft.push([x, w, 66 + Math.floor(r() * 90)]);
+    x += w + 5 + Math.floor(r() * 12);
+  }
+}
+
+function tallest(list: [number, number, number][], from: number, to: number, base: number) {
+  const inRange = list.filter(([x, w]) => x >= from && x + w <= to);
+  const [x, w, h] = inRange.reduce((a, b) => (b[2] > a[2] ? b : a));
+  return { x: x + w / 2, y: base - h - (h > 150 ? 22 : 0) };
+}
+const towerA = tallest(rightCity, 1250, 1420, 600);
+const towerB = tallest(rightCity, 1430, 1600, 600);
+
+type Node = { id: string; x: number; y: number; label: string; dx: number; dy: number; anchor: 'start' | 'end' | 'middle' };
+const nodes: Node[] = [
+  { id: 'inv', x: 120, y: 650, label: 'INVENTORY', dx: 0, dy: -18, anchor: 'middle' },
+  { id: 'prod', x: 341, y: 420, label: 'PRODUCTION', dx: -16, dy: 5, anchor: 'end' },
+  { id: 'proc', x: 476, y: 761, label: 'PROCUREMENT', dx: 0, dy: -20, anchor: 'middle' },
+  { id: 'book', x: 1250, y: 520, label: 'BOOKINGS', dx: 0, dy: -20, anchor: 'middle' },
+  { id: 'sup', x: towerA.x, y: towerA.y, label: 'SUPPORT', dx: 0, dy: -18, anchor: 'middle' },
+  { id: 'rep', x: towerB.x, y: towerB.y, label: 'REPORTING', dx: 0, dy: -18, anchor: 'middle' },
+  { id: 'log', x: 1051, y: 546, label: 'LOGISTICS', dx: 18, dy: -12, anchor: 'start' },
+];
+
+// a spoke hangs from the core like a cable: sagging below the straight line, so it never rises into the copy
+function spoke(n: Node) {
+  const dx = n.x - HUB.x;
+  const dy = n.y - HUB.y;
+  const dist = Math.hypot(dx, dy);
+  const mx = HUB.x + dx / 2;
+  const my = HUB.y + dy / 2;
+  const sag = n.y > HUB.y ? -dist * 0.1 : dist * 0.2;
+  return `M${HUB.x} ${HUB.y} Q${mx} ${my + sag} ${n.x} ${n.y}`;
+}
+
+function Palm({ x, y, s = 1, lean = 14 }: { x: number; y: number; s?: number; lean?: number }) {
+  const leaf = 'M0 0 C14 -17 42 -16 60 5 C42 -6 16 -4 0 0 Z';
+  const spread = [-62, -32, -4, 22];
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`} fill={DARK}>
+      <path d={`M-2 0 Q${lean * 0.15} -46 ${lean} -88`} stroke={DARK} strokeWidth="5" fill="none" strokeLinecap="round" />
+      <g transform={`translate(${lean} -88)`}>
+        {spread.map((a) => (
+          <g key={a}>
+            <path d={leaf} transform={`rotate(${a})`} />
+            <path d={leaf} transform={`scale(-1 1) rotate(${a})`} />
+          </g>
+        ))}
+      </g>
+    </g>
+  );
+}
+
+function Hut({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <rect x="0" y="-18" width="28" height="18" fill={DARK} />
+      <path d="M-5 -18 L14 -36 L33 -18 Z" fill={PLANT_LIGHT} />
+      <rect x="11" y="-12" width="6" height="12" fill={PAPER} opacity="0.55" />
+    </g>
+  );
+}
+
+function Boat({
+  x,
+  y,
+  s = 1,
+  kind,
+  delay = 0,
+}: {
+  x: number;
+  y: number;
+  s?: number;
+  kind: 'canopy' | 'sail' | 'cargo';
+  delay?: number;
+}) {
+  return (
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <g className="svg-fx animate-bob" style={{ animationDelay: `${delay}s` }}>
+        {kind === 'sail' && (
+          <>
+            <line x1="75" y1="0" x2="75" y2="-86" stroke={DARK} strokeWidth="2.5" />
+            <path d="M79 -84 L79 -8 L134 -8 Z" fill={PAPER} stroke={DARK} strokeWidth="1.6" />
+            <path d="M71 -70 L71 -8 L28 -8 Z" fill={PAPER} stroke={DARK} strokeWidth="1.6" />
+          </>
+        )}
+        {kind === 'canopy' && (
+          <g>
+            <path d="M34 0 C34 -34 116 -34 116 0 Z" fill={PLANT_LIGHT} />
+            <path d="M54 0 C54 -22 62 -30 75 -31 M96 0 C96 -22 88 -30 75 -31" stroke={PAPER} strokeOpacity="0.25" strokeWidth="1.5" fill="none" />
+          </g>
+        )}
+        {kind === 'cargo' && (
+          <g>
+            <rect x="24" y="-26" width="34" height="26" fill={PLANT_LIGHT} />
+            <rect x="60" y="-34" width="34" height="34" fill={PLANT} />
+            <rect x="96" y="-22" width="30" height="22" fill={PLANT_LIGHT} />
+            <rect x="60" y="-34" width="34" height="5" fill={RED} />
+          </g>
+        )}
+        <path d="M-4 -10 C20 -2 50 0 75 0 C100 0 130 -2 154 -10 C148 18 112 30 75 30 C38 30 2 18 -4 -10 Z" fill={DARK} />
+      </g>
+    </g>
+  );
+}
+
+function ripple(y: number, x0: number, n: number) {
+  let d = `M${x0} ${y} q22 -5 44 0`;
+  for (let i = 0; i < n; i++) d += ' t44 0';
+  return d;
+}
+
+// banks are listed far → near; a Catmull-Rom pass turns them into smooth curves so the river meanders
+const leftBank: [number, number][] = [[745, 566], [752, 606], [742, 648], [640, 698], [450, 758], [260, 830], [140, 900]];
+const rightBank: [number, number][] = [[835, 566], [908, 606], [982, 648], [968, 700], [964, 760], [1034, 832], [1190, 900]];
+
+function curve(points: [number, number][]) {
+  let d = '';
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] ?? points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] ?? p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0]} ${c1[1]} ${c2[0]} ${c2[1]} ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+const RIVER =
+  `M${leftBank[0][0]} ${leftBank[0][1]}` +
+  curve(leftBank) +
+  ` L${rightBank[rightBank.length - 1][0]} ${rightBank[rightBank.length - 1][1]}` +
+  curve([...rightBank].reverse()) +
+  ' Z';
+
+export function HeroScene({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 1600 900"
+      preserveAspectRatio="xMidYMax slice"
+      className={className}
+      role="img"
+      aria-label="Illustration: a river winding through an industrial Dhaka landscape — factory and warehouse on the left bank, towers, a mosque and a port crane on the right. The Agentiq mark floats over the river and is wired to every part of the business."
+    >
+      <defs>
+        <linearGradient id="land" gradientUnits="userSpaceOnUse" x1="0" y1="560" x2="0" y2="900">
+          <stop offset="0" stopColor="#D6D6C9" />
+          <stop offset="0.38" stopColor="#8E8E88" />
+          <stop offset="1" stopColor="#16161A" />
+        </linearGradient>
+        <linearGradient id="water" gradientUnits="userSpaceOnUse" x1="0" y1="566" x2="0" y2="900">
+          <stop offset="0" stopColor="#F4F4E8" />
+          <stop offset="1" stopColor="#E4E4D3" />
+        </linearGradient>
+        <clipPath id="riverClip">
+          <path d={RIVER} />
+        </clipPath>
+        <mask id="hubcut" maskUnits="userSpaceOnUse" x="300" y="300" width="1000" height="1000">
+          <rect x="300" y="300" width="1000" height="1000" fill="#fff" />
+          <polygon points="560,1153 920,793 987,793 627,1153" fill="#000" />
+          <circle cx="980" cy="763" r="88" fill="#000" />
+        </mask>
+      </defs>
+
+      {/* horizon skyline */}
+      <g fill={FAR}>
+        {horizonCity.map(([x, w, h], i) => (
+          <rect key={i} x={x} y={HORIZON - h + 6} width={w} height={h} />
+        ))}
+      </g>
+
+      {/* right bank: far towers */}
+      <g fill={FAR}>
+        {rightCity.map(([x, w, h], i) => (
+          <g key={i}>
+            <rect x={x} y={600 - h} width={w} height={h} />
+            {h > 150 && <rect x={x + w / 2 - 1} y={600 - h - 22} width="2" height="22" />}
+          </g>
+        ))}
+      </g>
+
+      {/* left bank: far blocks */}
+      <g fill={MID}>
+        {midLeft.map(([x, w, h], i) => (
+          <rect key={i} x={x} y={604 - h} width={w} height={h} />
+        ))}
+      </g>
+
+      {/* land: light at the horizon, deepening toward us */}
+      <path
+        d="M-1400 574 Q-600 560 0 570 Q300 556 560 566 L760 566 L868 566 Q1200 558 1600 566 Q2200 560 3000 572 V900 H-1400 Z"
+        fill="url(#land)"
+      />
+
+      {/* right bank: mid blocks, mosque */}
+      <g fill={MID}>
+        {midRight.map(([x, w, h], i) => (
+          <rect key={i} x={x} y={660 - h} width={w} height={h} />
+        ))}
+      </g>
+      <g fill={MID} transform="translate(231 244) scale(1.3)">
+        <rect x="745" y="270" width="80" height="42" />
+        <rect x="765" y="250" width="40" height="22" />
+        <path d="M759 250 A26 26 0 0 1 811 250 Z" />
+        <rect x="784" y="204" width="2" height="22" />
+        <rect x="738" y="216" width="8" height="96" />
+        <rect x="824" y="216" width="8" height="96" />
+        <path d="M736 216 L742 200 L748 216 Z" />
+        <path d="M822 216 L828 200 L834 216 Z" />
+      </g>
+
+      {/* the river */}
+      <path d={RIVER} fill="url(#water)" />
+      <g clipPath="url(#riverClip)">
+        {Array.from({ length: 22 }).map((_, i) => (
+          <path
+            key={i}
+            d={ripple(580 + i * 15, 300 + ((i * 53) % 130), 26)}
+            fill="none"
+            stroke="#C6C6B6"
+            strokeWidth="1.2"
+            opacity={0.35 + i * 0.03}
+          />
+        ))}
+      </g>
+
+      {/* left bank: industrial park */}
+      <g>
+        {/* chimneys sit behind the plant */}
+        <rect x="330" y="420" width="22" height="284" fill={PLANT} />
+        <rect x="330" y="420" width="22" height="10" fill={RED} />
+        <rect x="366" y="462" width="20" height="242" fill={PLANT} />
+        <rect x="366" y="462" width="20" height="9" fill={RED} />
+        {[0, 2.2, 4.4].map((d) => (
+          <circle key={d} cx="341" cy="412" r="11" fill="#CDCDBF" className="svg-fx animate-smoke" style={{ animationDelay: `${d}s` }} />
+        ))}
+        {[1.1, 3.3].map((d) => (
+          <circle key={d} cx="376" cy="454" r="9" fill="#CDCDBF" className="svg-fx animate-smoke" style={{ animationDelay: `${d}s` }} />
+        ))}
+        {/* main plant, sawtooth roof */}
+        <path
+          d="M226 704 V620 V596 L266 620 V596 L306 620 V596 L346 620 V596 L386 620 V596 L426 620 V596 L466 620 V704 Z"
+          fill={PLANT}
+        />
+        {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          <rect key={i} x={240 + i * 32} y="648" width="20" height="11" fill={PAPER} opacity="0.55" />
+        ))}
+        <rect x="240" y="676" width="52" height="28" fill={PAPER} opacity="0.14" />
+        {/* warehouse */}
+        <path d="M36 724 V678 L116 650 L196 678 V724 Z" fill={PLANT} />
+        {[0, 1, 2].map((i) => (
+          <rect key={i} x={52 + i * 46} y="694" width="32" height="30" fill={PAPER} opacity="0.18" />
+        ))}
+        {/* pipe rack + tanks */}
+        <rect x="466" y="676" width="110" height="5" fill={PLANT_LIGHT} />
+        {[476, 520, 566].map((px) => (
+          <rect key={px} x={px} y="676" width="4" height="28" fill={PLANT_LIGHT} />
+        ))}
+        {[
+          [478, 50, 72],
+          [532, 46, 56],
+        ].map(([tx, tw, th], i) => (
+          <g key={i}>
+            <rect x={tx} y={704 - th} width={tw} height={th} fill={PLANT} />
+            <ellipse cx={tx + tw / 2} cy={704 - th} rx={tw / 2} ry="6" fill={PLANT_LIGHT} />
+          </g>
+        ))}
+        <Hut x={64} y={778} s={1.2} />
+        <Hut x={112} y={782} s={1.05} />
+        {[
+          [-34, 800, 1.2, 10],
+          [214, 748, 0.9, -8],
+          [160, 790, 1.0, 8],
+        ].map(([px, py, ps, pl], i) => (
+          <Palm key={i} x={px} y={py} s={ps} lean={pl} />
+        ))}
+      </g>
+
+      {/* right bank: port crane, containers, village */}
+      <g>
+        <g transform="translate(0 26)">
+        {[
+          [1104, 686, PLANT_LIGHT],
+          [1140, 686, RED],
+          [1176, 686, PLANT],
+          [1122, 666, PLANT],
+          [1158, 666, PLANT_LIGHT],
+        ].map(([cx, cy, col], i) => (
+          <rect key={i} x={cx as number} y={cy as number} width="32" height="20" fill={col as string} stroke={PAPER} strokeOpacity="0.25" />
+        ))}
+        <g fill="none" stroke={PLANT} strokeWidth="6">
+          <path d="M1026 708 L1034 568 M1076 708 L1068 568" />
+          <path d="M1030 640 L1072 640 M1032 600 L1070 600" strokeWidth="3" />
+          <path d="M920 556 H1180" strokeWidth="9" />
+          <path d="M1051 556 L1051 520 L930 556 M1051 520 L1160 556" strokeWidth="3" />
+        </g>
+        <rect x="1036" y="540" width="30" height="24" fill={PLANT} />
+        <g className="svg-fx animate-bob">
+          <path d="M954 560 V588" stroke={PLANT} strokeWidth="2.5" />
+          <rect x="936" y="588" width="38" height="22" fill={RED} />
+        </g>
+        </g>
+        <Hut x={1296} y={760} s={1.2} />
+        <Hut x={1346} y={764} s={1.05} />
+        <Hut x={1394} y={760} s={1.2} />
+        {[
+          [1250, 752, 1.05, 10],
+          [1480, 746, 1.3, -10],
+          [1560, 754, 0.95, 8],
+          [1450, 790, 0.9, 6],
+        ].map(([px, py, ps, pl], i) => (
+          <Palm key={i} x={px} y={py} s={ps} lean={pl} />
+        ))}
+      </g>
+
+      {/* boats */}
+      <Boat x={360} y={812} s={1.5} kind="cargo" delay={0} />
+      <Boat x={888} y={768} s={0.5} kind="sail" delay={-1.4} />
+      <Boat x={830} y={730} s={0.5} kind="canopy" delay={-2.6} />
+      <Boat x={884} y={632} s={0.28} kind="sail" delay={-0.8} />
+
+      {/* birds */}
+      <g fill="none" stroke={DARK} strokeWidth="2" strokeLinecap="round" opacity="0.55">
+        <path d="M196 232 q8 -8 16 0 q8 -8 16 0" />
+        <path d="M262 206 q6 -6 12 0 q6 -6 12 0" />
+        <path d="M1372 182 q8 -8 16 0 q8 -8 16 0" />
+        <path d="M1436 214 q6 -6 12 0 q6 -6 12 0" />
+      </g>
+
+      {/* spokes: cables from the core to every part of the business */}
+      <g fill="none" stroke={RED} strokeWidth="1.8" strokeLinecap="round" strokeDasharray="6 6">
+        {nodes.map((n) => (
+          <path key={n.id} d={spoke(n)} className="animate-dash" />
+        ))}
+      </g>
+      {nodes.map((n) => (
+        <g key={n.id}>
+          <circle cx={n.x} cy={n.y} r="6" fill="none" stroke={RED} strokeWidth="1.5" className="svg-fx animate-pulseRing" />
+          <circle cx={n.x} cy={n.y} r="6.5" fill={RED} stroke={PAPER} strokeWidth="2.5" />
+          <text
+            x={n.x + n.dx}
+            y={n.y + n.dy}
+            textAnchor={n.anchor}
+            className="hidden fill-ink font-mono sm:block"
+            style={{ fontSize: 15, letterSpacing: '0.14em', paintOrder: 'stroke', stroke: PAPER, strokeWidth: 6, strokeLinejoin: 'round' }}
+          >
+            {n.label}
+          </text>
+        </g>
+      ))}
+
+      {/* the Agentiq core: the actual mark, floating over the river */}
+      <ellipse cx={HUB.x} cy={HUB.y + HUB.size / 2 + 30} rx="64" ry="7" fill={DARK} opacity="0.1" />
+      {[0, 1, 2].map((i) => (
+        <rect
+          key={i}
+          x={HUB.x - 40 + i * 12}
+          y={HUB.y + HUB.size / 2 + 44 + i * 12}
+          width={80 - i * 24}
+          height="4"
+          rx="2"
+          fill={RED}
+          opacity={0.45 - i * 0.12}
+        />
+      ))}
+      <g className="svg-fx animate-floaty">
+        <rect
+          x={HUB.x - HUB.size / 2 - 4}
+          y={HUB.y - HUB.size / 2 - 4}
+          width={HUB.size + 8}
+          height={HUB.size + 8}
+          rx="26"
+          fill="none"
+          stroke={RED}
+          strokeWidth="1.6"
+          className="svg-fx animate-pulseRing"
+        />
+        <svg
+          x={HUB.x - HUB.size / 2}
+          y={HUB.y - HUB.size / 2}
+          width={HUB.size}
+          height={HUB.size}
+          viewBox="374 374 820 820"
+          overflow="visible"
+        >
+          <rect x="388" y="388" width="792" height="792" rx="52" fill={PAPER} stroke={DARK} strokeWidth="21" />
+          <g mask="url(#hubcut)" fill={DARK}>
+            <rect x="796" y="498" width="244" height="550" rx="122" />
+            <line x1="615" y1="925" x2="918" y2="622" stroke={DARK} strokeWidth="250" strokeLinecap="round" />
+          </g>
+          <circle cx="980" cy="763" r="66" fill={RED} />
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="0 980 763" to="360 980 763" dur="14s" repeatCount="indefinite" />
+            <line x1="985" y1="766" x2="1033" y2="814" stroke={PAPER} strokeWidth="22" strokeLinecap="round" />
+          </g>
+        </svg>
+      </g>
+      <text
+        x={HUB.x}
+        y={HUB.y + HUB.size / 2 + 104}
+        textAnchor="middle"
+        className="hidden fill-ink font-mono sm:block"
+        style={{ fontSize: 15.5, letterSpacing: '0.2em', fontWeight: 600 }}
+      >
+        AGENTIQ CORE
+      </text>
+      <text
+        x={HUB.x}
+        y={HUB.y + HUB.size / 2 + 126}
+        textAnchor="middle"
+        className="hidden fill-ink/55 font-mono sm:block"
+        style={{ fontSize: 12.5, letterSpacing: '0.18em' }}
+      >
+        BUILT FROM BANGLADESH · SERVING GLOBALLY
+      </text>
+    </svg>
+  );
+}

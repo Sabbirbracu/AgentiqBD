@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="374 374 820 820" fill="none">
+  <defs>
+    <mask id="c" maskUnits="userSpaceOnUse" x="300" y="300" width="1000" height="1000">
+      <rect x="300" y="300" width="1000" height="1000" fill="#fff"/>
+      <polygon points="560,1153 920,793 987,793 627,1153" fill="#000"/>
+      <circle cx="980" cy="763" r="88" fill="#000"/>
+    </mask>
+  </defs>
+  <rect x="374" y="374" width="820" height="820" rx="150" fill="#FCFCF4"/>
+  <rect x="388" y="388" width="792" height="792" rx="52" stroke="#0A0A0B" stroke-width="21"/>
+  <g mask="url(#c)" fill="#0A0A0B">
+    <rect x="796" y="498" width="244" height="550" rx="122"/>
+    <line x1="615" y1="925" x2="918" y2="622" stroke="#0A0A0B" stroke-width="250" stroke-linecap="round"/>
+  </g>
+  <circle cx="980" cy="763" r="66" fill="#E84F3D"/>
+  <line x1="985" y1="766" x2="1033" y2="814" stroke="#FCFCF4" stroke-width="22" stroke-linecap="round"/>
+</svg>
