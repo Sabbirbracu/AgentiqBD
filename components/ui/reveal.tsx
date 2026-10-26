@@ -10,17 +10,20 @@ export function Reveal({
   y = 28,
   className,
   as = 'div',
+  id,
 }: {
   children: ReactNode;
   delay?: number;
   y?: number;
   className?: string;
   as?: 'div' | 'li' | 'span';
+  id?: string;
 }) {
   const reduce = useReducedMotion();
   const Comp = motion[as];
   return (
     <Comp
+      id={id}
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}

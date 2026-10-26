@@ -1,17 +1,17 @@
 import { MapPin } from 'lucide-react';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
-import { missionGoals, values } from '@/lib/content';
+import { missionGoals, sectionNo, values } from '@/lib/content';
 
 export function Origin() {
   return (
-    <section id="company" className="relative overflow-hidden bg-paper py-24 sm:py-32">
+    <section id="about" className="relative overflow-hidden bg-paper py-24 sm:py-32">
       <div className="container-x">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
           <div>
             <SectionHeading
-              index="09"
-              label="Our story"
+              index={sectionNo('about')}
+              label="About"
               title={
                 <>
                   Built from Bangladesh.{' '}

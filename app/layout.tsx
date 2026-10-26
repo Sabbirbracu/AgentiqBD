@@ -1,28 +1,27 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import {
-  Bricolage_Grotesque,
-  Geist,
-  Geist_Mono,
-  Instrument_Serif,
-} from 'next/font/google';
+import { Besley, Geist_Mono, Poppins, Schibsted_Grotesk } from 'next/font/google';
 import { site } from '@/lib/content';
 
-const display = Bricolage_Grotesque({
+const display = Besley({
   subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
   variable: '--font-display',
   display: 'swap',
 });
-const sans = Geist({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
-const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
-const serif = Instrument_Serif({
+const poppins = Poppins({
   subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
-  variable: '--font-serif',
+  weight: ['500', '600', '700'],
+  variable: '--font-poppins',
   display: 'swap',
 });
-
+const sans = Schibsted_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 const title = 'Agentiq BD — Turn Complexity into Intelligence';
 
 export const metadata: Metadata = {
@@ -61,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${display.variable} ${sans.variable} ${mono.variable} ${serif.variable}`}
+      className={`${display.variable} ${sans.variable} ${mono.variable} ${poppins.variable}`}
     >
       <body>{children}</body>
     </html>

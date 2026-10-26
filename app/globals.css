@@ -44,12 +44,11 @@
     @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10;
   }
   .display {
-    @apply font-display tracking-tightest;
-    font-variation-settings: 'opsz' 96;
+    @apply font-display tracking-[-0.018em];
   }
-  /* Serif italic accent used inside headings */
+  /* Highlighted words inside headings: same typeface, brand colour (set by the caller) */
   .accent-serif {
-    @apply font-serif font-normal italic tracking-tight;
+    @apply font-display font-bold not-italic tracking-[-0.02em];
   }
   .hairline {
     @apply border-ink/10;
@@ -302,4 +301,47 @@
   .hero-fx *::after {
     animation: none !important;
   }
+}
+
+/* ───────────────────────── Agent visuals ─────────────────────────
+   Motion for components/brand/agent: progress bars in the control room, floating
+   confirmation cards, flowing connector dashes. Transform/opacity only; all off for
+   visitors who prefer reduced motion. */
+@keyframes cr-bar {
+  0% { transform: scaleX(0.08); }
+  70% { transform: scaleX(1); }
+  100% { transform: scaleX(1); opacity: 0.35; }
+}
+@keyframes cr-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes hub-flow {
+  to { stroke-dashoffset: -24; }
+}
+.cr-bar { animation: cr-bar 4.6s ease-in-out infinite; }
+.cr-float { animation: cr-float 6s ease-in-out infinite; }
+.hub-flow { animation: hub-flow 1.4s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cr-bar, .cr-float, .hub-flow { animation: none; }
+  .cr-bar { transform: scaleX(0.7); }
+}
+
+/* Showcase carousel: progress under the active screen chip. */
+@keyframes showcase-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* "Who we are": a light that runs down the spine between the sector cards. */
+@keyframes spine-run {
+  0% { top: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: calc(100% - 8px); opacity: 0; }
+}
+.spine-run { animation: spine-run 5.5s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .spine-run { animation: none; top: 40%; }
 }

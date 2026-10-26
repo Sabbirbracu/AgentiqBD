@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Plus } from 'lucide-react';
 import { SectionHeading } from '@/components/ui/section-heading';
-import { faqs } from '@/lib/content';
+import { faqs, sectionNo } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
 export function FAQ() {
@@ -13,7 +13,7 @@ export function FAQ() {
     <section id="faq" className="bg-paper-200/60 py-24 sm:py-32">
       <div className="container-x grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
         <SectionHeading
-          index="10"
+          index={sectionNo('faq')}
           label="FAQ"
           title={
             <>

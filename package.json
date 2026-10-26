@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "export:brand": "node scripts/export-brand.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -15,6 +16,7 @@
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "simple-icons": "^16.36.0",
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {

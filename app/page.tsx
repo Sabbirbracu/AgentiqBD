@@ -1,14 +1,15 @@
 import { Navbar } from '@/components/sections/navbar';
 import { Hero } from '@/components/sections/hero';
-import { Manifesto } from '@/components/sections/manifesto';
+import { WhoWeAre } from '@/components/sections/who-we-are';
+import { WorksWith } from '@/components/sections/works-with';
 import { Capabilities } from '@/components/sections/capabilities';
-import { AIEmployees } from '@/components/sections/ai-employees';
-import { Workflows } from '@/components/sections/workflows';
-import { BusinessSystems } from '@/components/sections/business-systems';
+import { Work } from '@/components/sections/work';
+import { Products } from '@/components/sections/products';
+import { CoreServices } from '@/components/sections/core-services';
 import { Industries } from '@/components/sections/industries';
-import { Approach } from '@/components/sections/approach';
+import { Testimonials } from '@/components/sections/testimonials';
 import { Principles } from '@/components/sections/principles';
-import { Origin } from '@/components/sections/origin';
+import { Approach } from '@/components/sections/approach';
 import { FAQ } from '@/components/sections/faq';
 import { Contact } from '@/components/sections/contact';
 import { Footer } from '@/components/sections/footer';
@@ -19,15 +20,16 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Manifesto />
+        <WhoWeAre />
         <Capabilities />
-        <AIEmployees />
-        <Workflows />
-        <BusinessSystems />
+        <WorksWith />
+        <Work />
+        <Products />
+        <CoreServices />
         <Industries />
-        <Approach />
+        <Testimonials />
         <Principles />
-        <Origin />
+        <Approach />
         <FAQ />
         <Contact />
       </main>

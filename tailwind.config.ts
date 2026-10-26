@@ -37,8 +37,8 @@ const config: Config = {
       },
       fontFamily: {
         display: ['var(--font-display)', 'system-ui', 'sans-serif'],
+        poppins: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
         mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
       letterSpacing: {

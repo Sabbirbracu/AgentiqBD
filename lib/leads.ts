@@ -1,8 +1,10 @@
 export type LeadPayload = {
+  /** Which route the enquiry came in on. */
+  kind: 'project' | 'partnership';
   name: string;
   email: string;
-  company: string;
-  interests: string[];
+  /** Service needed (project) or partner type (partnership). */
+  topic: string;
   message: string;
 };
 

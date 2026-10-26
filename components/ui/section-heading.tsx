@@ -11,7 +11,7 @@ export function SectionHeading({
   align = 'left',
   className,
 }: {
-  index: string;
+  index?: string;
   label: string;
   title: ReactNode;
   children?: ReactNode;
@@ -35,8 +35,12 @@ export function SectionHeading({
             dark ? 'text-paper/60' : 'text-ink/55',
           )}
         >
-          <span className="text-signal">{index}</span>
-          <span className={cn('h-px w-8', dark ? 'bg-white/25' : 'bg-ink/25')} />
+          {index && (
+            <>
+              <span className="text-signal">{index}</span>
+              <span className={cn('h-px w-8', dark ? 'bg-white/25' : 'bg-ink/25')} />
+            </>
+          )}
           {label}
         </p>
       </Reveal>

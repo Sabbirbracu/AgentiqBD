@@ -1,35 +1,35 @@
-import { AlertTriangle, Boxes, Factory, PackageSearch, ShoppingCart, Sparkles } from 'lucide-react';
+import { AlertTriangle, BarChart3, Boxes, Factory, Headset, PackageSearch, Sparkles } from 'lucide-react';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
-import { erpModules } from '@/lib/content';
+import { agenticore } from '@/lib/content';
 
-const moduleIcons = [PackageSearch, Boxes, Factory, ShoppingCart];
+const moduleIcons = [Boxes, Factory, PackageSearch, Headset, BarChart3];
 const bars = [62, 48, 71, 55, 83, 40, 66, 28, 74, 58, 69, 45];
 
 export function BusinessSystems() {
   return (
-    <section className="grain relative overflow-hidden bg-ink py-24 text-paper sm:py-32">
+    <section id="agenticore" className="grain relative overflow-hidden bg-ink py-24 text-paper sm:py-32">
       <div className="absolute left-1/2 top-0 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-signal/10 blur-[140px]" />
       <div className="container-x relative grid items-center gap-16 lg:grid-cols-[0.85fr_1.15fr]">
         <div>
           <SectionHeading
             dark
-            index="05"
-            label="AI-enabled ERP"
+            label="AgentiCore"
             title={
               <>
-                Run operations on{' '}
-                <span className="accent-serif text-signal">one connected platform.</span>
+                Intelligent business systems,{' '}
+                <span className="accent-serif text-signal">working as one.</span>
               </>
             }
           >
-            Procurement, inventory, production and orders in a single system — with AI that watches
-            for exceptions, answers questions in plain language and recommends the next move.
+            Inventory, production, procurement, support and reporting usually live in separate
+            tools. AgentiCore connects them through intelligent workflows, so an order, a shortage
+            or a customer question reaches every team that needs to act.
           </SectionHeading>
 
           <Reveal delay={0.1}>
             <ul className="mt-10 grid gap-3 sm:grid-cols-2">
-              {erpModules.map((m, i) => {
+              {agenticore.modules.map((m, i) => {
                 const Icon = moduleIcons[i];
                 return (
                   <li

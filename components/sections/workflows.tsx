@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check } from 'lucide-react';
+import { ArrowRight, Check, X } from 'lucide-react';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { workflows } from '@/lib/content';
 import { cn } from '@/lib/utils';
@@ -15,17 +15,16 @@ export function Workflows() {
     <section id="workflows" className="relative overflow-hidden bg-paper py-24 sm:py-32">
       <div className="container-x relative">
         <SectionHeading
-          index="04"
-          label="Workflow automation"
+          label="Workflow demonstrations"
           title={
             <>
-              Automation that moves like{' '}
-              <span className="accent-serif text-signal">your business does.</span>
+              From scattered steps to{' '}
+              <span className="accent-serif text-signal">one connected flow.</span>
             </>
           }
         >
-          The expensive part of most work isn’t the work — it’s the hand-offs between people and
-          tools. We connect them so the next step simply happens.
+          The expensive part of most work is the hand-offs between people and tools. Here is how
+          three common processes change, end to end.
         </SectionHeading>
 
         <div className="mt-14 flex flex-wrap gap-2" role="tablist" aria-label="Workflow examples">
@@ -126,19 +125,35 @@ export function Workflows() {
                 ))}
               </ol>
 
-              <div className="mt-12 grid gap-8 border-t border-ink/10 pt-8 lg:grid-cols-[1.1fr_0.9fr]">
-                <p className="text-pretty text-lg leading-relaxed text-ink/70">{wf.detail}</p>
-                <ul className="space-y-3">
-                  {wf.changes.map((c) => (
-                    <li key={c} className="flex items-center gap-3 text-[15px] font-medium">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ink text-paper">
-                        <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                      </span>
-                      {c}
-                    </li>
-                  ))}
-                </ul>
+              <div className="mt-12 grid gap-4 border-t border-ink/10 pt-8 md:grid-cols-[1fr_auto_1fr] md:items-stretch">
+                <div className="rounded-2xl bg-ink/[0.04] p-6">
+                  <p className="eyebrow mb-4 text-ink/45">Before</p>
+                  <ul className="space-y-3">
+                    {wf.before.map((b) => (
+                      <li key={b} className="flex gap-3 text-[15px] leading-snug text-ink/70">
+                        <X className="mt-0.5 h-4 w-4 shrink-0 text-ink/35" />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <ArrowRight className="mx-auto hidden h-5 w-5 self-center text-signal md:block" aria-hidden />
+                <div className="rounded-2xl border border-signal/30 bg-signal/[0.06] p-6">
+                  <p className="eyebrow mb-4 text-signal">After</p>
+                  <ul className="space-y-3">
+                    {wf.after.map((a) => (
+                      <li key={a} className="flex gap-3 text-[15px] font-medium leading-snug">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-signal" strokeWidth={3} />
+                        {a}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
+              <p className="mt-6 text-pretty font-display text-xl font-semibold leading-snug sm:text-2xl">
+                {wf.outcome}
+              </p>
+              <p className="mt-3 text-xs text-ink/40">Illustrative scenario — outcomes vary with your tools and process.</p>
             </div>
           </motion.div>
         </AnimatePresence>
