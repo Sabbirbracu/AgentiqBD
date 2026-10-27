@@ -3,6 +3,7 @@ import { BusinessSystems } from '@/components/sections/business-systems';
 import { SolutionShell } from '@/components/sections/solution-shell';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/agenticore' },
   title: 'AgentiCore',
   description: 'Inventory, production, procurement, support and reporting connected through intelligent workflows.',
 };

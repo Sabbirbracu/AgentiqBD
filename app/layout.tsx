@@ -22,23 +22,38 @@ const sans = Schibsted_Grotesk({
   display: 'swap',
 });
 const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
-const title = 'Agentiq BD — Turn Complexity into Intelligence';
+const title = 'Agentiq BD — AI Agents, Automation & Software in Bangladesh';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: title, template: '%s · Agentiq BD' },
   description: site.description,
   applicationName: 'Agentiq BD',
+  authors: [{ name: 'Agentiq BD', url: site.url }],
+  creator: 'Agentiq BD',
+  publisher: 'Agentiq BD',
+  category: 'technology',
   keywords: [
-    'AI engineering',
+    'Agentiq BD',
+    'AI agent development',
     'AI employees',
+    'AI chatbot development',
     'workflow automation',
+    'business automation',
+    'AI automation company Bangladesh',
+    'AI company in Dhaka',
     'AI-enabled ERP',
     'industrial AI',
-    'business automation',
-    'Bangladesh AI company',
-    'Agentiq BD',
+    'custom software development Bangladesh',
   ],
+  alternates: { canonical: '/' },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+  },
+  // Google Search Console HTML-tag verification: set NEXT_PUBLIC_GSC_VERIFICATION in Vercel if you pick that method.
+  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } : undefined,
   openGraph: {
     title,
     description: site.description,

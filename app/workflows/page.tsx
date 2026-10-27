@@ -3,6 +3,7 @@ import { Workflows } from '@/components/sections/workflows';
 import { SolutionShell } from '@/components/sections/solution-shell';
 
 export const metadata: Metadata = {
+  alternates: { canonical: '/workflows' },
   title: 'Workflow demonstrations',
   description: 'Before-and-after examples of how scattered, manual processes become one connected flow.',
 };

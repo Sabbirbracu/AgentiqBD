@@ -1,3 +1,5 @@
+import { JsonLd } from '@/components/seo/json-ld';
+import { faqJsonLd, organizationJsonLd } from '@/lib/seo';
 import { Navbar } from '@/components/sections/navbar';
 import { Hero } from '@/components/sections/hero';
 import { WhoWeAre } from '@/components/sections/who-we-are';
@@ -17,6 +19,7 @@ import { Footer } from '@/components/sections/footer';
 export default function Home() {
   return (
     <>
+      <JsonLd data={[organizationJsonLd(), faqJsonLd()]} />
       <Navbar />
       <main>
         <Hero />

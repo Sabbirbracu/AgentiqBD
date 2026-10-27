@@ -7,7 +7,9 @@ import { Navbar } from '@/components/sections/navbar';
 import { Footer } from '@/components/sections/footer';
 import { PhoneMarquee, Showcase } from '@/components/ui/showcase';
 import { statusStyle } from '@/components/sections/work';
+import { JsonLd } from '@/components/seo/json-ld';
 import { projects } from '@/lib/content';
+import { absoluteUrl, breadcrumbJsonLd, orgId } from '@/lib/seo';
 import { cn } from '@/lib/utils';
 
 export function generateStaticParams() {
@@ -17,7 +19,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = projects.find((x) => x.id === slug);
-  return p ? { title: p.title, description: p.summary } : {};
+  if (!p) return {};
+  const path = `/work/${p.id}`;
+  return {
+    title: `${p.title} case study`,
+    description: p.summary,
+    alternates: { canonical: path },
+    openGraph: { title: `${p.title} case study · Agentiq BD`, description: p.summary, url: absoluteUrl(path), type: 'article' },
+  };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -33,6 +42,23 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbJsonLd([
+            { name: 'Home', path: '/' },
+            { name: 'Our work', path: '/#work' },
+            { name: p.title, path: `/work/${p.id}` },
+          ]),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'CreativeWork',
+            name: p.title,
+            description: p.summary,
+            url: absoluteUrl(`/work/${p.id}`),
+            creator: { '@type': 'Organization', '@id': orgId, name: 'Agentiq BD' },
+          },
+        ]}
+      />
       <Navbar solid />
       <main className="grain relative overflow-hidden bg-ink pb-24 pt-32 text-paper sm:pb-32 sm:pt-40">
         <div className="pointer-events-none absolute -right-40 top-20 h-[420px] w-[420px] rounded-full bg-signal/15 blur-[140px]" />

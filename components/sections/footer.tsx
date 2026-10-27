@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/brand/logo';
 import { SocialIcon } from '@/components/ui/social-icon';
-import { navLinks, services, site } from '@/lib/content';
+import { coreServices, navLinks, site } from '@/lib/content';
 
 const partnerHref = `mailto:${site.email}?subject=${encodeURIComponent('Partnership enquiry')}`;
 const careersHref = `mailto:${site.email}?subject=${encodeURIComponent('Career enquiry')}`;
@@ -23,11 +23,11 @@ export function Footer() {
           <nav aria-label="Services">
             <p className="eyebrow mb-5 text-paper/40">Services</p>
             <ul className="space-y-3">
-              {services.map((sv) => (
+              {coreServices.map((sv) => (
                 <li key={sv.id}>
-                  <a href={`/#service-${sv.id}`} className="text-paper/75 transition-colors hover:text-signal-300">
+                  <Link href={`/services/${sv.id}`} className="text-paper/75 transition-colors hover:text-signal-300">
                     {sv.title}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

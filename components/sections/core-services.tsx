@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { serviceArt as arts } from '@/components/brand/service-art';
 import { Reveal } from '@/components/ui/reveal';
@@ -58,8 +59,8 @@ export function CoreServices() {
                     />
                   )}
 
-                  {/* whole tile is the link to the contact section */}
-                  <a href="/#contact" aria-label={`Discuss ${s.title}`} className="absolute inset-0 z-20 rounded-[24px]" />
+                  {/* whole tile links to the service's own page (internal link for search engines + visitors) */}
+                  <Link href={`/services/${s.id}`} aria-label={`${s.title}: learn more`} className="absolute inset-0 z-20 rounded-[24px]" />
 
                   <span
                     className={cn(

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { site } from '@/lib/content';
 
-export const metadata: Metadata = { title: 'Privacy policy' };
+export const metadata: Metadata = { title: 'Privacy policy', alternates: { canonical: '/privacy' } };
 
 /** DRAFT — have this reviewed before launch, and update it when the contact form is connected to a backend. */
 export default function Privacy() {

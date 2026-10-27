@@ -87,7 +87,7 @@ const serviceItems: PreviewItem[] = coreServices.map((s) => ({
   Icon: serviceIcons[s.id],
   art: serviceArt[s.id]?.(),
   dark: serviceArtDark[s.id] ?? false,
-  href: '/#core-services',
+  href: `/services/${s.id}`,
 }));
 
 const packageItems: PreviewItem[] = packages.map((p) => ({
@@ -415,7 +415,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               {coreServices.map((s) => (
                 <a
                   key={s.id}
-                  href="/#core-services"
+                  href={`/services/${s.id}`}
                   onClick={() => setOpen(false)}
                   className="rounded-2xl px-4 py-2.5 font-display text-[17px] text-paper/85 transition-colors hover:bg-white/5"
                 >
