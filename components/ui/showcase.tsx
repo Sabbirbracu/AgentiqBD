@@ -19,7 +19,7 @@ export function Showcase({
   frame = 'browser',
   label,
   accent = '#E84F3D',
-  interval = 4800,
+  interval = 3200,
   compact = false,
   note,
   className,
@@ -115,7 +115,7 @@ export function Showcase({
               initial={reduce ? false : { opacity: 0, x: 36, scale: 1.01 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={reduce ? { opacity: 0 } : { opacity: 0, x: -36 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
               <Image
                 src={cur.src}

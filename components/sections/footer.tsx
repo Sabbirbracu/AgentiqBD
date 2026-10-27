@@ -1,6 +1,11 @@
 import Link from 'next/link';
 import { Logo } from '@/components/brand/logo';
+import { SocialIcon } from '@/components/ui/social-icon';
 import { navLinks, services, site } from '@/lib/content';
+
+const partnerHref = `mailto:${site.email}?subject=${encodeURIComponent('Partnership enquiry')}`;
+const careersHref = `mailto:${site.email}?subject=${encodeURIComponent('Career enquiry')}`;
+const companyLinks = [...navLinks, { label: 'Become a partner', href: partnerHref }, { label: 'Careers', href: careersHref }];
 
 export function Footer() {
   return (
@@ -30,7 +35,7 @@ export function Footer() {
           <nav aria-label="Company">
             <p className="eyebrow mb-5 text-paper/40">Company</p>
             <ul className="space-y-3">
-              {navLinks.map((l) => (
+              {companyLinks.map((l) => (
                 <li key={l.href}>
                   <a href={l.href} className="text-paper/75 transition-colors hover:text-signal-300">
                     {l.label}
@@ -47,16 +52,24 @@ export function Footer() {
                   {site.email}
                 </a>
               </li>
-              <li>{site.location}</li>
               <li>
-                <a href={site.url} className="transition-colors hover:text-signal-300">
-                  www.agentiqbd.com
+                <a href={`tel:+88${site.phone}`} className="transition-colors hover:text-signal-300">
+                  {site.phone}
                 </a>
               </li>
+              <li>{site.address}</li>
+            </ul>
+            <ul className="mt-6 flex gap-2.5" aria-label="Social media">
               {site.social.map((so) => (
                 <li key={so.label}>
-                  <a href={so.href} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-signal-300">
-                    {so.label}
+                  <a
+                    href={so.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={so.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-signal text-paper transition-colors hover:bg-signal-600"
+                  >
+                    <SocialIcon kind={so.kind} className="h-[17px] w-[17px]" />
                   </a>
                 </li>
               ))}
@@ -67,9 +80,9 @@ export function Footer() {
         {/* oversized wordmark */}
         <p
           aria-hidden
-          className="display mt-16 select-none text-center text-[19vw] font-extrabold uppercase leading-[0.8] tracking-[0.02em] text-transparent [-webkit-text-stroke:1px_rgba(252,252,244,0.12)] sm:text-[15vw]"
+          className="display mt-16 select-none text-center text-[11vw] font-extrabold uppercase leading-[0.8] tracking-[0.02em] text-transparent [-webkit-text-stroke:1px_rgba(252,252,244,0.12)] sm:text-[8.5vw]"
         >
-          Agentiq
+          Agentiq BD
         </p>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-sm text-paper/40 sm:flex-row sm:items-center">

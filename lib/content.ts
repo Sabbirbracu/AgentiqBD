@@ -8,6 +8,8 @@ export const site = {
   url: 'https://www.agentiqbd.com',
   email: 'hello@agentiqbd.com',
   location: 'Dhaka, Bangladesh',
+  phone: '01304867542',
+  address: 'Pragati Sarani, Merul Badda, Dhaka',
   tagline: 'Turn Complexity into Intelligence',
   description:
     'Agentiq BD is an AI engineering and software company. We build intelligent software, automate business workflows and integrate AI into everyday operations — connected to the tools you already run.',
@@ -19,9 +21,11 @@ export const site = {
   auditUrl: '',
   /** TODO(owner): PLACEHOLDER links ('#') — replace with the real profile URLs. */
   social: [
-    { label: 'Facebook', href: '#' },
-    { label: 'LinkedIn', href: '#' },
-  ] as { label: string; href: string }[],
+    { label: 'Facebook', kind: 'facebook', href: '#' },
+    { label: 'Instagram', kind: 'instagram', href: '#' },
+    { label: 'LinkedIn', kind: 'linkedin', href: '#' },
+    { label: 'X', kind: 'x', href: '#' },
+  ] as { label: string; kind: 'facebook' | 'instagram' | 'linkedin' | 'x'; href: string }[],
 };
 
 /** Order of the numbered sections. Feedback only counts once there is real feedback to show. */
@@ -529,6 +533,8 @@ export const projects: {
   mobileImages?: ProductImage[];
   /** Shown under the gallery, e.g. "Sample data shown." */
   imageNote?: string;
+  /** Card cover: degrees the phone leans to the left, leaving a gap beside the laptop. */
+  phoneTilt?: number;
   /** What the system does — shown on the details page. */
   features?: string[];
   /** Case-study text — each part only appears on the details page when filled in. */
@@ -562,7 +568,8 @@ export const projects: {
   {
     id: 'learning-platform',
     title: 'Learning platform',
-    kind: 'Education software',
+    kind: 'Education platform',
+    liveUrl: 'https://bhashal.com/',
     summary:
       'A mobile-first English learning platform for Bangla speakers: structured lessons, practice, progress tracking, streaks and badges.',
     status: 'Deployed',
@@ -574,14 +581,16 @@ export const projects: {
       'XP, daily streaks, weekly goals and achievement badges',
       'Works on phones first, with a full web dashboard too',
     ],
+    // Web and mobile lists are paired by index: the mockup shows the same screen on both devices at once.
     images: [
-      { src: '/work/learning-platform/web-dashboard.webp', alt: 'Learning platform web dashboard with streak, XP, lessons and course progress', caption: 'Web dashboard', w: 1600, h: 901 },
+      { src: '/work/learning-platform/web-home.webp', alt: 'Learning platform dashboard with a welcome banner, streak, XP, lessons and course progress', caption: 'Dashboard', w: 2000, h: 1129 },
+      { src: '/work/learning-platform/web-progress.webp', alt: 'Progress page with weekly goal, total XP, quiz accuracy and day streak', caption: 'Progress', w: 2000, h: 1129 },
+      { src: '/work/learning-platform/web-achievements.webp', alt: 'Achievements page with a trophy case of earned and locked badges', caption: 'Achievements', w: 2000, h: 1128 },
     ],
     mobileImages: [
-      { src: '/work/learning-platform/mobile-home.webp', alt: 'Mobile home screen with weekly goal, XP and streak', caption: 'Home', w: 718, h: 1490 },
-      { src: '/work/learning-platform/mobile-learn.webp', alt: 'Mobile learning roadmap with current lesson and chapter progress', caption: 'Learn', w: 774, h: 1540 },
-      { src: '/work/learning-platform/mobile-lesson.webp', alt: 'Mobile lesson screen with an illustrated example and Bangla explanation', caption: 'Lesson', w: 752, h: 1504 },
-      { src: '/work/learning-platform/mobile-badges.webp', alt: 'Mobile trophy case with earned badges', caption: 'Badges', w: 712, h: 1492 },
+      { src: '/work/learning-platform/app-home.webp', alt: 'Mobile home screen with a welcome banner, current lesson, streak and XP', caption: 'Home', w: 660, h: 1436 },
+      { src: '/work/learning-platform/app-progress.webp', alt: 'Mobile progress screen with weekly goal, XP, quiz accuracy and streak', caption: 'Progress', w: 658, h: 1434 },
+      { src: '/work/learning-platform/app-badges.webp', alt: 'Mobile trophy case with earned and locked badges', caption: 'Badges', w: 662, h: 1430 },
     ],
   },
   {
@@ -595,12 +604,41 @@ export const projects: {
   },
   {
     id: 'matrimony-platform',
-    title: 'Matrimony platform',
-    kind: 'Web platform',
-    summary: 'A web platform for member profiles and matchmaking.',
+    title: 'ShaadiMart',
+    kind: 'Matrimony platform',
+    summary:
+      'A matchmaking platform with secure sign-in, real-time chat, profile management and paid membership tiers, taken from idea to a live product in six weeks.',
     status: 'Deployed',
-    role: 'Design & engineering',
-    images: [],
+    role: 'Full-stack engineering',
+    // The delivered build, kept as handed over. The client's own production site (shaadimartbd.com) keeps changing under their team.
+    liveUrl: 'https://dev.shaadimartbd.com',
+    features: [
+      'Multi-step profile onboarding with progress tracking and inline validation',
+      'Discovery and search, with daily match picks and a shortlist',
+      'Real-time messaging over secure WebSockets',
+      'Four subscription tiers enforced on the server, so premium limits cannot be bypassed',
+      'Profile photos stored on Cloudflare R2, with no egress fees',
+      'Admin dashboard for moderation and member reports',
+    ],
+    images: [
+      { src: '/work/matrimony-platform/web-landing.webp', alt: 'ShaadiMart landing page with a member search bar', caption: 'Landing page', w: 2000, h: 1129 },
+      { src: '/work/matrimony-platform/web-messages.webp', alt: 'Real-time chat with a conversation list and message thread', caption: 'Messages', w: 2000, h: 1079 },
+      { src: '/work/matrimony-platform/web-dashboard.webp', alt: 'Member dashboard with profile completion, match search, daily picks and shortlist', caption: 'Dashboard', w: 2000, h: 1081 },
+      { src: '/work/matrimony-platform/web-edit-profile.webp', alt: 'Multi-step profile editor on the lifestyle details step', caption: 'Edit profile', w: 2000, h: 1089 },
+    ],
+    mobileImages: [
+      { src: '/work/matrimony-platform/mobile-landing.webp', alt: 'ShaadiMart landing page on a phone', caption: 'Mobile landing', w: 606, h: 1086 },
+    ],
+    imageNote: 'Test account and sample data shown.',
+    phoneTilt: 20,
+    caseStudy: {
+      challenge:
+        'A founder with a validated idea, a startup budget and no technical team needed members to chat safely and instantly, a paywall that could not be bypassed, and thousands of profile photos served affordably, all live within six weeks.',
+      solution:
+        'A decoupled Next.js and TypeScript client on a Laravel REST API with Sanctum and MySQL, where the backend decides every access question. Four subscription tiers sit on top of two roles, chat runs over WebSockets behind Nginx, and images are served from Cloudflare R2. Deployed on a VPS with GitHub Actions.',
+      outcome:
+        'Live in 1.5 months with 8 modules, built end to end by one engineer. Premium limits are enforced server-side across all four tiers, image delivery carries no per-gigabyte cost, and a production-only WebSocket SSL failure was found and fixed at launch.',
+    },
   },
 ];
 

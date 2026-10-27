@@ -333,6 +333,9 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
         <nav className="hidden items-center lg:flex" aria-label="Primary">
           {trigger('services', 'Services')}
           {trigger('packages', 'Packages')}
+          <a href="/#products" onMouseEnter={close} className={linkCls}>
+            Products
+          </a>
           <a href="/#why" onMouseEnter={close} className={linkCls}>
             About
           </a>
@@ -450,6 +453,13 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
                 );
               })}
               <div className="my-2 h-px bg-white/10" />
+              <a
+                href="/#products"
+                onClick={() => setOpen(false)}
+                className="rounded-2xl px-4 py-3.5 font-display text-xl text-paper/85 transition-colors hover:bg-white/5"
+              >
+                Products
+              </a>
               <a
                 href="/#why"
                 onClick={() => setOpen(false)}

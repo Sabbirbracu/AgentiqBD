@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { SpotlightCard } from '@/components/ui/spotlight';
-import { PhoneMarquee, Showcase } from '@/components/ui/showcase';
+import { DeviceMockup } from '@/components/ui/devices';
 import { StackCards } from '@/components/ui/stack-cards';
 import { projects, sectionNo, type ProjectStatus } from '@/lib/content';
 import { cn } from '@/lib/utils';
@@ -104,19 +104,9 @@ function Card({ p, n, flip }: { p: Project; n: number; flip: boolean }) {
         className={cn('grain relative block min-h-[300px] overflow-hidden bg-gradient-to-br from-ink-700 to-ink lg:min-h-[460px]', flip && 'lg:order-2')}
       >
         <div aria-hidden className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-signal/25 blur-[100px]" />
-        {phones && phones.length > 0 ? (
-          <div className="absolute inset-0">
-            <PhoneMarquee images={phones} compact duration={32} />
-          </div>
-        ) : p.images.length > 0 ? (
-          <div className="relative grid h-full place-items-end px-6 pt-10 sm:px-10">
-            <Showcase images={p.images} label={p.liveUrl?.replace(/^https?:\/\//, '')} compact interval={4200 + n * 700} className="w-full" />
-          </div>
-        ) : (
-          <div aria-hidden className="relative flex h-full min-h-[300px] items-center justify-center p-8 sm:p-12 lg:min-h-[460px]">
-            <div className="w-full max-w-[460px]">{art?.()}</div>
-          </div>
-        )}
+        <div className="relative grid h-full place-items-center p-6 sm:p-10">
+          <DeviceMockup images={p.images} phones={phones} phoneTilt={p.phoneTilt} art={art?.()} interval={4200 + n * 700} />
+        </div>
       </Link>
 
       <div className="relative flex flex-col justify-center overflow-hidden p-7 sm:p-10">
@@ -161,7 +151,7 @@ function Card({ p, n, flip }: { p: Project; n: number; flip: boolean }) {
               href={p.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/link inline-flex items-center gap-1.5 text-[15px] font-medium text-ink/70 transition-colors hover:text-signal"
+              className="group/link inline-flex h-11 items-center gap-2 rounded-full bg-signal px-6 text-[15px] font-medium text-paper transition-colors hover:bg-signal-600"
             >
               Visit live site
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />

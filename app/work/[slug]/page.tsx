@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react';
@@ -72,7 +73,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             )}
           </div>
 
-          {p.mobileImages && p.mobileImages.length > 0 && (
+          {p.mobileImages && p.mobileImages.length > 1 && (
             <div className="mt-14">
               <PhoneMarquee images={p.mobileImages} />
             </div>
@@ -87,6 +88,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 note={p.imageNote}
               />
             </div>
+          )}
+
+          {p.mobileImages?.length === 1 && (
+            <figure className="mx-auto mt-14 max-w-[280px]">
+              <Image
+                src={p.mobileImages[0].src}
+                alt={p.mobileImages[0].alt}
+                width={p.mobileImages[0].w}
+                height={p.mobileImages[0].h}
+                sizes="280px"
+                className="h-auto w-full rounded-[28px] border border-white/15"
+              />
+              <figcaption className="mt-3 text-center text-xs text-paper/40">{p.mobileImages[0].caption}</figcaption>
+            </figure>
           )}
 
           {p.features && p.features.length > 0 && (

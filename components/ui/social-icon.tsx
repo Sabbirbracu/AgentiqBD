@@ -1,7 +1,8 @@
-import { siFacebook, siGithub, siX } from 'simple-icons';
+import { siFacebook, siGithub, siInstagram, siX } from 'simple-icons';
 
 const icons = {
   facebook: { path: siFacebook.path, viewBox: '0 0 24 24' },
+  instagram: { path: siInstagram.path, viewBox: '0 0 24 24' },
   github: { path: siGithub.path, viewBox: '0 0 24 24' },
   x: { path: siX.path, viewBox: '0 0 24 24' },
   linkedin: {
