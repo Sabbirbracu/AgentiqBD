@@ -1,0 +1,42 @@
+# Copied to the VPS at /opt/agentiqbd/docker-compose.yml by the GitHub workflow
+# on every deploy. Edit it here in the repo, never by hand on the server.
+#
+# The public front door is the shared nginx in /opt/proxy (see vps-infra). This
+# stack publishes NO host ports: nginx reaches the container by name over the
+# shared `edge` network (conf file: agentiqbd.conf -> http://agentiqbd-web:3000).
+
+# A unique project name keeps this stack's containers and volumes separate from
+# every other compose project on the VPS.
+name: agentiqbd
+
+services:
+  web:
+    image: ghcr.io/sabbirbracu/agentiqbd-frontend:${IMAGE_TAG:-latest}
+    container_name: agentiqbd-web
+    restart: unless-stopped
+    expose:
+      - "3000"
+    networks:
+      - edge
+
+    # The site needs no privileges at all.
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+    # Guard rails so a spike here can never starve the ERP or other sites.
+    mem_limit: 512m
+    cpus: 0.75
+
+    # Stop container logs from slowly filling the disk.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  # Shared with the proxy. Only web/api containers join it, never a database.
+  edge:
+    external: true
+    name: edge

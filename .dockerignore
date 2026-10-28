@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.github
+.claude
+.env*
+*.tsbuildinfo
+docs
+deploy
+Dockerfile
+.dockerignore
+.DS_Store
