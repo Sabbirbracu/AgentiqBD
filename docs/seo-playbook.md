@@ -53,3 +53,38 @@ Real monthly volumes need a keyword tool (Google Keyword Planner, Ahrefs, Semrus
 
 ## Measure
 Search Console → Performance (queries, pages, position), Pages (indexing problems), Enhancements (structured data). Expect first indexing within days; ranking movement for competitive phrases takes months.
+
+---
+
+# GEO (Generative Engine Optimization) — added 2026-10-28
+
+GEO = being the source that ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews quote or recommend. These engines answer from (1) pages they can fetch, (2) the Bing/Google indexes and (3) what *other sites* say about you. The first two are built; the third is the biggest open gap.
+
+## Built in code
+| What | Where |
+|---|---|
+| `llms.txt` and `llms-full.txt`, generated from site content (cannot drift from the pages) | `lib/llms.ts`, `app/llms.txt/route.ts`, `app/llms-full.txt/route.ts` |
+| Answer-first definition paragraph + FAQ on every service page | `lib/service-pages.ts` (`answer`, `faqs`) |
+| WebPage JSON-LD with `dateModified` + `about` → Organization, on home and service pages | `webPageJsonLd` in `lib/seo.ts` |
+| AI crawlers allowed (GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, …) | `app/robots.ts` |
+| IndexNow submit (Bing → feeds ChatGPT search and Copilot) | `npm run indexnow` after each deploy; key file in `public/` |
+| Name disambiguation from NVIDIA AgentIQ | `llms.txt`, JSON-LD `alternateName` |
+
+Bump `contentUpdated` in `lib/seo.ts` whenever page copy really changes (it feeds `dateModified`, sitemap and llms-full).
+
+## Owner actions (these move AI answers most)
+1. **Bing Webmaster Tools**: add the site (import from Search Console). ChatGPT search and Copilot rely on Bing's index. Then run `npm run indexnow` once the key file is live.
+2. **Entity profiles with identical name/address/phone/description**: LinkedIn company page, Facebook page, GitHub organisation, Crunchbase, Clutch, GoodFirms, Google Business Profile. Put the real URLs in `site.social` / `founder.social`; they flow into `sameAs` automatically.
+3. **Third-party mentions**: AI engines trust what other sites say. Get listed in Bangladesh tech/startup directories, publish on LinkedIn/Medium/dev.to, answer questions on Reddit and Quora (genuinely, with disclosure), and ask clients for reviews.
+4. **Citable content** (code-side next step): a /guides section with original, practical pieces such as "What does an AI chatbot cost to build in Bangladesh?", "AI Employee vs chatbot", "WhatsApp chatbot for business: how it works". Real experience from the four live projects beats generic text. Needs the owner's facts for any number.
+5. **Bangla pages** for the same services: many Bangladeshi users ask AI assistants in Bangla.
+
+## Measure (do monthly, 15 minutes)
+Ask each assistant these prompts in a fresh chat and note whether Agentiq BD is named, cited or linked, and what is said:
+- "Best AI agent development companies in Bangladesh"
+- "Who builds AI chatbots for WhatsApp in Dhaka?"
+- "AI automation company Bangladesh for small business"
+- "What is Agentiq BD?"
+- "ERP development company Bangladesh for pharmaceutical manufacturers"
+
+Also check GA/Vercel analytics referrers for chatgpt.com, perplexity.ai, gemini.google.com, copilot.microsoft.com, claude.ai. Expect little movement until items 2 and 3 are done; the site alone cannot make an unknown brand appear.

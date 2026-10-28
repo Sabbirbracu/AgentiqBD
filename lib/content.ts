@@ -6,7 +6,7 @@
 export const site = {
   name: 'Agentiq BD',
   url: 'https://www.agentiqbd.com',
-  email: 'hello@agentiqbd.com',
+  email: 'sales@agentiqbd.com',
   location: 'Dhaka, Bangladesh',
   phone: '01304867542',
   address: 'Pragati Sarani, Merul Badda, Dhaka',
@@ -21,10 +21,10 @@ export const site = {
   auditUrl: '',
   /** TODO(owner): PLACEHOLDER links ('#') — replace with the real profile URLs. */
   social: [
-    { label: 'Facebook', kind: 'facebook', href: '#' },
-    { label: 'Instagram', kind: 'instagram', href: '#' },
-    { label: 'LinkedIn', kind: 'linkedin', href: '#' },
-    { label: 'X', kind: 'x', href: '#' },
+    { label: 'Facebook', kind: 'facebook', href: 'https://www.facebook.com/agentiqbd/' },
+    { label: 'Instagram', kind: 'instagram', href: 'https://www.instagram.com/agentiqbd/' },
+    { label: 'LinkedIn', kind: 'linkedin', href: 'https://www.linkedin.com/company/agentiq-bd/?contentTrackingId=n%2Bv6PPRXT4ehR8nyIB2Csg%3D%3D&viewName=premium-nav-upsell-text&upsellOrderOrigin=Tracking%3Av1%3Apremium_nav_upsell_text%3ANav%3AIn-Product' },
+    { label: 'X', kind: 'x', href: 'https://twitter.com/agentiqbd' },
   ] as { label: string; kind: 'facebook' | 'instagram' | 'linkedin' | 'x'; href: string }[],
 };
 

@@ -5,7 +5,7 @@ import { ArrowRight, Check, ChevronRight, Plus } from 'lucide-react';
 import { SolutionShell } from '@/components/sections/solution-shell';
 import { JsonLd } from '@/components/seo/json-ld';
 import { coreServices, processSteps } from '@/lib/content';
-import { absoluteUrl, breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from '@/lib/seo';
+import { absoluteUrl, breadcrumbJsonLd, faqJsonLd, serviceJsonLd, webPageJsonLd } from '@/lib/seo';
 import { servicePageById, servicePages } from '@/lib/service-pages';
 
 export function generateStaticParams() {
@@ -38,6 +38,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     <SolutionShell tone="dark" ctaTitle={`Want help with ${core.title.toLowerCase()}?`}>
       <JsonLd
         data={[
+          webPageJsonLd({ name: page.metaTitle, description: page.metaDescription, path }),
           serviceJsonLd({ name: core.title, description: page.metaDescription, path }),
           faqJsonLd(page.faqs),
           breadcrumbJsonLd([

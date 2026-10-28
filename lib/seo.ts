@@ -152,6 +152,23 @@ export function breadcrumbJsonLd(trail: { name: string; path: string }[]) {
   };
 }
 
+/** WebPage node with a freshness date; `about` ties the page to the organisation entity for AI assistants. */
+export function webPageJsonLd(p: { name: string; description: string; path: string }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${absoluteUrl(p.path)}#webpage`,
+    url: absoluteUrl(p.path),
+    name: p.name,
+    description: p.description,
+    inLanguage: 'en',
+    dateModified: contentUpdated,
+    isPartOf: { '@id': websiteId },
+    about: { '@id': orgId },
+    publisher: { '@id': orgId },
+  };
+}
+
 export function serviceJsonLd(s: { name: string; description: string; path: string }) {
   return {
     '@context': 'https://schema.org',
