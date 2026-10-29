@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Logo } from '@/components/brand/logo';
 import { SocialIcon } from '@/components/ui/social-icon';
-import { coreServices, navLinks, site } from '@/lib/content';
+import { coreServices, navLinks, packages, site } from '@/lib/content';
 
 const partnerHref = `mailto:${site.email}?subject=${encodeURIComponent('Partnership enquiry')}`;
 const careersHref = `mailto:${site.email}?subject=${encodeURIComponent('Career enquiry')}`;
@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-ink text-paper">
       <div className="container-x border-t border-white/10 pb-10 pt-16">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_0.8fr_1fr]">
           <div>
             <Logo tone="paper" />
             <p className="mt-6 max-w-sm text-pretty leading-relaxed text-paper/55">
@@ -30,6 +30,24 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </nav>
+          {/* Crawlable links to every package page (the header menus only render while open). */}
+          <nav aria-label="Packages">
+            <p className="eyebrow mb-5 text-paper/40">Packages</p>
+            <ul className="space-y-3">
+              {packages.map((p) => (
+                <li key={p.id}>
+                  <Link href={`/packages/${p.id}`} className="text-paper/75 transition-colors hover:text-signal-300">
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/packages" className="text-signal-300 transition-colors hover:text-paper">
+                  All packages & pricing →
+                </Link>
+              </li>
             </ul>
           </nav>
           <nav aria-label="Company">

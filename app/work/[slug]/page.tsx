@@ -59,7 +59,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           },
         ]}
       />
-      <Navbar solid />
+      <Navbar overDark />
       <main className="grain relative overflow-hidden bg-ink pb-24 pt-32 text-paper sm:pb-32 sm:pt-40">
         <div className="pointer-events-none absolute -right-40 top-20 h-[420px] w-[420px] rounded-full bg-signal/15 blur-[140px]" />
         <div className="container-x relative">

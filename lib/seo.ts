@@ -1,4 +1,5 @@
 import { coreServices, faqs, founder, products, projects, site } from '@/lib/content';
+import { packagePages } from '@/lib/package-pages';
 import { servicePages } from '@/lib/service-pages';
 import { posts } from '@/lib/blog';
 
@@ -20,6 +21,8 @@ export const sitemapRoutes: { path: string; priority: number }[] = [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
   ...servicePages.map((s) => ({ path: `/services/${s.id}`, priority: 0.8 })),
+  { path: '/packages', priority: 0.9 },
+  ...packagePages.map((p) => ({ path: `/packages/${p.id}`, priority: 0.8 })),
   ...projects.map((p) => ({ path: `/work/${p.id}`, priority: 0.7 })),
   { path: '/blog', priority: 0.7 },
   ...posts.map((p) => ({ path: `/blog/${p.slug}`, priority: 0.6 })),
@@ -188,16 +191,36 @@ export function definedTermsJsonLd(p: { name: string; path: string; terms: { ter
   };
 }
 
-export function serviceJsonLd(s: { name: string; description: string; path: string }) {
+export function serviceJsonLd(s: {
+  name: string;
+  description: string;
+  path: string;
+  price?: { min: number; max?: number };
+  /** The search phrase this offer answers, e.g. "ecommerce website development in Bangladesh". Defaults to `name`. */
+  serviceType?: string;
+  keywords?: string[];
+}) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: s.name,
     description: s.description,
     url: absoluteUrl(s.path),
-    serviceType: s.name,
+    serviceType: s.serviceType ?? s.name,
+    ...(s.keywords?.length && { keywords: s.keywords.join(', ') }),
     provider: { '@id': orgId },
     areaServed: [{ '@type': 'Country', name: 'Bangladesh' }, 'Worldwide'],
+    // Packages publish a USD range; an open range ("$3,000+") has no maxPrice.
+    ...(s.price && {
+      offers: {
+        '@type': 'Offer',
+        url: absoluteUrl(s.path),
+        priceCurrency: 'USD',
+        ...(s.price.min === 0 && s.price.max === 0
+          ? { price: 0 }
+          : { priceSpecification: { '@type': 'PriceSpecification', priceCurrency: 'USD', minPrice: s.price.min, ...(s.price.max && { maxPrice: s.price.max }) } }),
+      },
+    }),
   };
 }
 

@@ -46,6 +46,30 @@ Volumes below are from Semrush, shared by the owner on 2026-10-29 (database not 
 | software company in Bangladesh / software development company in Bangladesh | `/` and `/services/custom-software` | | | home title, custom-software title + H1, FAQ "How do I choose a software company in Bangladesh?" |
 | AI company in Dhaka / AI company in Bangladesh | `/` | | | home keywords, Who we are copy |
 
+### Package pages (added 2026-10-29)
+Chosen from search intent and what Google shows for these queries (Bangladeshi vendor pages, price guides, "best ERP in Bangladesh" lists), not from a keyword tool. **Volumes are blank on purpose:** pull them in Semrush with the **Bangladesh (bd)** database, then fill this table. Each page puts its primary phrase in the `<title>`, the first words of the intro, the Service JSON-LD `serviceType` and the first FAQ; secondary phrases go in the meta description, keywords, FAQs and llms-full.txt. Copy lives in `lib/package-pages.ts`.
+
+| Target phrase | Page | Volume (bd) | KD% | Where it is used |
+|---|---|---|---|---|
+| ecommerce website development in Bangladesh | `/packages/commerce` | | | title, intro, meta, serviceType |
+| ecommerce website price in Bangladesh / ecommerce website cost | `/packages/commerce` | | | FAQ "How much does an e-commerce website cost in Bangladesh?" |
+| ecommerce website with AI / AI ecommerce | `/packages/commerce` | | | H1 ("AI built in"), answer, keywords |
+| bKash / Nagad payment gateway integration, courier API (Pathao, Steadfast, RedX) | `/packages/commerce` | | | intro, deliverables, FAQ |
+| SaaS development company / MVP development company | `/packages/saas-mvp` | | | title, serviceType |
+| SaaS MVP development cost / how much does it cost to build a SaaS MVP | `/packages/saas-mvp` | | | first FAQ, price examples |
+| how long does MVP development take / what is an MVP | `/packages/saas-mvp` | | | FAQs |
+| AI workflow automation / workflow automation services | `/packages/automation` | | | title, intro, serviceType, FAQ "What is AI workflow automation?" |
+| AI automation agency (Bangladesh) | `/packages/automation` | | | meta keywords, llms-full (commercial term competitors use) |
+| AI knowledge base for employees | `/packages/automation` | | | intro, FAQ |
+| ERP software in Bangladesh / ERP software price in Bangladesh | `/packages/business-software` | | | title, serviceType, FAQ "How much does ERP software cost in Bangladesh?" |
+| inventory management software Bangladesh / manufacturing ERP | `/packages/business-software` | | | title, intro, FAQ |
+| custom ERP vs ready-made ERP | `/packages/business-software` | | | FAQ (answers the "best ERP" comparison intent without claiming "best") |
+| free AI audit / AI readiness assessment / AI business audit | `/packages/audit` | | | title, intro, first two FAQs |
+
+Not targeted: "best ERP software in Bangladesh" and "best ecommerce company" as claims (house rule: no "best"; the FAQ answers the comparison instead), competitor product names (Managerium, Odoo, Tally), and BDT prices (the owner prices in USD; quoting taka would go stale with the exchange rate).
+
+Crawlability fix shipped with this: the header mega menus render only while open, so package pages had **no crawlable links** before. The footer now links all five packages + `/packages`, package pages link their related services, and each service page links its matching package.
+
 \* "knowledge base software" (Semrush US, 2026-10-29): the trend chart shows two tall months and almost nothing since, so 1.5M is a spike, not steady demand. Most of these searchers want a ready-made tool (Guru, Confluence, Zendesk), so the page answers "buy or build?" honestly instead of competing as a product. Also skipped: "guru knowledge base software" (a brand), "free knowledge base software" (we do not offer free software), "best knowledge base software" (comparison lists; we do not claim "best").
 
 Deliberately **not** targeted: "openclaw ai agent" and "ai voice agent zanus" (other companies' product names; we would not rank and it would mislead visitors) and "agentic ai coding tools" (a tool category we do not sell).

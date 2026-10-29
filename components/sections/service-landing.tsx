@@ -10,27 +10,28 @@ import { Footer } from '@/components/sections/footer';
 import { Navbar } from '@/components/sections/navbar';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
-import { coreServices, processSteps, products, projects, site } from '@/lib/content';
+import { coreServices, packages, processSteps, products, projects, site } from '@/lib/content';
 import type { ServiceLanding } from '@/lib/service-landing';
 import { includedInEveryBuild } from '@/lib/service-landing';
 import type { ServicePage } from '@/lib/service-pages';
 import { servicePageById } from '@/lib/service-pages';
+import { packagePages } from '@/lib/package-pages';
 import { cn } from '@/lib/utils';
 
 type Core = (typeof coreServices)[number];
 
-const bookingMail = `mailto:${site.email}?subject=${encodeURIComponent('Discovery call request')}&body=${encodeURIComponent(
+export const bookingMail = `mailto:${site.email}?subject=${encodeURIComponent('Discovery call request')}&body=${encodeURIComponent(
   'Hi Agentiq BD,\n\nI’d like to book a discovery call.\n\nName:\nCompany:\nPreferred times (with time zone):\nWhat I’d like to discuss:\n',
 )}`;
-const auditMail = `mailto:${site.email}?subject=${encodeURIComponent('AI Business Audit request')}&body=${encodeURIComponent(
+export const auditMail = `mailto:${site.email}?subject=${encodeURIComponent('AI Business Audit request')}&body=${encodeURIComponent(
   'Hi Agentiq BD,\n\nI’d like an AI Business Audit.\n\nName:\nCompany:\nWhat the business does:\nWhat I’d like to improve:\n',
 )}`;
-const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
+export const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
 const btn = 'group inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 text-[15px] font-medium transition-colors';
 
 /** Wraps each phrase found in `text` with `wrap`; text without a match is returned as is. */
-function emphasize(text: string, phrases: string[], wrap: (part: string, i: number) => ReactNode): ReactNode[] {
+export function emphasize(text: string, phrases: string[], wrap: (part: string, i: number) => ReactNode): ReactNode[] {
   const found = phrases.filter((p) => p && text.includes(p));
   if (!found.length) return [text];
   const re = new RegExp(`(${found.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`);
@@ -40,21 +41,35 @@ function emphasize(text: string, phrases: string[], wrap: (part: string, i: numb
 /** "AI Agent Development" → "AI agent development": lower-cases plain words, keeps acronyms like AI, ERP, RAG and SaaS. */
 const inSentence = (title: string) => title.replace(/\b[A-Z][a-z]+\b/g, (w) => w.toLowerCase());
 
-function whatsappHref(service: string) {
+export function whatsappHref(service: string) {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`Hi Agentiq BD, I’d like to know more about ${service}.`)}`;
 }
 
-/** The two calls to action used on every service page: book a call (primary) and WhatsApp (secondary). */
-function CtaButtons({ service, dark = true, className }: { service: string; dark?: boolean; className?: string }) {
+/**
+ * The two calls to action used on every service and package page: book a call (primary) and WhatsApp (secondary).
+ * `primary` swaps the booking button for another action, such as requesting the free audit.
+ */
+export function CtaButtons({
+  service,
+  dark = true,
+  primary,
+  className,
+}: {
+  service: string;
+  dark?: boolean;
+  primary?: { label: string; href: string; external?: boolean };
+  className?: string;
+}) {
+  const main = primary ?? { label: 'Book a free discovery call', href: site.bookingUrl || bookingMail, external: Boolean(site.bookingUrl) };
   return (
     <div className={cn('flex flex-col gap-3 sm:flex-row sm:flex-wrap', className)}>
       <a
-        href={site.bookingUrl || bookingMail}
-        {...(site.bookingUrl ? external : {})}
+        href={main.href}
+        {...(main.external ? external : {})}
         className={cn(btn, 'bg-signal text-paper shadow-[0_10px_30px_-10px_rgba(232,79,61,0.7)] hover:bg-signal-600')}
       >
         <CalendarClock className="h-[18px] w-[18px]" aria-hidden />
-        Book a free discovery call
+        {main.label}
         <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
       </a>
       <a
@@ -73,7 +88,7 @@ function CtaButtons({ service, dark = true, className }: { service: string; dark
   );
 }
 
-function Section({ id, tone = 'paper', className, children }: { id?: string; tone?: 'paper' | 'tint' | 'ink'; className?: string; children: ReactNode }) {
+export function Section({ id, tone = 'paper', className, children }: { id?: string; tone?: 'paper' | 'tint' | 'ink'; className?: string; children: ReactNode }) {
   return (
     <section
       id={id}
@@ -421,7 +436,7 @@ function UseCases({ landing }: { landing: ServiceLanding }) {
   );
 }
 
-type Tone = 'paper' | 'tint';
+export type Tone = 'paper' | 'tint';
 
 function Proof({ landing, tone }: { landing: ServiceLanding; tone: Tone }) {
   const items = (landing.proof ?? [])
@@ -657,6 +672,11 @@ function Related({ page, tone }: { page: ServicePage; tone: Tone }) {
 }
 
 function ClosingCta({ core }: { core: Core }) {
+  // Fixed-scope packages that cover this service (their `relatedServices` lists it).
+  const pkgs = packagePages
+    .filter((p) => p.relatedServices.includes(core.id))
+    .map((p) => packages.find((x) => x.id === p.id))
+    .filter((p): p is (typeof packages)[number] => Boolean(p));
   return (
     <section className="grain relative overflow-hidden bg-ink py-20 text-paper sm:py-28">
       <div aria-hidden className="pointer-events-none absolute left-1/2 top-0 h-[480px] w-[960px] -translate-x-1/2 rounded-full bg-signal/20 blur-[160px]" />
@@ -671,7 +691,20 @@ function ClosingCta({ core }: { core: Core }) {
               Book a free discovery call. We will look at how the work runs today and tell you honestly what is worth building first.
             </p>
             <CtaButtons service={core.title} className="mt-10 justify-center" />
-            <p className="mt-8 text-sm text-paper/45">
+            {pkgs.length > 0 && (
+              <p className="mt-8 text-sm text-paper/55">
+                Prefer a fixed scope and price?{' '}
+                {pkgs.map((p, i) => (
+                  <span key={p.id}>
+                    {i > 0 && ' or '}
+                    <Link href={`/packages/${p.id}`} className="font-medium text-paper/85 underline-offset-4 hover:text-paper hover:underline">
+                      See {p.title} ({p.price})
+                    </Link>
+                  </span>
+                ))}
+              </p>
+            )}
+            <p className="mt-4 text-sm text-paper/45">
               Not sure where to start?{' '}
               <a
                 href={site.auditUrl || auditMail}
@@ -710,7 +743,7 @@ export function ServiceLandingPage({
   const tone = (i: number): Tone => ((i + (hasProof ? 1 : 0)) % 2 === 0 ? 'paper' : 'tint');
   return (
     <>
-      <Navbar solid />
+      <Navbar overDark />
       <main>
         <Hero core={core} page={page} landing={landing} />
         <Overview core={core} page={page} landing={landing} />

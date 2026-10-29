@@ -2,6 +2,7 @@ import { coreServices, faqs, founder, packages, processSteps, products, projects
 import { posts } from '@/lib/blog';
 import { absoluteUrl, contentUpdated } from '@/lib/seo';
 import { serviceLanding } from '@/lib/service-landing';
+import { packagePages } from '@/lib/package-pages';
 import { servicePages } from '@/lib/service-pages';
 
 /**
@@ -45,6 +46,9 @@ export function buildLlmsTxt() {
       return `- [${core?.title ?? s.h1}](${absoluteUrl(`/services/${s.id}`)}): ${s.metaDescription}`;
     }),
     '',
+    '## Packages',
+    ...packages.map((p) => `- [${p.title}](${absoluteUrl(`/packages/${p.id}`)}): ${p.price}, ${p.timeline}. ${p.description}`),
+    '',
     '## Work and products',
     ...projects.map((p) => `- [${p.title}](${absoluteUrl(`/work/${p.id}`)}): ${p.summary}`),
     ...products.map(productLine),
@@ -56,6 +60,7 @@ export function buildLlmsTxt() {
     `- [Full text of this site for AI assistants](${absoluteUrl('/llms-full.txt')})`,
     `- [Home](${absoluteUrl('/')}): overview, FAQ and contact options`,
     `- [Services hub](${absoluteUrl('/services')})`,
+    `- [Packages & pricing](${absoluteUrl('/packages')})`,
     `- [Sitemap](${absoluteUrl('/sitemap.xml')})`,
     '',
   ].join('\n');
@@ -83,7 +88,10 @@ export function buildLlmsFullTxt() {
     ...whyUs.pillars.map((p) => `- **${p.title}** ${p.text}`),
     '',
     '## Packages',
-    ...packages.map((p) => `- **${p.title}**: ${p.description}`),
+    ...packages.flatMap((p) => [
+      `- **${p.title}** (${p.price}, ${p.timeline}): ${p.description}${p.audience ? ` For: ${p.audience}` : ''} ${absoluteUrl(`/packages/${p.id}`)}`,
+      ...(p.includes ?? []).map((x) => `  - ${x.title}: ${x.text}`),
+    ]),
     '',
     '## Services',
     '',
@@ -107,6 +115,33 @@ export function buildLlmsFullTxt() {
       ...s.fit.map((f) => `- ${f}`),
       '',
       ...s.faqs.flatMap((f) => [`**${f.q}**`, f.a, '']),
+    );
+  }
+
+  out.push('## Package details', '');
+  for (const pp of packagePages) {
+    const pkg = packages.find((p) => p.id === pp.id);
+    if (!pkg) continue;
+    out.push(
+      `### ${pkg.title}`,
+      `URL: ${absoluteUrl(`/packages/${pp.id}`)}`,
+      `Price: ${pkg.price}. Timeline: ${pkg.timeline}.`,
+      '',
+      pp.answer,
+      '',
+      'Who it is for:',
+      ...pp.audience.map((a) => `- ${a.title}: ${a.text}`),
+      '',
+      'Problems it solves:',
+      ...pp.problems.map((x) => `- ${x.problem} → ${x.fix}`),
+      '',
+      'What you get:',
+      ...pp.deliverables.map((d) => `- ${d.title}: ${d.text}`),
+      ...(pp.included ? ['', 'Included as standard:', ...pp.included.items.map((x) => `- ${x.title}: ${x.text}`)] : []),
+      ...(pp.notIncluded ? ['', 'Not included (paid stage):', ...pp.notIncluded.map((x) => `- ${x}`)] : []),
+      ...(pp.scopes.length ? ['', 'Price examples:', ...pp.scopes.map((x) => `- ${x.label} (${x.price}): ${x.text}`)] : []),
+      '',
+      ...pp.faqs.flatMap((f) => [`**${f.q}**`, f.a, '']),
     );
   }
 

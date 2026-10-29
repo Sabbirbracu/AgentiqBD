@@ -289,41 +289,71 @@ export const coreServices = [
 ];
 
 /**
- * Packages shown in the "Packages" mega menu. TODO(owner): add timelines and prices once you have confirmed them;
- * none are shown on purpose. Tags are descriptive, not claims.
+ * Packages shown in the "Packages" mega menu, in the owner's order and wording (2026-10-29). The free audit leads:
+ * it covers assessment, top 3 opportunities and a roadmap only; technical design, proofs of concept and builds are
+ * paid. Prices are the owner's ranges in USD; timelines confirmed by the owner the same day. Offer pages live in
+ * lib/package-pages.ts. Tags are descriptive, not claims.
  */
 export const packages = [
   {
     id: 'audit',
-    title: 'AI Business Audit',
-    short: 'See where AI and automation would actually help.',
-    description:
-      'We review how your business runs today, map the workflows worth improving, and give you a prioritised plan before anything is built.',
-    tags: ['Review', 'Priorities', 'Roadmap'],
+    title: '48-Hour AI Business Audit',
+    price: '100% free',
+    timeline: '48 hours',
+    free: true,
+    short: 'Find where AI and automation can help.',
+    description: 'Find where intelligent software and automation can improve your business.',
+    includes: [
+      { title: 'Workflow assessment', text: 'Identify repetitive tasks, operational bottlenecks and manual processes.' },
+      { title: 'Top 3 opportunities', text: 'Find three practical opportunities for AI, automation or custom software.' },
+      { title: 'Recommended action plan', text: 'Get a prioritised roadmap showing what to improve first and why.' },
+      { title: '48-hour delivery', text: 'Delivered within 48 hours after the discovery discussion and receipt of the required information.' },
+    ],
+    tags: ['Free', 'Top 3 opportunities', 'Roadmap'],
   },
   {
-    id: 'agent-starter',
-    title: 'AI Agent Starter',
-    short: 'Your first AI Employee, scoped to one job.',
+    id: 'commerce',
+    title: 'AI Commerce Launch',
+    price: '$800–$3,000',
+    timeline: '2–6 weeks',
+    short: 'Online store with AI support and order automation.',
     description:
-      'A working AI Employee for support, leads or bookings, connected to your channels and systems, with clear limits and human approval where it matters.',
-    tags: ['One agent', 'Your channels', 'Human approval'],
+      'E-commerce development, payment and courier integrations, AI-powered product discovery, customer support and order automation.',
+    audience: 'Online stores, retailers and Facebook sellers ready to scale.',
+    tags: ['E-commerce', 'Payments & courier', 'AI support'],
   },
   {
-    id: 'workflow',
-    title: 'Workflow Automation',
-    short: 'One process, automated end to end.',
+    id: 'saas-mvp',
+    title: 'Custom Software & SaaS MVP',
+    price: '$1,500–$8,000+',
+    timeline: '4–12 weeks',
+    short: 'Web apps, SaaS platforms, portals and APIs.',
     description:
-      'We pick a repetitive process, such as lead follow-up or document intake, and automate it across the tools your team already uses.',
-    tags: ['One process', 'Cross-tool', 'Reporting'],
+      'Custom web applications, SaaS platforms, business portals, internal tools, APIs and AI-powered products.',
+    audience: 'Startups, founders and businesses with unique software requirements.',
+    tags: ['Web apps', 'SaaS', 'APIs'],
   },
   {
-    id: 'systems',
-    title: 'Business Systems Setup',
-    short: 'Operations on one connected system.',
+    id: 'automation',
+    title: 'AI & Workflow Automation',
+    price: '$500–$2,500',
+    timeline: '1–4 weeks',
+    short: 'Automations, document processing and knowledge assistants.',
     description:
-      'Inventory, procurement, production or reporting brought together in a custom system, with dashboards and alerts for what needs attention.',
-    tags: ['ERP', 'Dashboards', 'Integrations'],
+      'Automate repetitive tasks, connect existing tools, process documents and deploy AI knowledge assistants that help teams find information and complete routine work faster.',
+    audience: 'Businesses that want to improve existing workflows without building an entirely new software platform.',
+    tags: ['Automation', 'Documents', 'Knowledge base'],
+  },
+  {
+    id: 'business-software',
+    title: 'Custom Business Software',
+    price: '$3,000–$15,000+',
+    timeline: '8–20 weeks',
+    short: 'Inventory, procurement, manufacturing and reporting.',
+    description:
+      'Design and build business-specific platforms for inventory, procurement, manufacturing, logistics, multi-branch operations and management reporting—with AI capabilities integrated where they add real value.',
+    audience: 'Established businesses that need a custom operational platform rather than disconnected tools and spreadsheets.',
+    tags: ['Operations', 'Multi-branch', 'Reporting'],
   },
 ];
 
@@ -885,7 +915,7 @@ export const faqs = [
   },
   {
     q: 'How do pricing and project timelines work?',
-    a: 'We start with a discovery conversation about the problem, then propose a scoped plan, often beginning with a prototype of the core workflow. Pricing and timelines depend on integrations and complexity, so we give you a clear estimate after discovery rather than a number up front.',
+    a: 'Each package lists a starting price and a typical timeline, for example AI & Workflow Automation from $500 in 1–4 weeks. The exact price depends on integrations and complexity, so after a discovery conversation we send a fixed scope and quote for you to approve before work starts. Not sure where to begin? The 48-Hour AI Business Audit is free.',
   },
   {
     q: 'Do you provide ongoing maintenance?',

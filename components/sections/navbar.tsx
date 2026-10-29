@@ -5,8 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import {
   ArrowUpRight,
-  Bot,
-  Boxes,
+  Building2,
   ChevronDown,
   FlaskConical,
   FolderKanban,
@@ -14,15 +13,17 @@ import {
   Menu,
   Newspaper,
   Package,
+  Rocket,
   ScanSearch,
+  ShoppingBag,
   Workflow,
   X,
   type LucideIcon,
 } from 'lucide-react';
 import { Logo } from '@/components/brand/logo';
 import { moreArt, moreArtDark } from '@/components/brand/more-art';
-import { packageArt, packageArtDark } from '@/components/brand/package-art';
-import { serviceArt, serviceArtDark } from '@/components/brand/service-art';
+import { packageArt } from '@/components/brand/package-art';
+import { serviceMenuArt } from '@/components/brand/service-menu-art';
 import { serviceIcons } from '@/components/brand/service-icons';
 import { coreServices, moreMenu, packages, site } from '@/lib/content';
 import { cn } from '@/lib/utils';
@@ -31,9 +32,10 @@ type MenuId = 'services' | 'packages' | 'more';
 
 const packageIcons: Record<string, LucideIcon> = {
   audit: ScanSearch,
-  'agent-starter': Bot,
-  workflow: Workflow,
-  systems: Boxes,
+  commerce: ShoppingBag,
+  'saas-mvp': Rocket,
+  automation: Workflow,
+  'business-software': Building2,
 };
 
 const moreIcons: Record<string, LucideIcon> = {
@@ -58,6 +60,11 @@ type PreviewItem = {
   dark: boolean;
   /** Where the row links. Without it the row is "coming soon": hoverable for the preview, not clickable. */
   href?: string;
+  /** Packages only: who it is for, and a CTA overriding the menu's. Prices stay off the menu (owner's call). */
+  audience?: string;
+  cta?: string;
+  /** The free audit: a "Free" badge and a highlighted "start here" row. */
+  featured?: boolean;
 };
 
 /** Menu order for services (the home bento keeps coreServices' own order): custom software leads, then the AI services. */
@@ -75,8 +82,8 @@ const serviceItems: PreviewItem[] = menuServices.map((s) => ({
   description: s.description,
   tags: s.tags,
   Icon: serviceIcons[s.id],
-  art: serviceArt[s.id]?.(),
-  dark: serviceArtDark[s.id] ?? false,
+  art: serviceMenuArt[s.id]?.(),
+  dark: true,
   href: `/services/${s.id}`,
 }));
 
@@ -88,8 +95,11 @@ const packageItems: PreviewItem[] = packages.map((p) => ({
   tags: p.tags,
   Icon: packageIcons[p.id],
   art: packageArt[p.id]?.(),
-  dark: packageArtDark[p.id] ?? false,
-  href: '/#contact',
+  dark: true,
+  href: `/packages/${p.id}`,
+  featured: p.free,
+  audience: p.audience,
+  cta: p.free ? 'See the free audit' : 'View package',
 }));
 
 const moreItems: PreviewItem[] = moreMenu.map((m) => ({
@@ -128,7 +138,17 @@ function PreviewMenu({
   const [active, setActive] = useState(0);
   const cur = items[active];
   const rowCls = (i: number) =>
-    cn('group flex flex-1 items-center gap-3.5 rounded-2xl px-3 py-2 transition-colors', i === active ? 'bg-white/[0.09]' : 'hover:bg-white/[0.05]');
+    cn(
+      'group relative flex flex-1 items-center gap-3.5 rounded-2xl px-3 py-2 transition-colors',
+      items[i].featured
+        ? cn(
+            'border border-signal/50 bg-gradient-to-r from-signal/25 via-signal/10 to-transparent shadow-[0_0_40px_-12px_rgba(232,79,61,0.8)]',
+            i === active ? 'from-signal/35 border-signal/80' : 'hover:border-signal/80',
+          )
+        : i === active
+          ? 'bg-white/[0.09]'
+          : 'hover:bg-white/[0.05]',
+    );
 
   return (
     <div
@@ -147,7 +167,7 @@ function PreviewMenu({
                 <span
                   className={cn(
                     'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors',
-                    i === active ? 'bg-signal text-paper' : 'bg-white/10 text-signal-300',
+                    i === active || it.featured ? 'bg-signal text-paper' : 'bg-white/10 text-signal-300',
                   )}
                 >
                   <it.Icon className="h-[18px] w-[18px]" />
@@ -156,8 +176,16 @@ function PreviewMenu({
                   <span className={cn('block truncate font-display text-[15.5px] font-semibold leading-tight', it.href ? 'text-paper' : 'text-paper/60')}>
                     {it.title}
                   </span>
-                  <span className="mt-0.5 block truncate text-[13px] text-paper/70">{it.short}</span>
+                  <span className="mt-0.5 block truncate text-[13px] text-paper/70">
+                    {it.featured && <span className="font-semibold text-signal-300">Start here · </span>}
+                    {it.short}
+                  </span>
                 </span>
+                {it.featured && (
+                  <span className="shrink-0 rounded-full bg-signal px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-paper shadow-[0_6px_18px_-6px_rgba(232,79,61,0.9)]">
+                    Free
+                  </span>
+                )}
                 {it.href ? (
                   <ArrowUpRight className={cn('h-4 w-4 shrink-0 transition-all', i === active ? 'text-signal-300 opacity-100' : 'opacity-0')} />
                 ) : (
@@ -166,7 +194,7 @@ function PreviewMenu({
               </>
             );
             return (
-              <li key={it.id} className="flex max-h-[84px] flex-1 flex-col">
+              <li key={it.id} className={cn('flex max-h-[84px] flex-1 flex-col', it.featured && 'mb-2.5')}>
                 {it.href ? (
                   <a href={it.href} onClick={onNavigate} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} className={rowCls(i)}>
                     {body}
@@ -194,12 +222,23 @@ function PreviewMenu({
             className="mt-3 flex flex-1 flex-col"
           >
             <h3 className="display text-[1.55rem] font-bold leading-tight text-paper">{cur.title}</h3>
+            {cur.featured && (
+              <p className="mt-2.5 w-fit rounded-full bg-signal px-3.5 py-1 font-mono text-[11.5px] font-bold uppercase tracking-wider text-paper">
+                100% free · 48-hour delivery
+              </p>
+            )}
             <p className="mt-2 text-pretty text-[14px] leading-relaxed text-paper/75">{cur.description}</p>
+            {cur.audience && (
+              <p className="mt-2 text-pretty text-[13px] leading-relaxed text-paper/60">
+                <span className="font-semibold text-paper/85">For: </span>
+                {cur.audience}
+              </p>
+            )}
 
             <div
               aria-hidden
               className={cn(
-                'mt-5 flex min-h-[212px] flex-1 items-center justify-center overflow-hidden rounded-2xl border px-5 py-3',
+                'mt-5 flex min-h-[212px] flex-1 items-center justify-center overflow-hidden rounded-2xl border p-3',
                 cur.dark ? 'border-white/10 bg-[#141416] text-paper' : 'border-black/5 bg-paper text-ink',
               )}
             >
@@ -220,7 +259,7 @@ function PreviewMenu({
                   onClick={onNavigate}
                   className="group inline-flex items-center gap-1.5 text-[14px] font-semibold text-signal-300 transition-colors hover:text-paper"
                 >
-                  {cta === 'auto' ? `Open ${cur.title}` : cta}
+                  {cur.cta ?? (cta === 'auto' ? `Open ${cur.title}` : cta)}
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </a>
               ) : (
@@ -234,12 +273,18 @@ function PreviewMenu({
   );
 }
 
-export function Navbar({ solid = false }: { solid?: boolean }) {
-  const [scrolledY, setScrolled] = useState(false);
-  const scrolled = solid || scrolledY;
+/**
+ * Transparent at the top of every page and a floating dark pill once scrolled, as on the home page.
+ * `overDark` is for pages whose top is dark: the transparent header then uses light text and logo.
+ */
+export function Navbar({ overDark = false }: { overDark?: boolean }) {
+  const [scrolled, setScrolled] = useState(false);
+  // Light text and logo: on the dark pill, or over a dark page top.
+  const light = scrolled || overDark;
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<MenuId | null>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.2 });
 
@@ -271,9 +316,22 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
     };
   }, [open]);
 
+  // Hover opens a menu; leaving its trigger or panel closes it after a short grace period, so the cursor can travel
+  // from the trigger down to the panel without the menu flickering shut.
+  const openMenu = (id: MenuId) => {
+    clearTimeout(closeTimer.current);
+    setMenu(id);
+  };
+  const holdMenu = () => clearTimeout(closeTimer.current);
+  const releaseMenu = () => {
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setMenu(null), 200);
+  };
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
   const linkCls = cn(
     'whitespace-nowrap rounded-full px-[14px] py-2 text-[14.8px] transition-colors xl:px-[17px]',
-    scrolled ? 'text-paper/65 hover:bg-white/[0.06] hover:text-paper' : 'text-[#2C313B] hover:bg-ink/[0.05] hover:text-ink',
+    light ? 'text-paper/65 hover:bg-white/[0.06] hover:text-paper' : 'text-[#2C313B] hover:bg-ink/[0.05] hover:text-ink',
   );
 
   const trigger = (id: MenuId, label: string) => (
@@ -282,13 +340,14 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
       type="button"
       aria-expanded={menu === id}
       aria-haspopup="true"
-      onMouseEnter={() => setMenu(id)}
-      onFocus={() => setMenu(id)}
-      onClick={() => setMenu(id)}
+      onMouseEnter={() => openMenu(id)}
+      onMouseLeave={releaseMenu}
+      onFocus={() => openMenu(id)}
+      onClick={() => openMenu(id)}
       className={cn(
         'inline-flex items-center gap-1 whitespace-nowrap rounded-full px-[14px] py-2 text-[14.8px] transition-colors xl:px-[17px]',
-        menu === id && (scrolled ? 'bg-white/[0.06] text-paper' : 'bg-ink/[0.05] text-ink'),
-        scrolled ? 'text-paper/65 hover:bg-white/[0.06] hover:text-paper' : 'text-[#2C313B] hover:bg-ink/[0.05] hover:text-ink',
+        menu === id && (light ? 'bg-white/[0.06] text-paper' : 'bg-ink/[0.05] text-ink'),
+        light ? 'text-paper/65 hover:bg-white/[0.06] hover:text-paper' : 'text-[#2C313B] hover:bg-ink/[0.05] hover:text-ink',
       )}
     >
       {label}
@@ -296,12 +355,18 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
     </button>
   );
 
-  const close = () => setMenu(null);
+  const close = () => {
+    clearTimeout(closeTimer.current);
+    setMenu(null);
+  };
 
   return (
     <header
       ref={headerRef}
-      onMouseLeave={close}
+      onBlur={(e) => {
+        // Keyboard users: close the menu once focus moves outside the header.
+        if (!headerRef.current?.contains(e.relatedTarget as Node | null)) setMenu(null);
+      }}
       className={cn(
         'fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-6',
         scrolled ? 'pt-3 sm:pt-4' : 'pt-0',
@@ -317,7 +382,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
         )}
       >
         <Link href="/#top" aria-label="Agentiq BD home" className="flex" onClick={() => setOpen(false)}>
-          <Logo tone={scrolled ? 'paper' : 'ink'} size="lg" />
+          <Logo tone={light ? 'paper' : 'ink'} size="lg" />
         </Link>
 
         <nav className="hidden items-center lg:flex" aria-label="Primary">
@@ -337,7 +402,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             href="/#contact"
             className={cn(
               'group hidden h-11 whitespace-nowrap items-center gap-2.5 rounded-full px-[25px] text-[15px] font-medium transition-colors hover:bg-flame hover:text-paper sm:inline-flex',
-              scrolled ? 'bg-paper text-ink' : 'bg-ink text-paper',
+              light ? 'bg-paper text-ink' : 'bg-ink text-paper',
             )}
           >
             Start a Project
@@ -347,7 +412,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             type="button"
             className={cn(
               'inline-flex h-10 w-10 items-center justify-center rounded-full border lg:hidden',
-              scrolled ? 'border-white/15 text-paper' : 'border-ink/20 text-ink',
+              light ? 'border-white/15 text-paper' : 'border-ink/20 text-ink',
             )}
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
@@ -373,9 +438,10 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
-            className={cn('mx-auto hidden max-w-[1280px] lg:block', scrolled ? 'mt-0' : 'mt-2')}
+            className="mx-auto hidden max-w-[1280px] lg:block"
           >
-            <div className="mx-auto max-w-[1000px]">
+            {/* The gap above the panel is padding, not margin, so it counts as part of the menu's hover area. */}
+            <div className={cn('mx-auto max-w-[1000px]', !scrolled && 'pt-2')} onMouseEnter={holdMenu} onMouseLeave={releaseMenu}>
               {menu === 'services' && (
                 <PreviewMenu label="Our services" previewLabel="Service preview" items={serviceItems} cta="Discuss this service" attached={scrolled} onNavigate={close} />
               )}
@@ -416,11 +482,12 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
               {packages.map((p) => (
                 <a
                   key={p.id}
-                  href="/#contact"
+                  href={`/packages/${p.id}`}
                   onClick={() => setOpen(false)}
                   className="rounded-2xl px-4 py-2.5 font-display text-[17px] text-paper/85 transition-colors hover:bg-white/5"
                 >
                   {p.title}
+                  {p.free && <span className="ml-2 rounded-full bg-signal px-2 py-0.5 align-middle font-mono text-[11px] font-bold uppercase text-paper">Free</span>}
                 </a>
               ))}
               <p className="eyebrow px-4 pb-1 pt-4 text-paper/35">More</p>

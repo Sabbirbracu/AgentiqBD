@@ -18,7 +18,7 @@ export function SolutionShell({
   const dark = tone === 'dark';
   return (
     <>
-      <Navbar solid />
+      <Navbar overDark={dark} />
       <main className={cn(dark ? 'bg-ink text-paper' : 'bg-paper text-ink')}>
         <div className="container-x pt-32 sm:pt-36">
           <Link

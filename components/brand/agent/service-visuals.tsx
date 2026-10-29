@@ -53,7 +53,8 @@ export function FlowLink({ d, t, i = 0 }: { d: string; t: Theme; i?: number }) {
       <path d={d} fill="none" stroke={t.line} strokeWidth={1.6} />
       <path d={d} fill="none" stroke={RED} strokeWidth={1.6} strokeDasharray="3 9" className="hub-flow" />
       <circle r={3.6} fill={RED}>
-        <animateMotion dur="3.4s" begin={`${i * 0.5}s`} repeatCount="indefinite" path={d} />
+        {/* Negative begin: each dot starts mid-loop, so none waits at the SVG origin before its turn. */}
+        <animateMotion dur="3.4s" begin={`-${i * 0.5}s`} repeatCount="indefinite" path={d} />
       </circle>
     </g>
   );
