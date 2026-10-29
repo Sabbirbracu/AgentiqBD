@@ -23,23 +23,36 @@ When you add or rename a page, add it to `sitemapRoutes` in `lib/seo.ts` and bum
 5. **URL Inspection** → paste `https://www.agentiqbd.com/` → **Request indexing**. Repeat for `/services` and the 9 service pages.
 6. Also submit the sitemap in Bing Webmaster Tools (https://www.bing.com/webmasters, "Import from Google Search Console" is one click). Bing feeds several AI assistants.
 
-## Search volume
-Real monthly volumes need a keyword tool (Google Keyword Planner, Ahrefs, Semrush). None was available to this session, so no numbers are listed here. Fill the column after pulling them.
+## Keyword map
+Volumes below are from Semrush, shared by the owner on 2026-10-29 (database not stated, so treat them as global/US, not Bangladesh). Blank = not pulled yet. To see Bangladesh demand, switch the Semrush database to **Bangladesh (bd)** and re-run the same phrases.
 
-| Target phrase | Page | Volume (fill in) |
-|---|---|---|
-| agentiq bd | `/` | |
-| AI agent development company | `/services/ai-agents` | |
-| AI agent development Bangladesh | `/services/ai-agents` | |
-| AI chatbot development | `/services/chatbots` | |
-| WhatsApp chatbot for business | `/services/chatbots` | |
-| voice AI agent / AI receptionist | `/services/voice` | |
-| business process automation Bangladesh | `/services/workflow-automation` | |
-| RAG development / knowledge base chatbot | `/services/knowledge-rag` | |
-| AI integration services | `/services/integrations` | |
-| ERP development Bangladesh / AI-enabled ERP | `/services/business-systems` | |
-| custom software development Bangladesh | `/services/custom-software` | |
-| AI company in Dhaka / AI automation company Bangladesh | `/` | |
+| Target phrase | Page | Volume | KD% | Where it is used |
+|---|---|---|---|---|
+| agentic ai | `/services/ai-agents` | 90,500 | 96 | title, definition paragraph, FAQ, key terms |
+| what is agentic ai / agentic ai definition | `/services/ai-agents` | 33,100 / 18,100 | 87 | FAQ "What is agentic AI?", key term |
+| ai agents / ai agent | `/services/ai-agents` | 27,100 / 22,200 | 98 / 100 | H1, title |
+| what is an ai agent / what are ai agents | `/services/ai-agents` | 14,800 / 6,600 | 90 / 86 | H2 "What is an AI agent?", key term |
+| AI agent development company | `/services/ai-agents` | | | title, keywords |
+| AI voice agent / AI receptionist | `/services/voice` | | | title, H1, H2, key terms |
+| AI chatbot development / WhatsApp chatbot for business | `/services/chatbots` | | | |
+| business process automation Bangladesh | `/services/workflow-automation` | | | |
+| knowledge base software (US) | `/services/knowledge-rag` | 1.5M* | 50 | answer paragraph, keywords, key term |
+| ai powered knowledge base software (US) | `/services/knowledge-rag` | 1,900 | 57 | title "AI Knowledge Base Software", H1, H2 |
+| internal knowledge base software (US) | `/services/knowledge-rag` | 1,000 | 36 | meta description, keywords |
+| what is knowledge base software (US) | `/services/knowledge-rag` | 50 | 39 | FAQ "What is knowledge base software?" |
+| RAG development / knowledge base chatbot | `/services/knowledge-rag` | | | |
+| AI integration services | `/services/integrations` | | | |
+| ERP development Bangladesh / AI-enabled ERP | `/services/business-systems` | | | |
+| software company in Bangladesh / software development company in Bangladesh | `/` and `/services/custom-software` | | | home title, custom-software title + H1, FAQ "How do I choose a software company in Bangladesh?" |
+| AI company in Dhaka / AI company in Bangladesh | `/` | | | home keywords, Who we are copy |
+
+\* "knowledge base software" (Semrush US, 2026-10-29): the trend chart shows two tall months and almost nothing since, so 1.5M is a spike, not steady demand. Most of these searchers want a ready-made tool (Guru, Confluence, Zendesk), so the page answers "buy or build?" honestly instead of competing as a product. Also skipped: "guru knowledge base software" (a brand), "free knowledge base software" (we do not offer free software), "best knowledge base software" (comparison lists; we do not claim "best").
+
+Deliberately **not** targeted: "openclaw ai agent" and "ai voice agent zanus" (other companies' product names; we would not rank and it would mislead visitors) and "agentic ai coding tools" (a tool category we do not sell).
+
+"Best software company in Bangladesh": the site never claims to be "the best" (house rule: no overclaiming). The page targets "software company in Bangladesh", which these searches contain. Google and AI assistants answer "best" queries from reviews and listings, so the levers are off-site: Clutch, GoodFirms and Google Business Profile reviews, plus mentions in "top software companies in Bangladesh" articles.
+
+The KD 85–100 head terms (agentic ai, ai agents) are dominated by large publishers and will not rank quickly. What they are good for: AI assistants (GEO) quoting our definitions, and long-tail variants such as "AI agent development company in Bangladesh" that a new site can win.
 
 "Agentiq" / "AgentIQ" alone is shared with NVIDIA's open-source AgentIQ toolkit and other companies, so rank for "Agentiq BD" and the service phrases above instead.
 

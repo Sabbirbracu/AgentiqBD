@@ -5,7 +5,7 @@ import { coreServices, navLinks, site } from '@/lib/content';
 
 const partnerHref = `mailto:${site.email}?subject=${encodeURIComponent('Partnership enquiry')}`;
 const careersHref = `mailto:${site.email}?subject=${encodeURIComponent('Career enquiry')}`;
-const companyLinks = [...navLinks, { label: 'Become a partner', href: partnerHref }, { label: 'Careers', href: careersHref }];
+const companyLinks = [...navLinks, { label: 'Blog', href: '/blog' }, { label: 'Become a partner', href: partnerHref }, { label: 'Careers', href: careersHref }];
 
 export function Footer() {
   return (

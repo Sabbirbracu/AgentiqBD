@@ -1,5 +1,6 @@
 import { coreServices, faqs, founder, products, projects, site } from '@/lib/content';
 import { servicePages } from '@/lib/service-pages';
+import { posts } from '@/lib/blog';
 
 /**
  * Search and AI-assistant visibility helpers: canonical URLs, the sitemap route list and JSON-LD builders.
@@ -12,7 +13,7 @@ export const absoluteUrl = (path = '/') => new URL(path, site.url).toString();
  * Date the sitemap reports as "last modified". Search engines ignore lastmod when it is always "today", so
  * bump this only when page content really changes.
  */
-export const contentUpdated = '2026-10-27';
+export const contentUpdated = '2026-10-29';
 
 /** Every public, indexable route. /brand/* is internal and is excluded here and in robots.ts. */
 export const sitemapRoutes: { path: string; priority: number }[] = [
@@ -20,6 +21,8 @@ export const sitemapRoutes: { path: string; priority: number }[] = [
   { path: '/services', priority: 0.9 },
   ...servicePages.map((s) => ({ path: `/services/${s.id}`, priority: 0.8 })),
   ...projects.map((p) => ({ path: `/work/${p.id}`, priority: 0.7 })),
+  { path: '/blog', priority: 0.7 },
+  ...posts.map((p) => ({ path: `/blog/${p.slug}`, priority: 0.6 })),
   { path: '/agenticore', priority: 0.6 },
   { path: '/ai-employees', priority: 0.6 },
   { path: '/workflows', priority: 0.5 },
@@ -34,7 +37,7 @@ const realProfiles = [
 
 export const orgId = `${site.url}/#organization`;
 const websiteId = `${site.url}/#website`;
-const founderId = `${site.url}/#founder`;
+export const founderId = `${site.url}/#founder`;
 
 export function organizationJsonLd() {
   return {
@@ -60,13 +63,16 @@ export function organizationJsonLd() {
         },
         areaServed: [{ '@type': 'Country', name: 'Bangladesh' }, 'Worldwide'],
         knowsAbout: [
+          'AI agents',
+          'Agentic AI',
           'AI agent development',
           'AI chatbots',
-          'Voice AI agents',
+          'AI voice agents',
           'Business workflow automation',
           'Retrieval-augmented generation',
           'ERP and industrial AI',
           'Custom software and SaaS development',
+          'Software development in Bangladesh',
         ],
         founder: { '@id': founderId },
         ...(realProfiles.length ? { sameAs: realProfiles } : {}),
@@ -169,6 +175,19 @@ export function webPageJsonLd(p: { name: string; description: string; path: stri
   };
 }
 
+/** Glossary of a page as a DefinedTermSet, so search engines and AI assistants can quote each definition. */
+export function definedTermsJsonLd(p: { name: string; path: string; terms: { term: string; definition: string }[] }) {
+  const id = `${absoluteUrl(p.path)}#terms`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': id,
+    name: p.name,
+    url: absoluteUrl(p.path),
+    hasDefinedTerm: p.terms.map((t) => ({ '@type': 'DefinedTerm', name: t.term, description: t.definition, inDefinedTermSet: id })),
+  };
+}
+
 export function serviceJsonLd(s: { name: string; description: string; path: string }) {
   return {
     '@context': 'https://schema.org',
@@ -179,5 +198,38 @@ export function serviceJsonLd(s: { name: string; description: string; path: stri
     serviceType: s.name,
     provider: { '@id': orgId },
     areaServed: [{ '@type': 'Country', name: 'Bangladesh' }, 'Worldwide'],
+  };
+}
+
+/** One article as a BlogPosting, authored by the founder entity and published by the organisation. */
+export function blogPostingJsonLd(p: {
+  title: string;
+  description: string;
+  path: string;
+  date: string;
+  updated?: string;
+  section: string;
+  keywords: string[];
+  words: number;
+}) {
+  const url = absoluteUrl(p.path);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: p.title,
+    description: p.description,
+    url,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    datePublished: p.date,
+    dateModified: p.updated ?? p.date,
+    articleSection: p.section,
+    keywords: p.keywords.join(', '),
+    wordCount: p.words,
+    inLanguage: 'en',
+    image: absoluteUrl('/opengraph-image'),
+    author: { '@type': 'Person', '@id': founderId, name: founder.name, url: absoluteUrl('/#why') },
+    publisher: { '@id': orgId },
+    isPartOf: { '@type': 'Blog', '@id': `${absoluteUrl('/blog')}#blog` },
   };
 }

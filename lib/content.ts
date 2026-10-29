@@ -12,7 +12,7 @@ export const site = {
   address: 'Pragati Sarani, Merul Badda, Dhaka',
   tagline: 'Turn Complexity into Intelligence',
   description:
-    'Agentiq BD is an AI engineering and software company. We build intelligent software, automate business workflows and integrate AI into everyday operations — connected to the tools you already run.',
+    'Agentiq BD is an AI engineering and software company in Dhaka, Bangladesh. We build intelligent software, automate business workflows and integrate AI into everyday operations — connected to the tools you already run.',
   /** International format, digits only (01304867542 → +880 1304 867542). */
   whatsapp: '8801304867542',
   /** TODO(owner): PLACEHOLDER — replace with the real Calendly / Cal.com / Google appointment link. Empty → "Book a discovery call" opens a pre-filled email. */
@@ -52,7 +52,7 @@ export function sectionNo(id: (typeof sectionOrder)[number]) {
 export const whoWeAre = {
   /** `**word**` marks the phrases that get highlighted. */
   lead:
-    'Agentiq BD is an **AI engineering and software company**. We build **intelligent software**, automate business workflows and integrate AI into everyday operations.',
+    'Agentiq BD is an **AI engineering and software company** in Dhaka, Bangladesh. We build **intelligent software**, automate business workflows and integrate AI into everyday operations.',
   body:
     'Based in Dhaka, Bangladesh, with **global delivery**. We work with business owners, operations leads and technical teams at manufacturers, growing SMEs and service businesses, with founder-led, hands-on technical delivery.',
   /** Who we serve — drives the graphic beside the text. */
@@ -221,7 +221,7 @@ export const coreServices = [
     category: 'Voice',
     tagline: 'Answers calls and books appointments.',
     short: 'Assistants that answer calls, take bookings and arrange call-backs.',
-    title: 'Voice AI Agents',
+    title: 'AI Voice Agents',
     description:
       'Voice assistants that answer calls, take bookings and arrange call-backs, connected to your calendar and CRM.',
     tags: ['Calls', 'Bookings', 'Call-backs'],
@@ -241,7 +241,7 @@ export const coreServices = [
     category: 'Knowledge',
     tagline: 'Q&A over your documents and SOPs.',
     short: 'Search and Q&A over your documents, policies and SOPs.',
-    title: 'Knowledge Base & RAG',
+    title: 'AI Knowledge Base & RAG',
     description:
       'Search and Q&A over your documents, policies and SOPs, so staff and customers get answers from your own material.',
     tags: ['PDFs & SOPs', 'Internal search', 'Q&A'],
@@ -351,6 +351,7 @@ export const moreMenu = [
     text: 'Notes on AI and engineering',
     description: 'Practical notes on AI, automation and building software that works in a real business.',
     tags: ['AI', 'Automation', 'Engineering'],
+    href: '/blog',
   },
   {
     id: 'rnd',

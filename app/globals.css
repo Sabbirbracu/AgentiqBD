@@ -323,8 +323,41 @@
 .cr-float { animation: cr-float 6s ease-in-out infinite; }
 .hub-flow { animation: hub-flow 1.4s linear infinite; }
 
+/* Pip at the desk: eye hand spin, typing hands, head bob, waiting pulse. */
+.pip-spin, .pip-type-l, .pip-type-r, .pip-bob { transform-box: view-box; transform-origin: 0 0; }
+.pip-spin { animation: pip-spin 1.1s linear infinite; }
+.pip-type-l { animation: pip-type 0.3s ease-in-out infinite alternate; }
+.pip-type-r { animation: pip-type 0.3s ease-in-out 0.15s infinite alternate; }
+.pip-bob { animation: pip-bob 1.8s ease-in-out infinite; }
+.pip-pulse { animation: pip-pulse 1.1s ease-in-out infinite; }
+.pip-screen { animation: pip-pulse 1.6s ease-in-out infinite; }
+@keyframes pip-spin { to { transform: rotate(360deg); } }
+@keyframes pip-type { to { transform: translateY(-6px); } }
+@keyframes pip-bob { 50% { transform: translateY(3px); } }
+@keyframes pip-pulse { 50% { opacity: 0.35; } }
+
+/* How it works graphics: typing caret and voice waveform bars. */
+.type-caret { display: inline-block; width: 1.5px; height: 1em; margin-left: 1px; vertical-align: -0.12em; background: currentColor; animation: type-caret 0.9s steps(1) infinite; }
+@keyframes type-caret { 50% { opacity: 0; } }
+.voice-bar { transform-origin: center; animation: voice-bar 0.9s ease-in-out infinite; }
+@keyframes voice-bar { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+
+/* Live desk (AI agents How it works): "thinking" text sweep. */
+@keyframes desk-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+.desk-shimmer {
+  background: linear-gradient(90deg, rgba(252, 252, 244, 0.45) 0%, #fcfcf4 50%, rgba(252, 252, 244, 0.45) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: desk-shimmer 1.6s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .cr-bar, .cr-float, .hub-flow { animation: none; }
+  .cr-bar, .cr-float, .hub-flow, .desk-shimmer, .pip-spin, .pip-type-l, .pip-type-r, .pip-bob, .pip-pulse, .pip-screen, .type-caret, .voice-bar { animation: none; }
   .cr-bar { transform: scaleX(0.7); }
 }
 

@@ -25,19 +25,23 @@ export type ServicePage = {
 export const servicePages: ServicePage[] = [
   {
     id: 'ai-agents',
-    metaTitle: 'AI Agent Development Company in Bangladesh',
+    metaTitle: 'AI Agent Development & Agentic AI in Bangladesh',
     metaDescription:
-      'Agentiq BD builds AI agents (AI Employees) for customer support, lead handling and bookings, connected to your systems with clear limits and human approval.',
-    h1: 'AI agent development for support, leads and bookings',
+      'AI agents and agentic AI for support, leads and bookings, connected to your systems with clear limits and human approval. Built by Agentiq BD, Bangladesh.',
+    h1: 'AI agents that handle support, leads and bookings',
     answer:
-      'An AI agent is software that takes a request, decides the next step and carries it out inside your business tools. Agentiq BD, an AI engineering company in Dhaka, Bangladesh, builds AI agents we call AI Employees. Each one is scoped to a single job, such as answering customers, qualifying leads or booking appointments, with only the permissions that job needs.',
+      'An AI agent is software that takes a request, decides the next step and carries it out inside your business tools. Working towards a goal over several steps like this, rather than answering a single prompt, is what is meant by agentic AI. Agentiq BD, an AI engineering company in Dhaka, Bangladesh, builds AI agents we call AI Employees. Each one is scoped to a single job, such as answering customers, qualifying leads or booking appointments, with only the permissions that job needs.',
     keywords: [
+      'AI agents',
       'AI agent development',
+      'agentic AI',
+      'what is agentic AI',
+      'what is an AI agent',
+      'what are AI agents',
       'AI agent development company',
       'AI agents for business',
-      'AI employees',
       'AI agent development Bangladesh',
-      'custom AI agents',
+      'AI employees',
     ],
     build: [
       'Support agents that answer from your own knowledge base and hand over to a person when needed',
@@ -55,6 +59,18 @@ export const servicePages: ServicePage[] = [
       {
         q: 'What is an AI Employee?',
         a: 'An AI Employee is an AI agent given one defined job, such as support, lead handling or bookings. It works inside your systems with limited permissions, asks for human approval on sensitive actions, and keeps a record of what it did.',
+      },
+      {
+        q: 'What is agentic AI?',
+        a: 'Agentic AI is AI that works towards a goal over several steps. It plans what to do, uses tools such as your CRM or calendar, checks the result and decides what comes next, instead of only replying to one prompt. AI agents are how agentic AI is put to work. In a business we keep them tightly scoped: one job, limited permissions and human approval for sensitive actions.',
+      },
+      {
+        q: 'What is the difference between an AI agent and a chatbot?',
+        a: 'A chatbot answers questions in a conversation. An AI agent can also take actions: look up an order, update a record, book a slot or raise a ticket. Many projects use both, with a chat window in front and an agent doing the work behind it.',
+      },
+      {
+        q: 'What are AI agents used for in business?',
+        a: 'Common uses are customer support, lead qualification, appointment booking, document processing and internal requests. A good first agent usually takes on a repetitive task with clear rules that your team handles many times a day.',
       },
       {
         q: 'Will an AI agent replace my team?',
@@ -113,13 +129,15 @@ export const servicePages: ServicePage[] = [
   },
   {
     id: 'voice',
-    metaTitle: 'Voice AI Agents That Answer Calls & Book',
+    metaTitle: 'AI Voice Agents That Answer Calls & Book',
     metaDescription:
-      'Voice AI agents that answer calls, take bookings and arrange call-backs, connected to your calendar and CRM. Built by Agentiq BD in Dhaka, Bangladesh.',
-    h1: 'Voice AI agents that answer calls and take bookings',
+      'AI voice agents that answer calls, take bookings and arrange call-backs, connected to your calendar and CRM. Built by Agentiq BD in Dhaka, Bangladesh.',
+    h1: 'AI voice agents that answer calls and take bookings',
     answer:
-      'A voice AI agent is an assistant that speaks with callers, understands what they need and completes the task. Agentiq BD builds voice AI agents that answer calls, take bookings and arrange call-backs, connected to your calendar and CRM so nothing is lost between the call and your records.',
+      'An AI voice agent is an assistant that speaks with callers, understands what they need and completes the task. Agentiq BD builds AI voice agents that answer calls, take bookings and arrange call-backs, connected to your calendar and CRM so nothing is lost between the call and your records.',
     keywords: [
+      'AI voice agent',
+      'AI voice agents',
       'voice AI agent',
       'AI voice assistant for business',
       'AI receptionist',
@@ -200,13 +218,19 @@ export const servicePages: ServicePage[] = [
   },
   {
     id: 'knowledge-rag',
-    metaTitle: 'Knowledge Base & RAG Development',
+    metaTitle: 'AI Knowledge Base Software & RAG Development',
     metaDescription:
-      'Search and Q&A over your documents, policies and SOPs with retrieval-augmented generation (RAG), so staff and customers get answers from your own material.',
-    h1: 'Knowledge base and RAG: answers from your own documents',
+      'Custom AI-powered knowledge base software for internal search and customer Q&A over your PDFs, policies and SOPs, built with RAG by Agentiq BD.',
+    h1: 'AI knowledge base software that answers from your own documents',
     answer:
-      'Retrieval-augmented generation (RAG) lets an AI assistant look up your own documents before it answers, so replies come from your material instead of general knowledge. Agentiq BD builds knowledge-base and RAG applications for internal search and customer Q&A over PDFs, policies and SOPs.',
+      'Knowledge base software stores a company’s documents and helps people find answers in them. AI knowledge base software goes further: using retrieval-augmented generation (RAG), the assistant looks up your own documents before it answers, so replies come from your material instead of general knowledge. Agentiq BD builds custom AI knowledge base software for internal search and customer Q&A over PDFs, policies and SOPs.',
     keywords: [
+      'knowledge base software',
+      'AI knowledge base software',
+      'AI powered knowledge base software',
+      'internal knowledge base software',
+      'custom knowledge base software',
+      'knowledge base platform',
       'RAG development',
       'knowledge base chatbot',
       'AI document search',
@@ -227,6 +251,14 @@ export const servicePages: ServicePage[] = [
       'Support teams answering the same policy questions repeatedly',
     ],
     faqs: [
+      {
+        q: 'What is knowledge base software?',
+        a: 'Knowledge base software is a central place for a company’s documents, policies and how-to guides, with search so staff or customers can find answers themselves. AI knowledge base software adds an assistant that reads the relevant documents and answers questions in plain language, with a link to the source.',
+      },
+      {
+        q: 'Should we buy knowledge base software or have one built?',
+        a: 'If you mainly need a place to write and organise help articles, an off-the-shelf tool is usually the right choice and we will say so. A custom build makes sense when answers must come from many existing files such as PDFs, SOPs and spreadsheets, when access rules are strict, or when the knowledge base has to connect to your own systems and chat channels.',
+      },
       {
         q: 'What is RAG in simple terms?',
         a: 'The assistant first finds the relevant passages in your documents, then writes its answer from them. That keeps answers tied to your material and lets you check the source.',
@@ -331,13 +363,18 @@ export const servicePages: ServicePage[] = [
   },
   {
     id: 'custom-software',
-    metaTitle: 'Custom Software & SaaS Development Bangladesh',
+    metaTitle: 'Software Development Company in Bangladesh',
     metaDescription:
-      'Web apps, SaaS products and platforms built from scratch or modernized from legacy systems. Custom software development by Agentiq BD, Dhaka, Bangladesh.',
-    h1: 'Custom software, SaaS and legacy modernization',
+      'Agentiq BD is a software development company in Dhaka, Bangladesh, building web apps, SaaS products and platforms, and modernizing legacy systems.',
+    h1: 'Custom software development company in Bangladesh',
     answer:
-      'Custom software development is building the system your business needs rather than adapting one that nearly fits. Agentiq BD, based in Dhaka, Bangladesh, builds web applications, SaaS products and platforms from scratch, and modernizes older systems, securely deployed and maintainable.',
+      'Custom software development is building the system your business needs rather than adapting one that nearly fits. Agentiq BD is a software development company in Dhaka, Bangladesh. We build web applications, SaaS products and platforms from scratch, and modernize older systems, for clients in Bangladesh and abroad, securely deployed and maintainable.',
     keywords: [
+      'software company in Bangladesh',
+      'software development company in Bangladesh',
+      'best software company in Bangladesh',
+      'software company in Dhaka',
+      'IT company in Bangladesh',
       'custom software development Bangladesh',
       'SaaS development company',
       'web application development',
@@ -368,6 +405,10 @@ export const servicePages: ServicePage[] = [
       {
         q: 'Can you work with an international team or client?',
         a: 'Yes. We are based in Dhaka and work with clients globally. Meetings, documentation and delivery are in English.',
+      },
+      {
+        q: 'How do I choose a software company in Bangladesh?',
+        a: 'Look at live work you can open, not only screenshots. Speak with the engineer who will design your system, ask for a written scope and estimate before work starts, and agree who owns the code and how support works after launch. Hold us to the same test: our projects are on the Our Work page, and you talk directly to the engineer designing your system.',
       },
     ],
     related: ['business-systems', 'integrations', 'reporting'],

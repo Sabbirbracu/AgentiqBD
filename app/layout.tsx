@@ -22,7 +22,7 @@ const sans = Schibsted_Grotesk({
   display: 'swap',
 });
 const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
-const title = 'Agentiq BD — AI Agents, Automation & Software in Bangladesh';
+const title = 'Agentiq BD — AI & Software Company in Bangladesh';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -35,6 +35,11 @@ export const metadata: Metadata = {
   category: 'technology',
   keywords: [
     'Agentiq BD',
+    'software company in Bangladesh',
+    'software development company in Bangladesh',
+    'AI company in Bangladesh',
+    'AI agents',
+    'agentic AI',
     'AI agent development',
     'AI employees',
     'AI chatbot development',

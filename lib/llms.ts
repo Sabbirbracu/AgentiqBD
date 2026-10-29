@@ -1,5 +1,7 @@
 import { coreServices, faqs, founder, packages, processSteps, products, projects, site, whyUs } from '@/lib/content';
+import { posts } from '@/lib/blog';
 import { absoluteUrl, contentUpdated } from '@/lib/seo';
+import { serviceLanding } from '@/lib/service-landing';
 import { servicePages } from '@/lib/service-pages';
 
 /**
@@ -8,7 +10,7 @@ import { servicePages } from '@/lib/service-pages';
  */
 
 const intro =
-  'Agentiq BD is an AI engineering and software company based in Dhaka, Bangladesh, serving clients globally. It builds AI agents ("AI Employees"), chatbots, voice AI, workflow automation, knowledge-base (RAG) applications, AI integrations, industrial AI and ERP systems, and custom software. Delivery is founder-led and hands-on.';
+  'Agentiq BD is an AI engineering and software development company based in Dhaka, Bangladesh, serving clients globally. It builds AI agents ("AI Employees") and other agentic AI systems, chatbots, AI voice agents, workflow automation, knowledge-base (RAG) applications, AI integrations, industrial AI and ERP systems, and custom software. Delivery is founder-led and hands-on.';
 
 const disambiguation =
   'Agentiq BD is not affiliated with NVIDIA\'s "AgentIQ" open-source toolkit or any other product named Agent IQ. Our domain is agentiqbd.com.';
@@ -46,6 +48,9 @@ export function buildLlmsTxt() {
     '## Work and products',
     ...projects.map((p) => `- [${p.title}](${absoluteUrl(`/work/${p.id}`)}): ${p.summary}`),
     ...products.map(productLine),
+    '',
+    '## Blog',
+    ...posts.map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.excerpt}`),
     '',
     '## Optional',
     `- [Full text of this site for AI assistants](${absoluteUrl('/llms-full.txt')})`,
@@ -92,6 +97,9 @@ export function buildLlmsFullTxt() {
       '',
       s.answer,
       '',
+      'Key terms:',
+      ...(serviceLanding[s.id]?.glossary ?? []).map((g) => `- **${g.term}**: ${g.definition}`),
+      '',
       'What we build:',
       ...s.build.map((b) => `- ${b}`),
       '',
@@ -113,6 +121,11 @@ export function buildLlmsFullTxt() {
   }
 
   out.push('## Products', '', ...products.flatMap((p) => [productLine(p), ...p.highlights.map((h) => `  - ${h}`)]), '');
+
+  out.push('## Blog articles', '');
+  for (const p of posts) {
+    out.push(`### ${p.title}`, `URL: ${absoluteUrl(`/blog/${p.slug}`)}`, `Topic: ${p.category}. Published: ${p.date}.`, '', p.excerpt, '', 'In short:', ...p.takeaways.map((t) => `- ${t}`), '');
+  }
 
   out.push('## Frequently asked questions', '', ...faqs.flatMap((f) => [`**${f.q}**`, f.a, '']));
 

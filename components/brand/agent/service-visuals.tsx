@@ -25,16 +25,16 @@ import { cn } from '@/lib/utils';
  * Pure SVG (no filters), themed for dark or light surfaces. Copy mirrors lib/content.ts.
  */
 
-const RED = '#E84F3D';
+export const RED = '#E84F3D';
 
-function theme(dark: boolean) {
+export function theme(dark: boolean) {
   return dark
     ? { panel: '#151518', stroke: 'rgba(255,255,255,0.14)', text: '#FCFCF4', muted: 'rgba(252,252,244,0.58)', faint: 'rgba(252,252,244,0.4)', line: 'rgba(255,255,255,0.22)', tile: '#2a2a30', soft: 'rgba(255,255,255,0.06)' }
     : { panel: '#FFFFFF', stroke: 'rgba(10,10,11,0.13)', text: '#0A0A0B', muted: 'rgba(10,10,11,0.6)', faint: 'rgba(10,10,11,0.42)', line: 'rgba(10,10,11,0.24)', tile: '#0A0A0B', soft: 'rgba(10,10,11,0.045)' };
 }
-type Theme = ReturnType<typeof theme>;
+export type Theme = ReturnType<typeof theme>;
 
-function Frame({ dark, label, children, className }: { dark: boolean; label: string; children: React.ReactNode; className?: string }) {
+export function Frame({ dark, label, children, className }: { dark: boolean; label: string; children: React.ReactNode; className?: string }) {
   return (
     <svg
       viewBox="0 0 688 400"
@@ -47,7 +47,7 @@ function Frame({ dark, label, children, className }: { dark: boolean; label: str
   );
 }
 
-function Link({ d, t, i = 0 }: { d: string; t: Theme; i?: number }) {
+export function FlowLink({ d, t, i = 0 }: { d: string; t: Theme; i?: number }) {
   return (
     <g>
       <path d={d} fill="none" stroke={t.line} strokeWidth={1.6} />
@@ -59,7 +59,7 @@ function Link({ d, t, i = 0 }: { d: string; t: Theme; i?: number }) {
   );
 }
 
-function IconTile({ x, y, s = 34, Icon, hot, t }: { x: number; y: number; s?: number; Icon: LucideIcon; hot?: boolean; t: Theme }) {
+export function IconTile({ x, y, s = 34, Icon, hot, t }: { x: number; y: number; s?: number; Icon: LucideIcon; hot?: boolean; t: Theme }) {
   return (
     <g>
       <rect x={x} y={y} width={s} height={s} rx={s * 0.3} fill={hot ? RED : t.tile} />
@@ -68,7 +68,7 @@ function IconTile({ x, y, s = 34, Icon, hot, t }: { x: number; y: number; s?: nu
   );
 }
 
-function Mono({ x, y, children, t, size = 10.5, anchor }: { x: number; y: number; children: React.ReactNode; t: Theme; size?: number; anchor?: 'end' | 'middle' }) {
+export function Mono({ x, y, children, t, size = 10.5, anchor }: { x: number; y: number; children: React.ReactNode; t: Theme; size?: number; anchor?: 'end' | 'middle' }) {
   return (
     <text x={x} y={y} className="font-mono" fontSize={size} letterSpacing={1.8} fill={t.faint} textAnchor={anchor}>
       {children}
@@ -101,7 +101,7 @@ export function WorkflowVisual({ dark = false, className }: { dark?: boolean; cl
       </g>
 
       {flow.slice(0, 3).map((_, i) => (
-        <Link key={i} i={i} t={t} d={`M${X(i) + W} ${Y(i) + H / 2} C ${X(i) + W + 30} ${Y(i) + H / 2}, ${X(i + 1) - 30} ${Y(i + 1) + H / 2}, ${X(i + 1)} ${Y(i + 1) + H / 2}`} />
+        <FlowLink key={i} i={i} t={t} d={`M${X(i) + W} ${Y(i) + H / 2} C ${X(i) + W + 30} ${Y(i) + H / 2}, ${X(i + 1) - 30} ${Y(i + 1) + H / 2}, ${X(i + 1)} ${Y(i + 1) + H / 2}`} />
       ))}
 
       {flow.map((n, i) => (
@@ -232,12 +232,12 @@ export function CustomVisual({ dark = false, className }: { dark?: boolean; clas
       <Mono x={608} y={32} t={t}>YOUR TEAM</Mono>
 
       {col1.map((_, i) => (
-        <Link key={`a${i}`} i={i} t={t} d={`M148 ${ny(i) + 28} C 178 ${ny(i) + 28}, 178 ${MID}, 208 ${MID}`} />
+        <FlowLink key={`a${i}`} i={i} t={t} d={`M148 ${ny(i) + 28} C 178 ${ny(i) + 28}, 178 ${MID}, 208 ${MID}`} />
       ))}
       {col3.map((_, i) => (
-        <Link key={`b${i}`} i={i + 1} t={t} d={`M388 ${MID} C 418 ${MID}, 418 ${ny(i) + 28}, 448 ${ny(i) + 28}`} />
+        <FlowLink key={`b${i}`} i={i + 1} t={t} d={`M388 ${MID} C 418 ${MID}, 418 ${ny(i) + 28}, 448 ${ny(i) + 28}`} />
       ))}
-      <Link i={2} t={t} d={`M576 ${MID} C 590 ${MID}, 596 ${MID}, 608 ${MID}`} />
+      <FlowLink i={2} t={t} d={`M576 ${MID} C 590 ${MID}, 596 ${MID}, 608 ${MID}`} />
 
       {col1.map((n, i) => (
         <g key={n.name}>

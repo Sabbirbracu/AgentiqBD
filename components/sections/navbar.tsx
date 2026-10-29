@@ -5,22 +5,15 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import {
   ArrowUpRight,
-  BarChart3,
-  BookOpenText,
   Bot,
   Boxes,
   ChevronDown,
-  Code2,
-  Factory,
   FlaskConical,
   FolderKanban,
   Handshake,
   Menu,
-  MessagesSquare,
   Newspaper,
   Package,
-  PhoneCall,
-  Plug,
   ScanSearch,
   Workflow,
   X,
@@ -30,22 +23,11 @@ import { Logo } from '@/components/brand/logo';
 import { moreArt, moreArtDark } from '@/components/brand/more-art';
 import { packageArt, packageArtDark } from '@/components/brand/package-art';
 import { serviceArt, serviceArtDark } from '@/components/brand/service-art';
+import { serviceIcons } from '@/components/brand/service-icons';
 import { coreServices, moreMenu, packages, site } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
 type MenuId = 'services' | 'packages' | 'more';
-
-const serviceIcons: Record<string, LucideIcon> = {
-  'ai-agents': Bot,
-  chatbots: MessagesSquare,
-  voice: PhoneCall,
-  'workflow-automation': Workflow,
-  'knowledge-rag': BookOpenText,
-  integrations: Plug,
-  'business-systems': Factory,
-  reporting: BarChart3,
-  'custom-software': Code2,
-};
 
 const packageIcons: Record<string, LucideIcon> = {
   audit: ScanSearch,
@@ -78,7 +60,15 @@ type PreviewItem = {
   href?: string;
 };
 
-const serviceItems: PreviewItem[] = coreServices.map((s) => ({
+/** Menu order for services (the home bento keeps coreServices' own order): custom software leads, then the AI services. */
+const menuOrder = ['custom-software', 'ai-agents', 'chatbots', 'voice', 'workflow-automation', 'knowledge-rag', 'integrations', 'business-systems', 'reporting'];
+const rank = (id: string) => {
+  const i = menuOrder.indexOf(id);
+  return i === -1 ? menuOrder.length : i;
+};
+const menuServices = [...coreServices].sort((a, b) => rank(a.id) - rank(b.id));
+
+const serviceItems: PreviewItem[] = menuServices.map((s) => ({
   id: s.id,
   title: s.title,
   short: s.tagline,
@@ -412,7 +402,7 @@ export function Navbar({ solid = false }: { solid?: boolean }) {
           >
             <nav className="flex flex-col" aria-label="Mobile">
               <p className="eyebrow px-4 pb-1 pt-3 text-paper/35">Services</p>
-              {coreServices.map((s) => (
+              {menuServices.map((s) => (
                 <a
                   key={s.id}
                   href={`/services/${s.id}`}

@@ -10,10 +10,10 @@ const description =
   'AI agents, chatbots, voice AI, workflow automation, RAG, integrations, industrial AI and ERP, custom software and reporting from Agentiq BD in Dhaka, Bangladesh.';
 
 export const metadata: Metadata = {
-  title: 'AI, Automation & Software Services',
+  title: 'AI & Software Development Services in Bangladesh',
   description,
   alternates: { canonical: '/services' },
-  openGraph: { title: 'AI, Automation & Software Services · Agentiq BD', description, url: absoluteUrl('/services'), type: 'website' },
+  openGraph: { title: 'AI & Software Development Services in Bangladesh · Agentiq BD', description, url: absoluteUrl('/services'), type: 'website' },
 };
 
 export default function ServicesIndex() {
@@ -40,10 +40,10 @@ export default function ServicesIndex() {
       <section className="container-x pb-20 pt-24 sm:pb-28 sm:pt-28">
         <p className="eyebrow text-signal-300">Services</p>
         <h1 className="display mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.05] sm:text-6xl">
-          AI, automation and software services
+          AI and software development services
         </h1>
         <p className="mt-7 max-w-3xl text-pretty text-xl leading-relaxed text-paper/75">
-          Agentiq BD is an AI engineering and software company in Dhaka, Bangladesh. Nine services, one approach:
+          Agentiq BD is an AI engineering and software development company in Dhaka, Bangladesh. Nine services, one approach:
           start from the bottleneck in your business, then build only what helps.
         </p>
 
