@@ -27,7 +27,7 @@ const facts = () => [
 ];
 
 const productLine = (p: (typeof products)[number]) =>
-  `- ${p.href ? `[${p.name}](${p.href})` : p.name}: ${p.summary} (${p.status === 'Live' ? 'live' : p.status === 'MVP' ? 'MVP, in development' : 'in development'}).`;
+  `- [${p.name}](${absoluteUrl(`/products/${p.id}`)}): ${p.summary} (${p.status === 'Live' ? 'live' : p.status === 'MVP' ? 'MVP, in development' : 'in development'}).${p.href ? ` Website: ${p.href}` : ''}`;
 
 export function buildLlmsTxt() {
   return [
@@ -61,6 +61,8 @@ export function buildLlmsTxt() {
     `- [Home](${absoluteUrl('/')}): overview, FAQ and contact options`,
     `- [Services hub](${absoluteUrl('/services')})`,
     `- [Packages & pricing](${absoluteUrl('/packages')})`,
+    `- [Privacy policy](${absoluteUrl('/privacy')})`,
+    `- [Terms & conditions](${absoluteUrl('/terms')})`,
     `- [Sitemap](${absoluteUrl('/sitemap.xml')})`,
     '',
   ].join('\n');

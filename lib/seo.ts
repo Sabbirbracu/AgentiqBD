@@ -1,5 +1,6 @@
 import { coreServices, faqs, founder, products, projects, site } from '@/lib/content';
 import { packagePages } from '@/lib/package-pages';
+import { productPageById } from '@/lib/product-pages';
 import { servicePages } from '@/lib/service-pages';
 import { posts } from '@/lib/blog';
 
@@ -14,7 +15,7 @@ export const absoluteUrl = (path = '/') => new URL(path, site.url).toString();
  * Date the sitemap reports as "last modified". Search engines ignore lastmod when it is always "today", so
  * bump this only when page content really changes.
  */
-export const contentUpdated = '2026-10-29';
+export const contentUpdated = '2026-11-04';
 
 /** Every public, indexable route. /brand/* is internal and is excluded here and in robots.ts. */
 export const sitemapRoutes: { path: string; priority: number }[] = [
@@ -23,6 +24,8 @@ export const sitemapRoutes: { path: string; priority: number }[] = [
   ...servicePages.map((s) => ({ path: `/services/${s.id}`, priority: 0.8 })),
   { path: '/packages', priority: 0.9 },
   ...packagePages.map((p) => ({ path: `/packages/${p.id}`, priority: 0.8 })),
+  { path: '/products', priority: 0.8 },
+  ...products.map((p) => ({ path: `/products/${p.id}`, priority: 0.8 })),
   ...projects.map((p) => ({ path: `/work/${p.id}`, priority: 0.7 })),
   { path: '/blog', priority: 0.7 },
   ...posts.map((p) => ({ path: `/blog/${p.slug}`, priority: 0.6 })),
@@ -30,6 +33,7 @@ export const sitemapRoutes: { path: string; priority: number }[] = [
   { path: '/ai-employees', priority: 0.6 },
   { path: '/workflows', priority: 0.5 },
   { path: '/privacy', priority: 0.2 },
+  { path: '/terms', priority: 0.2 },
 ];
 
 /** Only real profile URLs: the '#' placeholders in content.ts must never reach structured data. */
@@ -126,10 +130,11 @@ export function organizationJsonLd() {
         '@type': 'SoftwareApplication',
         name: p.name,
         description: p.summary,
-        applicationCategory: 'BusinessApplication',
-        operatingSystem: 'Web',
+        applicationCategory: productPageById(p.id)?.applicationCategory ?? 'BusinessApplication',
+        operatingSystem: productPageById(p.id)?.operatingSystem ?? 'Web',
         creator: { '@id': orgId },
-        ...(p.href ? { url: p.href } : {}),
+        url: absoluteUrl(`/products/${p.id}`),
+        ...(p.href ? { sameAs: p.href } : {}),
         ...(p.status === 'Live' ? { offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } } : {}),
       })),
     ],

@@ -273,12 +273,20 @@ function PreviewMenu({
   );
 }
 
+/** Pixels of scroll in one direction before the header hides or comes back, so small trackpad jitter is ignored. */
+const SCROLL_INTENT = 8;
+
 /**
  * Transparent at the top of every page and a floating dark pill once scrolled, as on the home page.
+ * The pill slides away while the reader scrolls down and returns as soon as they scroll up.
  * `overDark` is for pages whose top is dark: the transparent header then uses light text and logo.
  */
 export function Navbar({ overDark = false }: { overDark?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+  // Read inside the scroll listener without re-subscribing it.
+  const pinned = useRef(false);
   // Light text and logo: on the dark pill, or over a dark page top.
   const light = scrolled || overDark;
   const [open, setOpen] = useState(false);
@@ -289,11 +297,29 @@ export function Navbar({ overDark = false }: { overDark?: boolean }) {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.2 });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    lastY.current = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      const delta = y - lastY.current;
+      if (y < 120 || pinned.current) {
+        // Near the top, or while a menu is open, the header always stays.
+        setHidden(false);
+        lastY.current = y;
+      } else if (Math.abs(delta) >= SCROLL_INTENT) {
+        setHidden(delta > 0);
+        lastY.current = y;
+      }
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    pinned.current = open || menu !== null;
+    if (pinned.current) setHidden(false);
+  }, [open, menu]);
 
   useEffect(() => {
     if (!menu) return;
@@ -363,13 +389,16 @@ export function Navbar({ overDark = false }: { overDark?: boolean }) {
   return (
     <header
       ref={headerRef}
+      // Tabbing into a hidden header brings it back into view.
+      onFocus={() => setHidden(false)}
       onBlur={(e) => {
         // Keyboard users: close the menu once focus moves outside the header.
         if (!headerRef.current?.contains(e.relatedTarget as Node | null)) setMenu(null);
       }}
       className={cn(
-        'fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-6',
+        'fixed inset-x-0 top-0 z-50 px-3 transition-[padding,transform] duration-500 ease-out sm:px-6',
         scrolled ? 'pt-3 sm:pt-4' : 'pt-0',
+        hidden && '-translate-y-[calc(100%+1rem)]',
       )}
     >
       <div
@@ -388,7 +417,7 @@ export function Navbar({ overDark = false }: { overDark?: boolean }) {
         <nav className="hidden items-center lg:flex" aria-label="Primary">
           {trigger('services', 'Services')}
           {trigger('packages', 'Packages')}
-          <a href="/#products" onMouseEnter={close} className={linkCls}>
+          <a href="/products" onMouseEnter={close} className={linkCls}>
             Products
           </a>
           <a href="/#why" onMouseEnter={close} className={linkCls}>
@@ -511,7 +540,7 @@ export function Navbar({ overDark = false }: { overDark?: boolean }) {
               })}
               <div className="my-2 h-px bg-white/10" />
               <a
-                href="/#products"
+                href="/products"
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-3.5 font-display text-xl text-paper/85 transition-colors hover:bg-white/5"
               >

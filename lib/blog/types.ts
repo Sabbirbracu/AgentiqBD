@@ -15,7 +15,12 @@ export type BlogArtId =
   | 'guardrails'
   | 'process'
   | 'phone'
-  | 'testing';
+  | 'testing'
+  | 'metrics'
+  | 'rag-eval'
+  | 'checklist'
+  | 'voice-test'
+  | 'monitoring';
 
 export type BlogCategory = 'Company' | 'Guides' | 'Engineering' | 'Lessons' | 'Strategy';
 

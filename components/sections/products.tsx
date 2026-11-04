@@ -1,11 +1,13 @@
-import { ArrowUpRight, Check } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
 import { Reveal } from '@/components/ui/reveal';
 import { SectionHeading } from '@/components/ui/section-heading';
 import { Showcase } from '@/components/ui/showcase';
 import { products, sectionNo } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
-const statusStyle = {
+/** Status pill colours on a dark surface; shared with the /products pages. */
+export const productStatusStyle = {
   Live: 'bg-emerald-400/15 text-emerald-300',
   MVP: 'bg-amber-400/15 text-amber-300',
   'In development': 'bg-white/10 text-paper/70',
@@ -46,7 +48,7 @@ export function Products() {
                       <span
                         className={cn(
                           'rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider',
-                          statusStyle[p.status],
+                          productStatusStyle[p.status],
                         )}
                       >
                         {p.status}
@@ -75,17 +77,29 @@ export function Products() {
                         <span className="eyebrow mr-3 text-paper/35">Availability</span>
                         {p.availability}
                       </p>
-                      {p.href && (
-                        <a
-                          href={p.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-signal px-5 text-[15px] font-medium transition-colors hover:bg-signal-600"
+                      <div className="flex flex-wrap gap-3">
+                        {p.href && (
+                          <a
+                            href={p.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-signal px-5 text-[15px] font-medium transition-colors hover:bg-signal-600"
+                          >
+                            {p.cta}
+                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                          </a>
+                        )}
+                        <Link
+                          href={`/products/${p.id}`}
+                          className={cn(
+                            'group inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-5 text-[15px] font-medium transition-colors',
+                            p.href ? 'border border-white/20 hover:bg-white/[0.06]' : 'bg-signal hover:bg-signal-600',
+                          )}
                         >
-                          {p.cta}
-                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </a>
-                      )}
+                          View case study
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
 

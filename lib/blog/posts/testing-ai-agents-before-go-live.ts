@@ -2,7 +2,7 @@ import type { Post } from '../types';
 
 export const post: Post = {
   slug: 'testing-ai-agents-before-go-live',
-  title: 'How we test an AI agent before it talks to your customers',
+  title: 'How to test an AI agent before it talks to your customers',
   metaTitle: 'How to Test AI Agents: Scenarios, Grading and Regression',
   excerpt:
     'You cannot unit-test a conversation the way you test a function. Here is how we build scenario sets, grade behaviour and catch regressions before every release.',
@@ -10,6 +10,7 @@ export const post: Post = {
   tags: ['AI agents', 'Testing', 'Evaluation'],
   keywords: ['how to test AI agents', 'AI agent evaluation', 'LLM evaluation', 'AI chatbot testing', 'regression testing AI'],
   date: '2026-10-29',
+  updated: '2026-11-04',
   cover: 'testing',
   takeaways: [
     'Agents can phrase the same answer differently each time, so we test behaviour across many scenarios, not exact outputs.',
@@ -36,7 +37,7 @@ export const post: Post = {
     { type: 'h2', text: 'Step 1: Build the scenario set' },
     {
       type: 'p',
-      text: 'A scenario is a short conversation with a description of what good behaviour looks like. We build the set from five sources:',
+      text: 'A scenario is a short conversation with a description of what good behaviour looks like. We build the set from five sources (for a full list of categories, see our [AI agent test case checklist](/blog/ai-agent-test-cases)):',
     },
     {
       type: 'list',
@@ -77,6 +78,10 @@ expect:
         ['Tone', 'Clear, polite, and in the customer’s language?', 'Human review on a sample'],
       ],
     },
+    {
+      type: 'p',
+      text: 'Each check becomes a number on a scorecard, with its own threshold. We cover the full list, and how to set the thresholds, in [AI agent evaluation metrics](/blog/ai-agent-evaluation-metrics).',
+    },
     { type: 'h2', text: 'Step 3: Automate the checks you can' },
     {
       type: 'p',
@@ -96,7 +101,11 @@ expect:
     { type: 'h2', text: 'Step 5: Keep testing after launch' },
     {
       type: 'p',
-      text: 'No test set covers everything real customers will say. After launch, conversations are flagged for review when the agent hands over, when a customer seems unhappy, or when a person corrects the agent’s draft. Each real failure is fixed and then added to the scenario set, so it can never quietly return. Over time the set grows into the most valuable asset of the project: a precise, written description of how the business wants its customers treated.',
+      text: 'No test set covers everything real customers will say. After launch, conversations are flagged for review when the agent hands over, when a customer seems unhappy, or when a person corrects the agent’s draft. Each real failure is fixed and then added to the scenario set, so it can never quietly return. Over time the set grows into the most valuable asset of the project: a precise, written description of how the business wants its customers treated. How we log, alert and review after launch is covered in [monitoring AI agents in production](/blog/monitoring-ai-agents-in-production).',
+    },
+    {
+      type: 'p',
+      text: 'Agents that answer from documents need extra checks on search and sources: see [RAG evaluation](/blog/rag-evaluation). Phone agents add speech and timing: see [how to test a voice AI agent](/blog/testing-voice-ai-agents).',
     },
     { type: 'h2', text: 'What our clients see' },
     {

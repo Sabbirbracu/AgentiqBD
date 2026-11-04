@@ -66,6 +66,18 @@ Chosen from search intent and what Google shows for these queries (Bangladeshi v
 | custom ERP vs ready-made ERP | `/packages/business-software` | | | FAQ (answers the "best ERP" comparison intent without claiming "best") |
 | free AI audit / AI readiness assessment / AI business audit | `/packages/audit` | | | title, intro, first two FAQs |
 
+### Blog cluster: AI agent testing (added 2026-11-04)
+Chosen from Search Console (2026-11-04 export): the testing post had the site's most impressions, mostly US, at position ~11.6, for "how to test ai agents" and a Croatian variant. A new domain cannot win the head terms, so this cluster is the worldwide entry point. Each post links to the testing post and `/services/ai-agents`. Volumes blank: pull them with the **US/global** database.
+
+| Target phrase | Page | Volume | KD% | Where it is used |
+|---|---|---|---|---|
+| how to test AI agents / AI agent testing | `/blog/testing-ai-agents-before-go-live` | | | metaTitle, title, keywords |
+| AI agent evaluation metrics / how to evaluate AI agents / AI agent KPIs | `/blog/ai-agent-evaluation-metrics` | | | metaTitle, title, H2s, bold definition sentences |
+| AI agent test cases / AI agent testing checklist / chatbot test cases | `/blog/ai-agent-test-cases` | | | metaTitle, title, template, 12 category H2s |
+| RAG evaluation / how to evaluate RAG / RAG testing | `/blog/rag-evaluation` | | | metaTitle, title, definition sentence; linked from `rag-explained` |
+| how to test voice AI agents / voice AI agent testing / AI receptionist testing | `/blog/testing-voice-ai-agents` | | | metaTitle, title, entity-accuracy definition; supports `/services/voice` |
+| AI agent monitoring / AI agent observability / LLM monitoring | `/blog/monitoring-ai-agents-in-production` | | | metaTitle, title, definition sentence |
+
 Not targeted: "best ERP software in Bangladesh" and "best ecommerce company" as claims (house rule: no "best"; the FAQ answers the comparison instead), competitor product names (Managerium, Odoo, Tally), and BDT prices (the owner prices in USD; quoting taka would go stale with the exchange rate).
 
 Crawlability fix shipped with this: the header mega menus render only while open, so package pages had **no crawlable links** before. The footer now links all five packages + `/packages`, package pages link their related services, and each service page links its matching package.

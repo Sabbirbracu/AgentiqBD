@@ -10,6 +10,7 @@ export const post: Post = {
   tags: ['RAG', 'Knowledge base', 'LLMs'],
   keywords: ['what is RAG', 'retrieval augmented generation explained', 'AI knowledge base', 'chat with your documents', 'RAG pipeline'],
   date: '2026-10-29',
+  updated: '2026-11-04',
   cover: 'rag',
   takeaways: [
     'A language model does not know your business. RAG finds the relevant parts of your documents and gives them to the model with each question.',
@@ -103,7 +104,7 @@ Question: ঢাকার বাইরে ডেলিভারিতে কত�
     },
     {
       type: 'p',
-      text: 'Run the set before and after every change to documents, chunking or prompts. It is the only reliable way to know whether a change helped.',
+      text: 'Run the set before and after every change to documents, chunking or prompts. It is the only reliable way to know whether a change helped. For the full method, read [RAG evaluation](/blog/rag-evaluation).',
     },
     { type: 'h2', text: 'Mixed languages' },
     {

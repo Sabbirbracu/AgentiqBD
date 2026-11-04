@@ -105,9 +105,14 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-sm text-paper/40 sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} Agentiq BD. All rights reserved.</p>
-          <Link href="/privacy" className="transition-colors hover:text-paper">
-            Privacy policy
-          </Link>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="transition-colors hover:text-paper">
+              Privacy policy
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-paper">
+              Terms &amp; conditions
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

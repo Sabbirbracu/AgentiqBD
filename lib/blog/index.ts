@@ -10,6 +10,11 @@ import { post as guardrails } from './posts/ai-agent-guardrails';
 import { post as processFirst } from './posts/fix-the-process-before-ai';
 import { post as bangladesh } from './posts/building-software-for-bangladesh';
 import { post as testing } from './posts/testing-ai-agents-before-go-live';
+import { post as evalMetrics } from './posts/ai-agent-evaluation-metrics';
+import { post as ragEval } from './posts/rag-evaluation';
+import { post as testCases } from './posts/ai-agent-test-cases';
+import { post as voiceTesting } from './posts/testing-voice-ai-agents';
+import { post as monitoring } from './posts/monitoring-ai-agents-in-production';
 
 export type { Block, BlogArtId, BlogCategory, Post } from './types';
 
@@ -18,6 +23,11 @@ export type { Block, BlogArtId, BlogCategory, Post } from './types';
  * Posts sharing a date keep this order, so put the newest first when adding one.
  */
 export const posts: Post[] = [
+  testCases,
+  evalMetrics,
+  ragEval,
+  voiceTesting,
+  monitoring,
   introducing,
   howAgentsWork,
   howWeBuild,

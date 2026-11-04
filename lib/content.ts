@@ -66,7 +66,7 @@ export const whoWeAre = {
 
 export const navLinks = [
   { label: 'Our Work', href: '/#work' },
-  { label: 'Products', href: '/#products' },
+  { label: 'Products', href: '/products' },
   { label: 'About', href: '/#why' },
   { label: 'Contact', href: '/#contact' },
 ];
@@ -396,7 +396,7 @@ export const moreMenu = [
     text: 'Software we build ourselves',
     description: 'Software we design, ship and run ourselves, including MyPixel Guard and BatchPilot.',
     tags: ['MyPixel Guard', 'BatchPilot'],
-    href: '/#products',
+    href: '/products',
   },
 ] as { id: string; label: string; text: string; description: string; tags: string[]; href?: string }[];
 
@@ -872,10 +872,10 @@ export const founder = {
   ] as string[],
   /** TODO(owner): paste the real profile URLs. An icon only shows once its `href` is filled in. */
   social: [
-    { kind: 'facebook', label: 'Facebook', href: '' },
-    { kind: 'linkedin', label: 'LinkedIn', href: '' },
+    { kind: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/sabbir.ahmad.443854/' },
+    { kind: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/sabbirahmad653/' },
     { kind: 'x', label: 'X', href: '' },
-    { kind: 'github', label: 'GitHub', href: '' },
+    { kind: 'github', label: 'GitHub', href: 'https://github.com/Sabbirbracu' },
   ] as { kind: 'facebook' | 'linkedin' | 'x' | 'github'; label: string; href: string }[],
 };
 

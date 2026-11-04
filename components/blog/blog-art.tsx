@@ -24,6 +24,11 @@ export const blogArtDark: Record<BlogArtId, boolean> = {
   process: false,
   phone: true,
   testing: true,
+  metrics: false,
+  'rag-eval': true,
+  checklist: false,
+  'voice-test': false,
+  monitoring: false,
 };
 
 function Bg({ id, tone }: { id: string; tone: 'dark' | 'light' | 'red' }) {
@@ -481,6 +486,220 @@ function TestingArt({ id }: { id: string }) {
   );
 }
 
+function MetricsArt({ id }: { id: string }) {
+  const bars = [
+    { label: 'task success', v: 0.86, gate: 0.8 },
+    { label: 'tool calls', v: 0.93, gate: 0.9 },
+    { label: 'grounded', v: 0.9, gate: 0.85 },
+    { label: 'handover', v: 0.72, gate: 0.8, hot: true },
+    { label: 'safety', v: 1, gate: 1 },
+  ];
+  const x0 = 236;
+  const w = 300;
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <rect x="70" y="46" width="500" height="308" rx="16" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+      <path d="M70 84 H570" stroke="rgba(10,10,11,0.08)" />
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={92 + i * 16} cy="65" r="5" fill={i === 0 ? RED : 'rgba(10,10,11,0.14)'} />
+      ))}
+      <text x="320" y="70" textAnchor="middle" fontSize="12" className={mono} fill="rgba(10,10,11,0.5)">scorecard · release gate</text>
+      {bars.map((b, i) => {
+        const y = 118 + i * 44;
+        return (
+          <g key={b.label}>
+            <text x="98" y={y + 4.5} fontSize="13" className={mono} fill={INK}>
+              {b.label}
+            </text>
+            <rect x={x0} y={y - 7} width={w} height="14" rx="7" fill="rgba(10,10,11,0.06)" />
+            <rect x={x0} y={y - 7} width={w * b.v} height="14" rx="7" fill={b.hot ? RED : INK} fillOpacity={b.hot ? 1 : 0.85} />
+            <path d={`M${x0 + w * b.gate} ${y - 13} V${y + 13}`} stroke={RED} strokeWidth="2" strokeDasharray="3 3" />
+          </g>
+        );
+      })}
+      <path d="M90 330 H550" stroke="rgba(10,10,11,0.08)" />
+      <text x="90" y="342" fontSize="12" className={mono} fill="rgba(10,10,11,0.5)">- - - threshold</text>
+      <rect x="436" y="328" width="114" height="20" rx="10" fill={RED} />
+      <text x="493" y="342" textAnchor="middle" fontSize="11" className={mono} fill={PAPER}>1 below gate</text>
+    </Svg>
+  );
+}
+
+function RagEvalArt({ id }: { id: string }) {
+  const hits = [
+    { label: 'returns-policy.pdf · p3', ok: true },
+    { label: 'delivery-faq.md · §2', ok: true },
+    { label: 'returns-policy-2024.pdf', ok: false },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      <rect x="46" y="70" width="226" height="40" rx="14" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.16)" />
+      <text x="62" y="95" fontSize="13" className="font-sans" fill="rgba(252,252,244,0.85)">Can I return a sale item?</text>
+      {hits.map((h, i) => {
+        const y = 140 + i * 50;
+        return (
+          <g key={h.label}>
+            <text x="50" y={y + 24} fontSize="12" className={mono} fill="rgba(252,252,244,0.45)">
+              #{i + 1}
+            </text>
+            <rect x="76" y={y} width="196" height="38" rx="10" fill={h.ok ? 'rgba(255,255,255,0.09)' : 'rgba(232,79,61,0.16)'} stroke={h.ok ? 'rgba(255,255,255,0.16)' : RED} />
+            <text x="90" y={y + 23.5} fontSize="11.5" className={mono} fill="rgba(252,252,244,0.8)">
+              {h.label}
+            </text>
+          </g>
+        );
+      })}
+      <path d="M292 190 H340" stroke={RED} strokeWidth="2" strokeDasharray="4 4" className="hub-flow" />
+      <path d="M336 184 l7 6 l-7 6" stroke={RED} strokeWidth="2" strokeLinecap="round" />
+      <rect x="360" y="96" width="236" height="188" rx="16" fill={PAPER} />
+      <text x="378" y="126" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(10,10,11,0.5)">ANSWER CHECK</text>
+      {[
+        ['right passage found', true],
+        ['says only what it says', true],
+        ['cites the source', true],
+        ['ignores old version', false],
+      ].map(([l, ok], i) => {
+        const y = 150 + i * 30;
+        return (
+          <g key={l as string}>
+            <rect x="378" y={y} width="20" height="20" rx="6" fill={ok ? INK : RED} />
+            {ok ? (
+              <path d={`M383 ${y + 10} l3.5 3.5 l6 -7`} stroke={PAPER} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d={`M384 ${y + 6} l8 8 M392 ${y + 6} l-8 8`} stroke={PAPER} strokeWidth="2" strokeLinecap="round" />
+            )}
+            <text x="410" y={y + 14.5} fontSize="13" className="font-sans" fill={INK}>
+              {l as string}
+            </text>
+          </g>
+        );
+      })}
+      {[
+        ['RETRIEVAL', 160],
+        ['GENERATION', 478],
+      ].map(([l, x]) => (
+        <text key={l as string} x={x as number} y="326" textAnchor="middle" fontSize="12" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">
+          {l as string}
+        </text>
+      ))}
+    </Svg>
+  );
+}
+
+function ChecklistArt({ id }: { id: string }) {
+  const groups = [
+    { label: 'happy path', done: [true, true, true] },
+    { label: 'messy input', done: [true, true, false] },
+    { label: 'tool failures', done: [true, false, false] },
+    { label: 'prompt injection', done: [true, true, true], hot: true },
+    { label: 'handover', done: [true, true, false] },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <rect x="150" y="30" width="340" height="356" rx="18" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+      <rect x="270" y="20" width="100" height="24" rx="8" fill={INK} />
+      <text x="320" y="36" textAnchor="middle" fontSize="11" letterSpacing="1.4" className={mono} fill={PAPER}>PRE-LAUNCH</text>
+      {groups.map((g, i) => {
+        const y = 74 + i * 58;
+        return (
+          <g key={g.label}>
+            <text x="176" y={y + 6} fontSize="13" className={mono} fill={INK}>
+              {g.label}
+            </text>
+            {g.hot && (
+              <g>
+                <rect x="400" y={y - 8} width="66" height="18" rx="9" fill={RED} />
+                <text x="433" y={y + 4.5} textAnchor="middle" fontSize="10" className={mono} fill={PAPER}>critical</text>
+              </g>
+            )}
+            {g.done.map((d, k) => (
+              <g key={k}>
+                <rect x={176 + k * 96} y={y + 16} width="16" height="16" rx="4" fill={d ? INK : '#fff'} stroke={d ? INK : 'rgba(10,10,11,0.25)'} />
+                {d && <path d={`M${180 + k * 96} ${y + 24} l3 3 l5 -6`} stroke={PAPER} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />}
+                <rect x={198 + k * 96} y={y + 21} width="62" height="6" rx="3" fill="rgba(10,10,11,0.16)" />
+              </g>
+            ))}
+          </g>
+        );
+      })}
+    </Svg>
+  );
+}
+
+function VoiceTestArt({ id }: { id: string }) {
+  const wave = [10, 22, 38, 18, 52, 30, 64, 40, 24, 58, 34, 16, 46, 28, 12, 36, 20, 8];
+  const checks = [
+    { label: 'name heard', ok: true },
+    { label: 'date heard', ok: true },
+    { label: 'number heard', ok: false },
+    { label: 'read back', ok: true },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="red" />
+      <rect x="40" y="96" width="290" height="190" rx="18" fill={INK} />
+      <text x="60" y="128" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(252,252,244,0.5)">CALLER AUDIO</text>
+      {wave.map((h, i) => (
+        <rect key={i} x={62 + i * 14} y={196 - h / 2} width="7" height={h} rx="3.5" fill={i === 6 || i === 9 ? RED : PAPER} fillOpacity={i === 6 || i === 9 ? 1 : 0.75} />
+      ))}
+      <rect x="60" y="240" width="250" height="28" rx="8" fill="rgba(255,255,255,0.08)" />
+      <text x="72" y="258" fontSize="11.5" className={mono} fill="rgba(252,252,244,0.8)">"Thursday at five, 017…"</text>
+      <path d="M342 190 H382" stroke={PAPER} strokeOpacity="0.85" strokeWidth="2" strokeDasharray="4 5" className="hub-flow" />
+      <rect x="392" y="96" width="210" height="190" rx="18" fill={PAPER} />
+      {checks.map((c, i) => {
+        const y = 118 + i * 40;
+        return (
+          <g key={c.label}>
+            <rect x="410" y={y} width="20" height="20" rx="6" fill={c.ok ? INK : RED} />
+            {c.ok ? (
+              <path d={`M415 ${y + 10} l3.5 3.5 l6 -7`} stroke={PAPER} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d={`M416 ${y + 6} l8 8 M424 ${y + 6} l-8 8`} stroke={PAPER} strokeWidth="2" strokeLinecap="round" />
+            )}
+            <text x="442" y={y + 14.5} fontSize="13" className={mono} fill={INK}>
+              {c.label}
+            </text>
+          </g>
+        );
+      })}
+      <text x="320" y="330" textAnchor="middle" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(252,252,244,0.9)">SPEECH IN · LOGIC · SPEECH OUT</text>
+    </Svg>
+  );
+}
+
+function MonitoringArt({ id }: { id: string }) {
+  const pts = [62, 58, 64, 60, 57, 61, 59, 63, 60, 112, 66, 61, 58];
+  const x = (i: number) => 92 + i * 38;
+  const y = (v: number) => 300 - v * 1.6;
+  const line = pts.map((v, i) => `${i ? 'L' : 'M'}${x(i)} ${y(v)}`).join(' ');
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <rect x="60" y="46" width="520" height="308" rx="16" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+      <path d="M60 84 H580" stroke="rgba(10,10,11,0.08)" />
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={82 + i * 16} cy="65" r="5" fill={i === 0 ? RED : 'rgba(10,10,11,0.14)'} />
+      ))}
+      <text x="320" y="70" textAnchor="middle" fontSize="12" className={mono} fill="rgba(10,10,11,0.5)">tool errors · last 13 days</text>
+      {[0, 1, 2, 3].map((k) => (
+        <path key={k} d={`M80 ${150 + k * 40} H560`} stroke="rgba(10,10,11,0.06)" />
+      ))}
+      <path d={`M80 ${y(90)} H560`} stroke={RED} strokeWidth="1.6" strokeDasharray="5 5" />
+      <text x="556" y={y(90) - 8} textAnchor="end" fontSize="11" className={mono} fill={RED}>alert</text>
+      <path d={line} stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+      {pts.map((v, i) => (
+        <circle key={i} cx={x(i)} cy={y(v)} r={i === 9 ? 7 : 3.5} fill={i === 9 ? RED : INK} />
+      ))}
+      <rect x={x(9) - 62} y={y(112) - 46} width="124" height="30" rx="10" fill={INK} />
+      <text x={x(9)} y={y(112) - 26} textAnchor="middle" fontSize="11" className={mono} fill={PAPER}>CRM API timeout</text>
+      <path d="M80 330 H560" stroke="rgba(10,10,11,0.08)" />
+    </Svg>
+  );
+}
+
 const arts: Record<BlogArtId, (p: { id: string }) => ReactNode> = {
   intro: IntroArt,
   'agent-loop': AgentLoopArt,
@@ -492,6 +711,11 @@ const arts: Record<BlogArtId, (p: { id: string }) => ReactNode> = {
   process: ProcessArt,
   phone: PhoneArt,
   testing: TestingArt,
+  metrics: MetricsArt,
+  'rag-eval': RagEvalArt,
+  checklist: ChecklistArt,
+  'voice-test': VoiceTestArt,
+  monitoring: MonitoringArt,
 };
 
 /** Fills its parent; give the parent a size or aspect ratio. */

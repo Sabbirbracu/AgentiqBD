@@ -45,6 +45,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 const widget = 'rounded-[22px] border border-ink/10 bg-white p-5';
+/** Shared by the header and body so the title, article card and sidebar line up. */
+const shell = 'mx-auto w-full max-w-[1440px] px-5 sm:px-8';
+const columns = 'xl:grid-cols-[220px_minmax(0,1fr)_300px] xl:gap-10';
 const widgetLabel = 'flex items-center gap-2 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-ink/50';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -85,8 +88,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {/* Header: aligned with the article column on wide screens */}
         <header className="relative overflow-hidden pt-28 sm:pt-36">
           <div className="pointer-events-none absolute -right-40 -top-32 h-[480px] w-[480px] rounded-full bg-signal/[0.07] blur-[120px]" />
-          <div className="relative mx-auto w-full max-w-[1360px] px-5 sm:px-8 lg:px-10">
-            <div className="xl:grid xl:grid-cols-[210px_minmax(0,1fr)_280px] xl:gap-12">
+          <div className={`relative ${shell}`}>
+            <div className={`xl:grid ${columns}`}>
               <div className="hidden pt-1 xl:block">
                 <Link href="/blog" className="group inline-flex items-center gap-2 text-[14px] font-medium text-ink/60 transition-colors hover:text-ink">
                   <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" /> All articles
@@ -117,21 +120,20 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
               </div>
             </div>
-
-            <div className="mt-10 xl:grid xl:grid-cols-[210px_minmax(0,1fr)_280px] xl:gap-12">
-              <BlogArt art={post.cover} className="aspect-[16/10] rounded-[28px] border border-ink/10 shadow-[0_40px_90px_-50px_rgba(10,10,11,0.45)] sm:aspect-video xl:col-span-2 xl:col-start-2" />
-            </div>
           </div>
         </header>
 
-        {/* Body: contents | article | sidebar */}
-        <div className="mx-auto w-full max-w-[1360px] px-5 pb-24 pt-14 sm:px-8 sm:pt-16 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[210px_minmax(0,1fr)_280px]">
+        {/* Body: contents | article card | sidebar */}
+        <div className={`${shell} pb-24 pt-10 sm:pt-12`}>
+          <div className={`grid gap-10 lg:grid-cols-[minmax(0,1fr)_280px] ${columns}`}>
             <aside className="hidden xl:block">
               <ArticleToc items={toc} url={url} title={post.title} />
             </aside>
 
-            <article id="article" className="min-w-0 max-w-[720px]">
+            {/* The card border is the separator from the side columns; on phones there are none, so it drops away */}
+            <article id="article" className="min-w-0 sm:rounded-[28px] sm:border sm:border-ink/10 sm:p-8 lg:p-10 xl:p-12">
+              <BlogArt art={post.cover} className="mb-10 aspect-video rounded-[20px] border border-ink/10" />
+
               <MobileToc items={toc} />
 
               <section aria-label="In short" className="mb-12 rounded-[22px] border border-signal/20 bg-signal/[0.04] p-6 sm:p-7">
