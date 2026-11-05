@@ -2,7 +2,7 @@ import { coreServices, faqs, founder, products, projects, site } from '@/lib/con
 import { packagePages } from '@/lib/package-pages';
 import { productPageById } from '@/lib/product-pages';
 import { servicePages } from '@/lib/service-pages';
-import { posts } from '@/lib/blog';
+import { getPosts } from '@/lib/blog';
 
 /**
  * Search and AI-assistant visibility helpers: canonical URLs, the sitemap route list and JSON-LD builders.
@@ -17,8 +17,11 @@ export const absoluteUrl = (path = '/') => new URL(path, site.url).toString();
  */
 export const contentUpdated = '2026-11-04';
 
-/** Every public, indexable route. /brand/* is internal and is excluded here and in robots.ts. */
-export const sitemapRoutes: { path: string; priority: number }[] = [
+/**
+ * Every public, indexable route. /brand/* is internal and is excluded here and in robots.ts. A function, so scheduled
+ * blog posts join on their publish day; blog posts carry their own date as lastModified.
+ */
+export const sitemapRoutes = (): { path: string; priority: number; lastModified?: string }[] => [
   { path: '/', priority: 1 },
   { path: '/services', priority: 0.9 },
   ...servicePages.map((s) => ({ path: `/services/${s.id}`, priority: 0.8 })),
@@ -28,7 +31,7 @@ export const sitemapRoutes: { path: string; priority: number }[] = [
   ...products.map((p) => ({ path: `/products/${p.id}`, priority: 0.8 })),
   ...projects.map((p) => ({ path: `/work/${p.id}`, priority: 0.7 })),
   { path: '/blog', priority: 0.7 },
-  ...posts.map((p) => ({ path: `/blog/${p.slug}`, priority: 0.6 })),
+  ...getPosts().map((p) => ({ path: `/blog/${p.slug}`, priority: 0.6, lastModified: p.updated ?? p.date })),
   { path: '/agenticore', priority: 0.6 },
   { path: '/ai-employees', priority: 0.6 },
   { path: '/workflows', priority: 0.5 },

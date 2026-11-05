@@ -5,17 +5,23 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronRight, Sparkles } from 'lucide-react';
 import { Navbar } from '@/components/sections/navbar';
 import { Footer } from '@/components/sections/footer';
-import { ArticleBody } from '@/components/blog/article-body';
+import { ArticleBody, ArticleFaq } from '@/components/blog/article-body';
 import { ArticleToc, MobileToc } from '@/components/blog/article-toc';
 import { BlogArt } from '@/components/blog/blog-art';
 import { Byline, CategoryPill, PostCard } from '@/components/blog/post-card';
 import { JsonLd } from '@/components/seo/json-ld';
-import { blogAuthor, blogCategories, headings, postBySlug, posts, readMinutes, relatedPosts, toCard, wordCount } from '@/lib/blog';
+import { blogAuthor, blogCategories, faqHeading, getPosts, headings, plain, postBySlug, readMinutes, relatedPosts, toCard, wordCount } from '@/lib/blog';
 import { coreServices, founder, site } from '@/lib/content';
-import { absoluteUrl, blogPostingJsonLd, breadcrumbJsonLd } from '@/lib/seo';
+import { absoluteUrl, blogPostingJsonLd, breadcrumbJsonLd, faqJsonLd } from '@/lib/seo';
+
+/**
+ * Live posts are built ahead of time. A scheduled post 404s until its day; after that the first request renders it
+ * (dynamicParams is on by default), and the hourly revalidation picks it up.
+ */
+export const revalidate = 3600;
 
 export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+  return getPosts().map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -81,6 +87,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             { name: 'Blog', path: '/blog' },
             { name: post.title, path },
           ]),
+          ...(post.faq?.length ? [faqJsonLd(post.faq.map((f) => ({ q: f.q, a: plain(f.a) })))] : []),
         ]}
       />
       <Navbar />
@@ -151,6 +158,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </section>
 
               <ArticleBody blocks={post.body} />
+
+              {post.faq?.length ? <ArticleFaq title={faqHeading} items={post.faq} /> : null}
 
               <div className="mt-16 flex flex-col gap-6 rounded-[24px] border border-ink/10 bg-paper-50 p-6 sm:flex-row sm:items-center sm:p-7">
                 <Image src={founder.photo} alt={founder.name} width={72} height={72} className="h-[72px] w-[72px] shrink-0 rounded-2xl object-cover" />

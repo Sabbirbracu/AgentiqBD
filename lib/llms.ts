@@ -1,5 +1,5 @@
 import { coreServices, faqs, founder, packages, processSteps, products, projects, site, whyUs } from '@/lib/content';
-import { posts } from '@/lib/blog';
+import { getPosts, plain } from '@/lib/blog';
 import { absoluteUrl, contentUpdated } from '@/lib/seo';
 import { serviceLanding } from '@/lib/service-landing';
 import { packagePages } from '@/lib/package-pages';
@@ -54,7 +54,7 @@ export function buildLlmsTxt() {
     ...products.map(productLine),
     '',
     '## Blog',
-    ...posts.map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.excerpt}`),
+    ...getPosts().map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.excerpt}`),
     '',
     '## Optional',
     `- [Full text of this site for AI assistants](${absoluteUrl('/llms-full.txt')})`,
@@ -160,8 +160,9 @@ export function buildLlmsFullTxt() {
   out.push('## Products', '', ...products.flatMap((p) => [productLine(p), ...p.highlights.map((h) => `  - ${h}`)]), '');
 
   out.push('## Blog articles', '');
-  for (const p of posts) {
+  for (const p of getPosts()) {
     out.push(`### ${p.title}`, `URL: ${absoluteUrl(`/blog/${p.slug}`)}`, `Topic: ${p.category}. Published: ${p.date}.`, '', p.excerpt, '', 'In short:', ...p.takeaways.map((t) => `- ${t}`), '');
+    if (p.faq?.length) out.push(...p.faq.flatMap((f) => [`**${f.q}**`, plain(f.a), '']));
   }
 
   out.push('## Frequently asked questions', '', ...faqs.flatMap((f) => [`**${f.q}**`, f.a, '']));

@@ -78,6 +78,37 @@ Chosen from Search Console (2026-11-04 export): the testing post had the site's 
 | how to test voice AI agents / voice AI agent testing / AI receptionist testing | `/blog/testing-voice-ai-agents` | | | metaTitle, title, entity-accuracy definition; supports `/services/voice` |
 | AI agent monitoring / AI agent observability / LLM monitoring | `/blog/monitoring-ai-agents-in-production` | | | metaTitle, title, definition sentence |
 
+### Blog cluster: foreign buyers (added 2026-11-06, scheduled daily)
+Search Console (2026-11-06): US = 52 impressions / 0 clicks, Bangladesh = 56 / 11. These posts target buyer-intent and trending questions from US/UK/EU companies. Every post has a short-answer first paragraph, question-style H2s and a `faq` block (rendered on the page + FAQPage JSON-LD + llms-full) for AEO/GEO.
+
+| Live date | Target phrase | Page |
+|---|---|---|
+| 2026-11-06 | AI agent development cost / cost to build an AI agent | `/blog/ai-agent-development-cost` |
+| 2026-11-07 | outsource AI development / software development Bangladesh | `/blog/outsourcing-ai-development-to-bangladesh` |
+| 2026-11-08 | what is MCP / Model Context Protocol / MCP server | `/blog/what-is-mcp-model-context-protocol` |
+| 2026-11-09 | agentic commerce / AI shopping agents | `/blog/agentic-commerce-ai-shopping-agents` |
+| 2026-11-10 | AI agent ROI / is an AI agent worth it | `/blog/ai-agent-roi` |
+| 2026-11-11 | how to choose an AI development company | `/blog/how-to-choose-an-ai-development-company` |
+| 2026-11-12 | AI receptionist for small business | `/blog/ai-receptionist-small-business` |
+
+### Blog cluster: business solutions (added 2026-11-06)
+Owner asked for a post on every day and chose to **backdate** six of these to the empty days (30 Oct–5 Nov); all went live 2026-11-06.
+
+| Date shown | Target phrase | Page |
+|---|---|---|
+| 2026-10-30 | automated lead follow-up / speed to lead | `/blog/automated-lead-follow-up` |
+| 2026-10-31 | AI document processing / AI invoice processing | `/blog/ai-document-processing` |
+| 2026-11-01 | AI knowledge assistant for employees | `/blog/ai-knowledge-assistant-for-employees` |
+| 2026-11-02 | inventory software vs spreadsheets | `/blog/inventory-software-vs-spreadsheets` |
+| 2026-11-03 | automated business reporting / KPI dashboard | `/blog/automated-business-reporting` |
+| 2026-11-05 | AI customer support automation | `/blog/ai-customer-support-automation` |
+| 2026-11-06 | custom software vs SaaS / build vs buy | `/blog/custom-software-vs-saas` |
+| 2026-11-06 | business process automation examples | `/blog/business-processes-to-automate` |
+
+A link inside an article to a post that is not live yet renders as plain text until that post's day (`isLiveHref` in `lib/blog/index.ts`), so cross-links can be written ahead of time.
+
+**How scheduling works:** a post whose `date` is in the future (Dhaka time) has no page, no sitemap entry and no llms.txt line. Blog, sitemap and llms pages revalidate hourly, so the post appears on its day without a redeploy. `.github/workflows/publish-daily.yml` runs at 01:30 Dhaka, warms the pages and runs `node scripts/indexnow.mjs --today`. To schedule more: add the file, register it in `lib/blog/index.ts`, set `date`, push once. Preview locally with `BLOG_TODAY=YYYY-MM-DD` in `.env.development.local`.
+
 Not targeted: "best ERP software in Bangladesh" and "best ecommerce company" as claims (house rule: no "best"; the FAQ answers the comparison instead), competitor product names (Managerium, Odoo, Tally), and BDT prices (the owner prices in USD; quoting taka would go stale with the exchange rate).
 
 Crawlability fix shipped with this: the header mega menus render only while open, so package pages had **no crawlable links** before. The footer now links all five packages + `/packages`, package pages link their related services, and each service page links its matching package.

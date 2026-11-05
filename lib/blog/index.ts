@@ -15,14 +15,45 @@ import { post as ragEval } from './posts/rag-evaluation';
 import { post as testCases } from './posts/ai-agent-test-cases';
 import { post as voiceTesting } from './posts/testing-voice-ai-agents';
 import { post as monitoring } from './posts/monitoring-ai-agents-in-production';
+import { post as agentCost } from './posts/ai-agent-development-cost';
+import { post as outsourcing } from './posts/outsourcing-ai-development-to-bangladesh';
+import { post as mcp } from './posts/what-is-mcp-model-context-protocol';
+import { post as agenticCommerce } from './posts/agentic-commerce-ai-shopping-agents';
+import { post as roi } from './posts/ai-agent-roi';
+import { post as chooseVendor } from './posts/how-to-choose-an-ai-development-company';
+import { post as receptionist } from './posts/ai-receptionist-small-business';
+import { post as leadFollowUp } from './posts/automated-lead-follow-up';
+import { post as docProcessing } from './posts/ai-document-processing';
+import { post as knowledgeAssistant } from './posts/ai-knowledge-assistant-for-employees';
+import { post as inventory } from './posts/inventory-software-vs-spreadsheets';
+import { post as reporting } from './posts/automated-business-reporting';
+import { post as supportAutomation } from './posts/ai-customer-support-automation';
+import { post as customVsSaas } from './posts/custom-software-vs-saas';
+import { post as processes } from './posts/business-processes-to-automate';
 
 export type { Block, BlogArtId, BlogCategory, Post } from './types';
 
 /**
- * Display order on /blog: the first post is the wide featured card, the rest fill the three-column grid.
- * Posts sharing a date keep this order, so put the newest first when adding one.
+ * Every written post, including scheduled ones. Put the newest first when adding one: /blog sorts by date
+ * (newest first) and posts sharing a date keep this order. The first live post is the wide featured card.
  */
-export const posts: Post[] = [
+const allPosts: Post[] = [
+  // One post per day from 2026-10-29; 2026-11-07 → 2026-11-12 are scheduled (see `date` in each file).
+  receptionist,
+  chooseVendor,
+  roi,
+  agenticCommerce,
+  mcp,
+  outsourcing,
+  agentCost,
+  processes,
+  customVsSaas,
+  supportAutomation,
+  reporting,
+  inventory,
+  knowledgeAssistant,
+  docProcessing,
+  leadFollowUp,
   testCases,
   evalMetrics,
   ragEval,
@@ -52,7 +83,48 @@ export const blogMeta = {
     'Practical articles from Agentiq BD on how AI agents work, how we build them, RAG, guardrails, testing, automation and building software in Bangladesh.',
 };
 
-export const postBySlug = (slug: string) => posts.find((p) => p.slug === slug);
+/**
+ * Scheduled publishing: a post whose `date` is in the future stays hidden (no page, no sitemap, no llms.txt) until
+ * that day starts in Dhaka. Pages that list posts revalidate hourly, so a post goes live within the hour without a
+ * redeploy. The daily GitHub workflow (.github/workflows/publish-daily.yml) then warms the pages and pings IndexNow.
+ */
+export const blogTimeZone = 'Asia/Dhaka';
+
+/**
+ * Today's date (YYYY-MM-DD) in Dhaka. Outside production, BLOG_TODAY=2026-11-12 (e.g. in .env.development.local)
+ * previews the blog as it will look on that day, to check scheduled posts locally; production always uses the real date.
+ */
+export const blogToday = () =>
+  (process.env.NODE_ENV !== 'production' && process.env.BLOG_TODAY) ||
+  new Intl.DateTimeFormat('en-CA', { timeZone: blogTimeZone }).format(new Date());
+
+export const isLive = (p: Post, today = blogToday()) => p.date <= today;
+
+/** Live posts, newest first. Call it at render time (not at module load) so scheduled posts appear on their day. */
+export function getPosts(): Post[] {
+  const today = blogToday();
+  return allPosts
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => isLive(p, today))
+    .sort((a, b) => b.p.date.localeCompare(a.p.date) || a.i - b.i)
+    .map(({ p }) => p);
+}
+
+/** Scheduled posts that are not live yet, soonest first (for checks and the publishing calendar). */
+export const scheduledPosts = () => allPosts.filter((p) => !isLive(p)).sort((a, b) => a.date.localeCompare(b.date));
+
+export const postBySlug = (slug: string) => getPosts().find((p) => p.slug === slug);
+
+/**
+ * False for a link to a blog post that is not live yet, so the article renders it as plain text until that post's
+ * day instead of a link to a 404. Every other href is left alone.
+ */
+export function isLiveHref(href: string) {
+  const m = href.match(/^\/blog\/([^/?#]+)/);
+  if (!m) return true;
+  const target = allPosts.find((p) => p.slug === m[1]);
+  return !target || isLive(target);
+}
 
 export const slugify = (s: string) =>
   s
@@ -88,21 +160,24 @@ function blockText(b: Block): string {
   }
 }
 
-export const wordCount = (p: Post) => plain([p.excerpt, ...p.body.map(blockText)].join(' ')).split(/\s+/).filter(Boolean).length;
+export const wordCount = (p: Post) => plain([p.excerpt, ...p.body.map(blockText), ...(p.faq ?? []).flatMap((f) => [f.q, f.a])].join(' ')).split(/\s+/).filter(Boolean).length;
 
 export const readMinutes = (p: Post) => Math.max(1, Math.round(wordCount(p) / 220));
 
 export type Heading = { id: string; text: string; level: 2 | 3 };
 
+export const faqHeading = 'Frequently asked questions';
+
 /** Table of contents entries; ids match the ones the article renderer puts on its headings. */
 export function headings(p: Post): Heading[] {
-  return p.body.flatMap((b) => (b.type === 'h2' || b.type === 'h3' ? [{ id: slugify(b.text), text: plain(b.text), level: b.type === 'h2' ? 2 : 3 } as Heading] : []));
+  const body = p.body.flatMap((b) => (b.type === 'h2' || b.type === 'h3' ? [{ id: slugify(b.text), text: plain(b.text), level: b.type === 'h2' ? 2 : 3 } as Heading] : []));
+  return p.faq?.length ? [...body, { id: slugify(faqHeading), text: faqHeading, level: 2 }] : body;
 }
 
 /** Same category first, then shared tags, then display order. */
 export function relatedPosts(p: Post, n = 3) {
   const score = (o: Post) => (o.category === p.category ? 3 : 0) + o.tags.filter((t) => p.tags.includes(t)).length;
-  return posts
+  return getPosts()
     .filter((o) => o.slug !== p.slug)
     .map((o, i) => ({ o, s: score(o), i }))
     .sort((a, b) => b.s - a.s || a.i - b.i)

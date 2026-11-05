@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { AlertTriangle, Info, Lightbulb } from 'lucide-react';
 import { BlogArt } from '@/components/blog/blog-art';
-import { slugify, type Block } from '@/lib/blog';
+import { isLiveHref, slugify, type Block } from '@/lib/blog';
 import { cn } from '@/lib/utils';
 
 /** Renders **bold**, `code` and [text](href) inside a string. Internal links use next/link; external ones open in a new tab. */
@@ -20,6 +20,7 @@ export function Inline({ text }: { text: string }) {
         const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
         if (link) {
           const [, label, href] = link;
+          if (!isLiveHref(href)) return <span key={i}>{label}</span>;
           const cls = 'font-medium text-ink underline decoration-signal/50 decoration-2 underline-offset-[5px] transition-colors hover:text-signal-600 hover:decoration-signal';
           return href.startsWith('/') ? (
             <Link key={i} href={href} className={cls}>
@@ -187,5 +188,26 @@ export function ArticleBody({ blocks }: { blocks: Block[] }) {
         <BlockView key={i} b={b} />
       ))}
     </div>
+  );
+}
+
+/** Always open (not an accordion): search engines and AI assistants weigh visible answers, and readers skim them. */
+export function ArticleFaq({ title, items }: { title: string; items: { q: string; a: string }[] }) {
+  return (
+    <section aria-labelledby={slugify(title)} className="mt-16">
+      <h2 id={slugify(title)} className="scroll-mt-28 text-balance text-[26px] font-bold leading-tight tracking-[-0.02em] text-ink sm:text-[30px]">
+        {title}
+      </h2>
+      <div className="mt-6 divide-y divide-ink/[0.08] rounded-2xl border border-ink/10 bg-white">
+        {items.map((f) => (
+          <div key={f.q} className="p-5 sm:p-6">
+            <h3 className="text-[17.5px] font-bold leading-snug text-ink">{f.q}</h3>
+            <p className="mt-2 text-pretty text-[16.5px] leading-relaxed text-ink/75">
+              <Inline text={f.a} />
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

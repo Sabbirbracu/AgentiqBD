@@ -1,0 +1,35 @@
+name: Publish today's blog post
+
+# Blog posts are scheduled by their `date` (lib/blog/index.ts) and appear on the site by themselves once that day
+# starts in Dhaka (pages revalidate hourly). This job runs shortly after, to:
+#   1. request the pages, so the server regenerates them now instead of on a visitor's first hit;
+#   2. tell Bing / IndexNow engines about the new URL.
+# Nothing is built or deployed here.
+on:
+  schedule:
+    # 19:30 UTC = 01:30 in Dhaka (UTC+6), after the hourly revalidation window has passed.
+    - cron: '30 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Warm the blog, sitemap and llms.txt
+        run: |
+          # The first request after the revalidate window serves the old page and regenerates in the background;
+          # the second one gets the fresh version.
+          for round in 1 2; do
+            for path in /blog /sitemap.xml /llms.txt /llms-full.txt; do
+              curl --silent --show-error --fail -o /dev/null "https://www.agentiqbd.com$path"
+            done
+            sleep 20
+          done
+
+      - name: Ping IndexNow with today's post
+        run: node scripts/indexnow.mjs --today

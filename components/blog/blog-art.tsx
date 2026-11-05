@@ -29,6 +29,21 @@ export const blogArtDark: Record<BlogArtId, boolean> = {
   checklist: false,
   'voice-test': false,
   monitoring: false,
+  cost: false,
+  global: true,
+  mcp: false,
+  commerce: false,
+  roi: false,
+  vetting: true,
+  receptionist: true,
+  leads: true,
+  documents: false,
+  knowledge: false,
+  inventory: false,
+  dashboard: false,
+  support: false,
+  'build-buy': true,
+  automations: false,
 };
 
 function Bg({ id, tone }: { id: string; tone: 'dark' | 'light' | 'red' }) {
@@ -700,6 +715,557 @@ function MonitoringArt({ id }: { id: string }) {
   );
 }
 
+function CostArt({ id }: { id: string }) {
+  const segs = [
+    { label: 'integrations', w: 120, hot: true },
+    { label: 'testing', w: 86 },
+    { label: 'guardrails', w: 80 },
+    { label: 'data', w: 62 },
+    { label: 'design', w: 56 },
+  ];
+  let x = 70;
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <text x="70" y="74" fontSize="12" letterSpacing="2" className={mono} fill="rgba(10,10,11,0.5)">WHERE THE BUILD BUDGET GOES</text>
+      {segs.map((s, i) => {
+        const sx = x;
+        x += s.w + 4;
+        return (
+          <g key={s.label}>
+            <rect x={sx} y="92" width={s.w} height="40" rx="8" fill={s.hot ? RED : i % 2 ? 'rgba(10,10,11,0.82)' : INK} />
+            <text x={sx + s.w / 2} y="152" textAnchor="middle" fontSize="11.5" className={mono} fill={INK}>{s.label}</text>
+          </g>
+        );
+      })}
+      <text x={x + 8} y="117" fontSize="11.5" className={mono} fill="rgba(10,10,11,0.45)">+ model</text>
+      {[
+        { t: 'BUILD', s: 'one-time', y: 196 },
+        { t: 'RUN', s: 'per month', y: 252 },
+        { t: 'CARE', s: 'per month', y: 308 },
+      ].map((r, i) => (
+        <g key={r.t}>
+          <rect x="70" y={r.y} width="500" height="44" rx="12" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+          <rect x="84" y={r.y + 12} width="64" height="20" rx="6" fill={i === 0 ? INK : 'rgba(10,10,11,0.07)'} />
+          <text x="116" y={r.y + 26} textAnchor="middle" fontSize="11" letterSpacing="1.4" className={mono} fill={i === 0 ? PAPER : INK}>{r.t}</text>
+          <text x="164" y={r.y + 27} fontSize="13" className={mono} fill="rgba(10,10,11,0.6)">{r.s}</text>
+          <rect x={360} y={r.y + 18} width={i === 0 ? 190 : i === 1 ? 70 : 52} height="8" rx="4" fill={i === 0 ? RED : 'rgba(10,10,11,0.25)'} />
+        </g>
+      ))}
+    </Svg>
+  );
+}
+
+function GlobalArt({ id }: { id: string }) {
+  const x0 = 150;
+  const hw = 18; // px per hour
+  const rows = [
+    { city: 'London', offset: -6, y: 108 },
+    { city: 'Dhaka', offset: 0, y: 188, hot: true },
+    { city: 'New York', offset: -11, y: 268 },
+  ];
+  // working day 9-18 local, shown on Dhaka clock (0-24)
+  const block = (offset: number) => {
+    const start = (9 - offset + 24) % 24;
+    return { start, end: start + 9 };
+  };
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      <text x="40" y="58" fontSize="12" letterSpacing="2.2" className={mono} fill="rgba(252,252,244,0.5)">WORKING HOURS ON THE DHAKA CLOCK · UTC+6</text>
+      {[0, 6, 12, 18, 24].map((h) => (
+        <g key={h}>
+          <path d={`M${x0 + h * hw} 84 V316`} stroke="rgba(255,255,255,0.1)" strokeDasharray="3 5" />
+          <text x={x0 + h * hw} y="344" textAnchor="middle" fontSize="11" className={mono} fill="rgba(252,252,244,0.45)">{String(h % 24).padStart(2, '0')}:00</text>
+        </g>
+      ))}
+      <rect x={x0 + 15 * hw} y="84" width={3 * hw} height="232" rx="10" fill="rgba(232,79,61,0.14)" />
+      <rect x={x0 + 19 * hw} y="84" width={2 * hw} height="232" rx="10" fill="rgba(232,79,61,0.14)" />
+      {rows.map((r) => {
+        const b = block(r.offset);
+        const parts = b.end <= 24 ? [[b.start, b.end]] : [[b.start, 24], [0, b.end - 24]];
+        return (
+          <g key={r.city}>
+            <text x="40" y={r.y + 22} fontSize="14" className={mono} fill={r.hot ? RED : PAPER}>{r.city}</text>
+            {parts.map(([s, e], k) => (
+              <rect key={k} x={x0 + s * hw} y={r.y} width={(e - s) * hw} height="34" rx="10" fill={r.hot ? RED : 'rgba(255,255,255,0.14)'} stroke={r.hot ? RED : 'rgba(255,255,255,0.22)'} />
+            ))}
+          </g>
+        );
+      })}
+      <text x="600" y="380" textAnchor="end" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">OVERLAP = LIVE CALLS · REST = ASYNC</text>
+    </Svg>
+  );
+}
+
+function McpArt({ id }: { id: string }) {
+  const hosts = ['AI assistant', 'Code editor', 'Your agent'];
+  const servers = ['CRM', 'Orders', 'Documents'];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      {hosts.map((h, i) => {
+        const y = 92 + i * 84;
+        return (
+          <g key={h}>
+            <rect x="46" y={y} width="150" height="52" rx="14" fill="#fff" stroke="rgba(10,10,11,0.14)" />
+            <text x="121" y={y + 31} textAnchor="middle" fontSize="13" className={mono} fill={INK}>{h}</text>
+            <path d={`M196 ${y + 26} C 240 ${y + 26}, 240 200, 268 200`} stroke={INK} strokeOpacity="0.35" strokeWidth="1.6" strokeDasharray="4 5" className="hub-flow" />
+          </g>
+        );
+      })}
+      <rect x="268" y="150" width="104" height="100" rx="22" fill={RED} />
+      <text x="320" y="206" textAnchor="middle" fontSize="22" fontWeight="700" className={mono} fill={PAPER}>MCP</text>
+      <text x="320" y="228" textAnchor="middle" fontSize="10" letterSpacing="1.2" className={mono} fill="rgba(252,252,244,0.8)">one plug</text>
+      {servers.map((s, i) => {
+        const y = 92 + i * 84;
+        return (
+          <g key={s}>
+            <path d={`M372 200 C 400 200, 400 ${y + 26}, 444 ${y + 26}`} stroke={INK} strokeOpacity="0.35" strokeWidth="1.6" strokeDasharray="4 5" className="hub-flow" />
+            <rect x="444" y={y} width="150" height="52" rx="14" fill={INK} />
+            <text x="508" y={y + 31} textAnchor="middle" fontSize="13" className={mono} fill={PAPER}>{s}</text>
+            <rect x="562" y={y + 18} width="14" height="12" rx="3" fill={RED} />
+            <path d={`M565 ${y + 18} v-3 a4 4 0 0 1 8 0 v3`} stroke={RED} strokeWidth="1.8" fill="none" />
+          </g>
+        );
+      })}
+      <text x="121" y="364" textAnchor="middle" fontSize="11" letterSpacing="2" className={mono} fill="rgba(10,10,11,0.45)">HOSTS</text>
+      <text x="519" y="364" textAnchor="middle" fontSize="11" letterSpacing="2" className={mono} fill="rgba(10,10,11,0.45)">SERVERS</text>
+    </Svg>
+  );
+}
+
+function CommerceArt({ id }: { id: string }) {
+  const fields = [
+    { l: 'title + attributes', ok: true },
+    { l: 'GTIN', ok: true },
+    { l: 'price · live', ok: true },
+    { l: 'stock · live', ok: true },
+    { l: 'returns policy', ok: false },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="red" />
+      <rect x="52" y="60" width="270" height="280" rx="20" fill={PAPER} />
+      <rect x="72" y="80" width="88" height="88" rx="14" fill="rgba(10,10,11,0.08)" />
+      <path d="M92 146 l18 -26 l14 18 l10 -12 l16 20 z" fill="rgba(10,10,11,0.25)" />
+      <rect x="176" y="92" width="120" height="10" rx="5" fill={INK} />
+      <rect x="176" y="112" width="84" height="8" rx="4" fill="rgba(10,10,11,0.25)" />
+      <text x="176" y="154" fontSize="18" fontWeight="700" className={mono} fill={INK}>$118</text>
+      {fields.map((f, i) => {
+        const y = 188 + i * 29;
+        return (
+          <g key={f.l}>
+            <rect x="72" y={y} width="18" height="18" rx="5" fill={f.ok ? INK : RED} />
+            {f.ok ? (
+              <path d={`M76.5 ${y + 9} l3 3 l5.5 -6`} stroke={PAPER} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            ) : (
+              <path d={`M77 ${y + 5} l8 8 M85 ${y + 5} l-8 8`} stroke={PAPER} strokeWidth="1.8" strokeLinecap="round" />
+            )}
+            <text x="100" y={y + 13.5} fontSize="12.5" className={mono} fill={INK}>{f.l}</text>
+          </g>
+        );
+      })}
+      <path d="M334 200 H392" stroke={PAPER} strokeWidth="2" strokeDasharray="4 5" className="hub-flow" />
+      <rect x="400" y="120" width="200" height="160" rx="20" fill={INK} />
+      <circle cx="430" cy="150" r="10" fill={RED} />
+      <text x="448" y="155" fontSize="12" letterSpacing="1.4" className={mono} fill={PAPER}>AI SHOPPER</text>
+      <rect x="420" y="174" width="160" height="30" rx="9" fill="rgba(255,255,255,0.08)" />
+      <text x="432" y="193" fontSize="11" className={mono} fill="rgba(252,252,244,0.8)">"trail shoes, &lt;$120"</text>
+      <rect x="420" y="220" width="160" height="40" rx="12" fill={PAPER} />
+      <text x="500" y="245" textAnchor="middle" fontSize="12.5" className={mono} fill={INK}>checkout ✓</text>
+      <text x="320" y="376" textAnchor="middle" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.9)">READABLE DATA WINS THE RECOMMENDATION</text>
+    </Svg>
+  );
+}
+
+function RoiArt({ id }: { id: string }) {
+  const X = (m: number) => 90 + m * 40;
+  const Y = (v: number) => 320 - v * 0.022;
+  const months = Array.from({ length: 13 }, (_, i) => i);
+  const cost = months.map((m) => 2500 + m * 500);
+  const value = months.map((m) => m * 2000);
+  const path = (vals: number[]) => vals.map((v, i) => `${i ? 'L' : 'M'}${X(i)} ${Y(v)}`).join(' ');
+  const pay = 2500 / 1500;
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <rect x="50" y="40" width="540" height="330" rx="18" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+      <text x="74" y="72" fontSize="12" letterSpacing="1.8" className={mono} fill="rgba(10,10,11,0.5)">CUMULATIVE · EXAMPLE NUMBERS</text>
+      {[0, 1, 2, 3].map((k) => (
+        <path key={k} d={`M90 ${120 + k * 66} H570`} stroke="rgba(10,10,11,0.06)" />
+      ))}
+      <path d={path(cost)} stroke={INK} strokeWidth="2.4" />
+      <path d={path(value)} stroke={RED} strokeWidth="2.6" />
+      <circle cx={X(pay)} cy={Y(pay * 2000)} r="7" fill={RED} stroke="#fff" strokeWidth="3" />
+      <rect x={X(pay) + 12} y={Y(pay * 2000) - 44} width="132" height="30" rx="10" fill={INK} />
+      <text x={X(pay) + 78} y={Y(pay * 2000) - 24} textAnchor="middle" fontSize="11.5" className={mono} fill={PAPER}>payback ≈ 1.7 mo</text>
+      <text x={X(12) - 4} y={Y(value[12]) + 4} textAnchor="end" dy="-12" fontSize="12" className={mono} fill={RED}>value</text>
+      <text x={X(12) - 4} y={Y(cost[12]) + 22} textAnchor="end" fontSize="12" className={mono} fill={INK}>total cost</text>
+      {[0, 3, 6, 9, 12].map((m) => (
+        <text key={m} x={X(m)} y="344" textAnchor="middle" fontSize="11" className={mono} fill="rgba(10,10,11,0.45)">m{m}</text>
+      ))}
+    </Svg>
+  );
+}
+
+function VettingArt({ id }: { id: string }) {
+  const rows = ['live work', 'testing', 'ownership', 'pricing', 'questions'];
+  const vendors = [
+    { name: 'A', s: [4, 2, 2, 3, 2] },
+    { name: 'B', s: [5, 5, 4, 4, 5], hot: true },
+    { name: 'C', s: [3, 1, 3, 2, 3] },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      <text x="60" y="66" fontSize="12" letterSpacing="2.2" className={mono} fill="rgba(252,252,244,0.5)">VENDOR SCORECARD</text>
+      {vendors.map((v, j) => (
+        <text key={v.name} x={300 + j * 110} y="104" textAnchor="middle" fontSize="13" className={mono} fill={v.hot ? RED : PAPER}>vendor {v.name}</text>
+      ))}
+      {rows.map((r, i) => {
+        const y = 136 + i * 46;
+        return (
+          <g key={r}>
+            <path d={`M60 ${y + 22} H580`} stroke="rgba(255,255,255,0.07)" />
+            <text x="60" y={y + 6} fontSize="13" className={mono} fill="rgba(252,252,244,0.8)">{r}</text>
+            {vendors.map((v, j) =>
+              [0, 1, 2, 3, 4].map((k) => (
+                <circle key={`${j}-${k}`} cx={268 + j * 110 + k * 16} cy={y + 2} r="5" fill={k < v.s[i] ? (v.hot ? RED : PAPER) : 'rgba(255,255,255,0.12)'} fillOpacity={k < v.s[i] && !v.hot ? 0.75 : 1} />
+              )),
+            )}
+          </g>
+        );
+      })}
+      <rect x="352" y="356" width="116" height="26" rx="13" fill={RED} />
+      <text x="410" y="373" textAnchor="middle" fontSize="11" letterSpacing="1.2" className={mono} fill={PAPER}>paid pilot →</text>
+    </Svg>
+  );
+}
+
+function ReceptionistArt({ id }: { id: string }) {
+  const calls = [
+    { t: '02:14', l: 'Book Thu 5pm', r: 'booked', ok: true },
+    { t: '08:03', l: 'Opening hours?', r: 'answered', ok: true },
+    { t: '09:41', l: 'Move my appointment', r: 'moved', ok: true },
+    { t: '11:20', l: 'Billing complaint', r: '→ staff', ok: false },
+  ];
+  const wave = [8, 18, 30, 14, 40, 24, 34, 12, 26, 16];
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      <rect x="40" y="70" width="190" height="260" rx="28" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.16)" />
+      <circle cx="135" cy="140" r="32" fill={RED} />
+      <path d="M124 128 c2 -3 6 -3 7 0 l3 6 c1 2 0 4 -2 5 l-2 1 c2 5 6 9 11 11 l1 -2 c1 -2 3 -3 5 -2 l6 3 c3 1 3 5 0 7 c-4 4 -10 5 -15 2 c-8 -5 -14 -11 -18 -19 c-2 -5 -1 -10 4 -14 z" fill={PAPER} />
+      <text x="135" y="204" textAnchor="middle" fontSize="12" letterSpacing="1.4" className={mono} fill="rgba(252,252,244,0.7)">AI RECEPTIONIST</text>
+      {wave.map((h, i) => (
+        <rect key={i} x={80 + i * 11} y={256 - h / 2} width="6" height={h} rx="3" fill={i === 4 ? RED : PAPER} fillOpacity={i === 4 ? 1 : 0.7} />
+      ))}
+      <text x="135" y="308" textAnchor="middle" fontSize="11" className={mono} fill="rgba(252,252,244,0.45)">24/7 · every call</text>
+      {calls.map((c, i) => {
+        const y = 78 + i * 64;
+        return (
+          <g key={c.l}>
+            <rect x="262" y={y} width="338" height="50" rx="14" fill={c.ok ? 'rgba(255,255,255,0.07)' : RED} stroke={c.ok ? 'rgba(255,255,255,0.14)' : RED} />
+            <text x="280" y={y + 30} fontSize="12" className={mono} fill="rgba(252,252,244,0.55)">{c.t}</text>
+            <text x="330" y={y + 30} fontSize="13" className={mono} fill={PAPER}>{c.l}</text>
+            <text x="584" y={y + 30} textAnchor="end" fontSize="12" className={mono} fill={c.ok ? RED : PAPER}>{c.r}</text>
+          </g>
+        );
+      })}
+      <text x="600" y="376" textAnchor="end" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">ROUTINE HANDLED · THE REST HANDED OVER</text>
+    </Svg>
+  );
+}
+
+/** Small tick or cross box used by several covers. */
+function Mark({ x, y, ok, s = 18 }: { x: number; y: number; ok: boolean; s?: number }) {
+  const k = s / 18;
+  return (
+    <g>
+      <rect x={x} y={y} width={s} height={s} rx={5 * k} fill={ok ? INK : RED} />
+      {ok ? (
+        <path d={`M${x + 4.5 * k} ${y + 9 * k} l${3 * k} ${3 * k} l${5.5 * k} ${-6 * k}`} stroke={PAPER} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <path d={`M${x + 5 * k} ${y + 5 * k} l${8 * k} ${8 * k} M${x + 13 * k} ${y + 5 * k} l${-8 * k} ${8 * k}`} stroke={PAPER} strokeWidth="1.8" strokeLinecap="round" />
+      )}
+    </g>
+  );
+}
+
+function LeadsArt({ id }: { id: string }) {
+  const sources = ['Web form', 'Email', 'WhatsApp', 'Facebook', 'Phone'];
+  const stages = [
+    { l: 'Replied · 2 min', hot: true },
+    { l: 'Qualified' },
+    { l: 'Call booked' },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      {sources.map((s, i) => {
+        const y = 66 + i * 58;
+        return (
+          <g key={s}>
+            <Chip x={40} y={y} w={132} label={s} dark />
+            <path d={`M172 ${y + 17} C 220 ${y + 17}, 220 200, 254 200`} stroke={PAPER} strokeOpacity="0.3" strokeWidth="1.5" strokeDasharray="4 5" className="hub-flow" />
+          </g>
+        );
+      })}
+      <rect x="254" y="160" width="110" height="80" rx="18" fill={PAPER} />
+      <text x="309" y="196" textAnchor="middle" fontSize="15" fontWeight="700" className={mono} fill={INK}>CRM</text>
+      <text x="309" y="216" textAnchor="middle" fontSize="10.5" className={mono} fill="rgba(10,10,11,0.55)">one inbox</text>
+      {stages.map((s, i) => {
+        const y = 104 + i * 70;
+        return (
+          <g key={s.l}>
+            <path d={`M364 200 C 392 200, 392 ${y + 22}, 416 ${y + 22}`} stroke={PAPER} strokeOpacity="0.3" strokeWidth="1.5" />
+            <rect x="416" y={y} width="184" height="44" rx="14" fill={s.hot ? RED : 'rgba(255,255,255,0.07)'} stroke={s.hot ? RED : 'rgba(255,255,255,0.16)'} />
+            <text x="508" y={y + 27} textAnchor="middle" fontSize="12.5" className={mono} fill={PAPER}>{s.l}</text>
+          </g>
+        );
+      })}
+      <text x="600" y="376" textAnchor="end" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">NO ENQUIRY LEFT WAITING</text>
+    </Svg>
+  );
+}
+
+function DocumentsArt({ id }: { id: string }) {
+  const fields = [
+    { k: 'supplier', v: 'Acme Supplies', ok: true },
+    { k: 'invoice no', v: 'INV-20418', ok: true },
+    { k: 'PO match', v: 'PO-1187', ok: true },
+    { k: 'total', v: '$4,210.00', ok: true },
+    { k: 'line sum', v: '$4,120.00', ok: false },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <g transform="rotate(-4 160 200)">
+        <rect x="58" y="62" width="200" height="270" rx="10" fill="#fff" stroke="rgba(10,10,11,0.14)" />
+        <rect x="78" y="84" width="80" height="12" rx="4" fill={INK} />
+        <rect x="78" y="106" width="120" height="7" rx="3.5" fill="rgba(10,10,11,0.2)" />
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <g key={i}>
+            <rect x="78" y={140 + i * 22} width="100" height="7" rx="3.5" fill="rgba(10,10,11,0.14)" />
+            <rect x="196" y={140 + i * 22} width="42" height="7" rx="3.5" fill="rgba(10,10,11,0.22)" />
+          </g>
+        ))}
+        <rect x="160" y="290" width="78" height="16" rx="4" fill={RED} fillOpacity="0.85" />
+      </g>
+      <path d="M276 200 H322" stroke={INK} strokeOpacity="0.5" strokeWidth="2" strokeDasharray="4 5" className="hub-flow" />
+      <rect x="330" y="70" width="270" height="260" rx="18" fill={INK} />
+      <text x="352" y="102" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(252,252,244,0.5)">EXTRACTED · VALIDATED</text>
+      {fields.map((f, i) => {
+        const y = 122 + i * 40;
+        return (
+          <g key={f.k}>
+            <Mark x={352} y={y} ok={f.ok} />
+            <text x="382" y={y + 13.5} fontSize="12" className={mono} fill="rgba(252,252,244,0.6)">{f.k}</text>
+            <text x="582" y={y + 13.5} textAnchor="end" fontSize="12.5" className={mono} fill={f.ok ? PAPER : RED}>{f.v}</text>
+          </g>
+        );
+      })}
+      <text x="465" y="356" textAnchor="middle" fontSize="11" letterSpacing="1.6" className={mono} fill={RED}>mismatch → human review</text>
+    </Svg>
+  );
+}
+
+function KnowledgeArt({ id }: { id: string }) {
+  const docs = ['Returns policy v4', 'Warehouse SOP', 'Price list · Nov', 'HR handbook'];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      {docs.map((d, i) => {
+        const y = 70 + i * 66;
+        const hot = i === 0;
+        return (
+          <g key={d}>
+            <rect x="40" y={y} width="200" height="50" rx="12" fill="#fff" stroke={hot ? RED : 'rgba(10,10,11,0.14)'} strokeWidth={hot ? 2 : 1} />
+            <rect x="56" y={y + 14} width="16" height="22" rx="3" fill={hot ? RED : 'rgba(10,10,11,0.18)'} />
+            <text x="84" y={y + 30} fontSize="12.5" className={mono} fill={INK}>{d}</text>
+          </g>
+        );
+      })}
+      <path d="M240 95 C 290 95, 290 150, 318 150" stroke={RED} strokeWidth="2" strokeDasharray="4 5" className="hub-flow" />
+      <rect x="318" y="60" width="282" height="280" rx="20" fill={INK} />
+      <rect x="400" y="84" width="180" height="46" rx="14" fill="rgba(255,255,255,0.1)" />
+      <text x="490" y="112" textAnchor="middle" fontSize="12" className={mono} fill={PAPER}>Return window for B2B?</text>
+      <rect x="338" y="148" width="228" height="96" rx="14" fill={PAPER} />
+      <text x="354" y="174" fontSize="12" className={mono} fill={INK}>30 days from delivery,</text>
+      <text x="354" y="194" fontSize="12" className={mono} fill={INK}>unopened, with invoice.</text>
+      <rect x="354" y="210" width="140" height="22" rx="11" fill={RED} />
+      <text x="424" y="225" textAnchor="middle" fontSize="10.5" className={mono} fill={PAPER}>source: policy v4 §2</text>
+      <text x="459" y="314" textAnchor="middle" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(252,252,244,0.5)">EVERY ANSWER CITED</text>
+    </Svg>
+  );
+}
+
+function InventoryArt({ id }: { id: string }) {
+  const sheets = ['stock_FINAL.xlsx', 'stock_v3_upd.xlsx', 'branch2.xlsx'];
+  const bars = [
+    { l: 'Paracetamol 500', v: 0.82 },
+    { l: 'Gloves M', v: 0.46 },
+    { l: 'Syringe 5ml', v: 0.12, hot: true },
+    { l: 'Masks', v: 0.64 },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      {sheets.map((s, i) => (
+        <g key={s} transform={`rotate(${-6 + i * 5} 140 ${110 + i * 70})`}>
+          <rect x="44" y={80 + i * 74} width="196" height="56" rx="8" fill="#fff" stroke="rgba(10,10,11,0.16)" />
+          {[0, 1, 2].map((k) => (
+            <path key={k} d={`M44 ${96 + i * 74 + k * 13} H240`} stroke="rgba(10,10,11,0.08)" />
+          ))}
+          <text x="56" y={92 + i * 74} fontSize="10.5" className={mono} fill="rgba(10,10,11,0.6)">{s}</text>
+          <text x="226" y={124 + i * 74} textAnchor="end" fontSize="13" fontWeight="700" className={mono} fill={RED}>{['412', '398', '?'][i]}</text>
+        </g>
+      ))}
+      <path d="M262 200 H306" stroke={INK} strokeOpacity="0.5" strokeWidth="2" strokeDasharray="4 5" className="hub-flow" />
+      <rect x="314" y="64" width="286" height="272" rx="18" fill={INK} />
+      <text x="336" y="96" fontSize="11" letterSpacing="1.6" className={mono} fill="rgba(252,252,244,0.5)">LIVE STOCK · ALL BRANCHES</text>
+      {bars.map((b, i) => {
+        const y = 122 + i * 48;
+        return (
+          <g key={b.l}>
+            <text x="336" y={y + 4} fontSize="11.5" className={mono} fill="rgba(252,252,244,0.8)">{b.l}</text>
+            <rect x="336" y={y + 12} width="240" height="10" rx="5" fill="rgba(255,255,255,0.1)" />
+            <rect x="336" y={y + 12} width={240 * b.v} height="10" rx="5" fill={b.hot ? RED : PAPER} />
+            {b.hot && <text x="576" y={y + 4} textAnchor="end" fontSize="11" className={mono} fill={RED}>reorder</text>}
+          </g>
+        );
+      })}
+    </Svg>
+  );
+}
+
+function DashboardArt({ id }: { id: string }) {
+  const kpis = [
+    { l: 'Revenue', v: '$48.2k', d: '−8%', down: true },
+    { l: 'Margin', v: '31%', d: '+2pt' },
+    { l: 'Overdue', v: '$6.1k', d: '+12%', down: true },
+  ];
+  const bars = [42, 58, 50, 66, 61, 72, 54];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <rect x="40" y="40" width="560" height="320" rx="18" fill="#fff" stroke="rgba(10,10,11,0.12)" />
+      {kpis.map((k, i) => {
+        const x = 62 + i * 176;
+        return (
+          <g key={k.l}>
+            <rect x={x} y="62" width="160" height="78" rx="12" fill="rgba(10,10,11,0.04)" />
+            <text x={x + 14} y="86" fontSize="11" letterSpacing="1.2" className={mono} fill="rgba(10,10,11,0.5)">{k.l.toUpperCase()}</text>
+            <text x={x + 14} y="120" fontSize="22" fontWeight="700" className={mono} fill={INK}>{k.v}</text>
+            <text x={x + 146} y="120" textAnchor="end" fontSize="12" className={mono} fill={k.down ? RED : INK}>{k.d}</text>
+          </g>
+        );
+      })}
+      {bars.map((h, i) => (
+        <rect key={i} x={70 + i * 34} y={320 - h * 2} width="22" height={h * 2} rx="5" fill={i === 6 ? RED : INK} fillOpacity={i === 6 ? 1 : 0.85} />
+      ))}
+      <rect x="330" y="166" width="248" height="168" rx="14" fill={INK} />
+      <text x="348" y="192" fontSize="11" letterSpacing="1.4" className={mono} fill={RED}>MONDAY SUMMARY</text>
+      {['Revenue −8% vs last week:', 'two large orders moved', 'to next week. Overdue', 'up: 3 invoices > 30 days.'].map((l, i) => (
+        <text key={l} x="348" y={220 + i * 22} fontSize="12" className={mono} fill="rgba(252,252,244,0.85)">{l}</text>
+      ))}
+    </Svg>
+  );
+}
+
+function SupportArt({ id }: { id: string }) {
+  const steps = [
+    { l: 'Answer', s: 'policies, how-to', w: 0.95 },
+    { l: 'Look up', s: 'order status', w: 0.75 },
+    { l: 'Act', s: 'within limits', w: 0.5 },
+    { l: 'Hand over', s: 'to a person', w: 0.3, hot: true },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="red" />
+      {steps.map((s, i) => {
+        const y = 300 - i * 70;
+        const x = 60 + i * 60;
+        return (
+          <g key={s.l}>
+            <rect x={x} y={y} width="300" height="54" rx="14" fill={s.hot ? INK : PAPER} />
+            <text x={x + 20} y={y + 24} fontSize="14" fontWeight="700" className={mono} fill={s.hot ? PAPER : INK}>{s.l}</text>
+            <text x={x + 20} y={y + 42} fontSize="11" className={mono} fill={s.hot ? 'rgba(252,252,244,0.6)' : 'rgba(10,10,11,0.55)'}>{s.s}</text>
+            <text x={x + 284} y={y + 33} textAnchor="end" fontSize="11" className={mono} fill={s.hot ? RED : 'rgba(10,10,11,0.45)'}>{`0${i + 1}`}</text>
+          </g>
+        );
+      })}
+      <rect x="40" y="40" width="178" height="70" rx="16" fill={INK} />
+      <text x="56" y="68" fontSize="11" className={mono} fill="rgba(252,252,244,0.55)">customer</text>
+      <text x="56" y="90" fontSize="12.5" className={mono} fill={PAPER}>"Where is my order?"</text>
+      <text x="600" y="376" textAnchor="end" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.9)">AUTOMATE IN ORDER OF RISK</text>
+    </Svg>
+  );
+}
+
+function BuildBuyArt({ id }: { id: string }) {
+  const cols = [
+    { t: 'BUY', items: ['Accounting', 'Email', 'Payroll'], x: 44 },
+    { t: 'CONNECT', items: ['CRM ↔ Store', 'Store ↔ Stock', 'Stock ↔ Books'], x: 244 },
+    { t: 'BUILD', items: ['Your quoting', 'Your scheduling', 'Your product'], x: 444, hot: true },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="dark" />
+      {cols.map((c) => (
+        <g key={c.t}>
+          <rect x={c.x} y="70" width="152" height="40" rx="12" fill={c.hot ? RED : 'rgba(255,255,255,0.1)'} />
+          <text x={c.x + 76} y="95" textAnchor="middle" fontSize="13" letterSpacing="2" fontWeight="700" className={mono} fill={PAPER}>{c.t}</text>
+          {c.items.map((it, i) => (
+            <g key={it}>
+              <rect x={c.x} y={128 + i * 56} width="152" height="44" rx="12" fill="rgba(255,255,255,0.05)" stroke={c.hot ? RED : 'rgba(255,255,255,0.16)'} strokeDasharray={c.t === 'CONNECT' ? '4 4' : undefined} />
+              <text x={c.x + 76} y={155 + i * 56} textAnchor="middle" fontSize="12" className={mono} fill={PAPER}>{it}</text>
+            </g>
+          ))}
+        </g>
+      ))}
+      <text x="40" y="376" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">COMMODITY</text>
+      <text x="600" y="376" textAnchor="end" fontSize="11" letterSpacing="2" className={mono} fill="rgba(252,252,244,0.45)">YOUR EDGE →</text>
+    </Svg>
+  );
+}
+
+function AutomationsArt({ id }: { id: string }) {
+  const rows = [
+    { t: 'New enquiry', a: 'CRM + reply', ai: false },
+    { t: 'Invoice email', a: 'extract + post', ai: true },
+    { t: 'Stock < min', a: 'purchase request', ai: false },
+    { t: 'Due date −3d', a: 'payment reminder', ai: false },
+    { t: 'Support msg', a: 'tag + draft', ai: true },
+  ];
+  return (
+    <Svg>
+      <Bg id={id} tone="light" />
+      <text x="60" y="58" fontSize="11" letterSpacing="2" className={mono} fill="rgba(10,10,11,0.5)">TRIGGER</text>
+      <text x="420" y="58" fontSize="11" letterSpacing="2" className={mono} fill="rgba(10,10,11,0.5)">ACTION</text>
+      {rows.map((r, i) => {
+        const y = 74 + i * 60;
+        return (
+          <g key={r.t}>
+            <rect x="60" y={y} width="190" height="42" rx="12" fill="#fff" stroke="rgba(10,10,11,0.14)" />
+            <text x="78" y={y + 26} fontSize="12.5" className={mono} fill={INK}>{r.t}</text>
+            <path d={`M250 ${y + 21} H408`} stroke={INK} strokeOpacity="0.4" strokeWidth="1.6" strokeDasharray="4 5" className="hub-flow" />
+            {r.ai && (
+              <g>
+                <rect x="303" y={y + 9} width="50" height="24" rx="12" fill={RED} />
+                <text x="328" y={y + 25} textAnchor="middle" fontSize="11" fontWeight="700" className={mono} fill={PAPER}>AI</text>
+              </g>
+            )}
+            <rect x="408" y={y} width="172" height="42" rx="12" fill={INK} />
+            <text x="494" y={y + 26} textAnchor="middle" fontSize="12.5" className={mono} fill={PAPER}>{r.a}</text>
+          </g>
+        );
+      })}
+    </Svg>
+  );
+}
+
 const arts: Record<BlogArtId, (p: { id: string }) => ReactNode> = {
   intro: IntroArt,
   'agent-loop': AgentLoopArt,
@@ -716,6 +1282,21 @@ const arts: Record<BlogArtId, (p: { id: string }) => ReactNode> = {
   checklist: ChecklistArt,
   'voice-test': VoiceTestArt,
   monitoring: MonitoringArt,
+  cost: CostArt,
+  global: GlobalArt,
+  mcp: McpArt,
+  commerce: CommerceArt,
+  roi: RoiArt,
+  vetting: VettingArt,
+  receptionist: ReceptionistArt,
+  leads: LeadsArt,
+  documents: DocumentsArt,
+  knowledge: KnowledgeArt,
+  inventory: InventoryArt,
+  dashboard: DashboardArt,
+  support: SupportArt,
+  'build-buy': BuildBuyArt,
+  automations: AutomationsArt,
 };
 
 /** Fills its parent; give the parent a size or aspect ratio. */

@@ -5,7 +5,7 @@ import { Navbar } from '@/components/sections/navbar';
 import { Footer } from '@/components/sections/footer';
 import { BlogIndex } from '@/components/blog/blog-index';
 import { JsonLd } from '@/components/seo/json-ld';
-import { blogCategories, blogMeta, posts, toCard } from '@/lib/blog';
+import { blogCategories, blogMeta, getPosts, toCard } from '@/lib/blog';
 import { site } from '@/lib/content';
 import { absoluteUrl, breadcrumbJsonLd, founderId, orgId } from '@/lib/seo';
 
@@ -16,7 +16,11 @@ export const metadata: Metadata = {
   openGraph: { title: `${blogMeta.metaTitle} · Agentiq BD`, description: blogMeta.description, url: absoluteUrl('/blog'), type: 'website' },
 };
 
+/** Hourly, so scheduled posts appear on their publish day without a redeploy. */
+export const revalidate = 3600;
+
 export default function BlogPage() {
+  const posts = getPosts();
   const cards = posts.map(toCard);
 
   return (

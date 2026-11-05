@@ -20,7 +20,22 @@ export type BlogArtId =
   | 'rag-eval'
   | 'checklist'
   | 'voice-test'
-  | 'monitoring';
+  | 'monitoring'
+  | 'cost'
+  | 'global'
+  | 'mcp'
+  | 'commerce'
+  | 'roi'
+  | 'vetting'
+  | 'receptionist'
+  | 'leads'
+  | 'documents'
+  | 'knowledge'
+  | 'inventory'
+  | 'dashboard'
+  | 'support'
+  | 'build-buy'
+  | 'automations';
 
 export type BlogCategory = 'Company' | 'Guides' | 'Engineering' | 'Lessons' | 'Strategy';
 
@@ -54,4 +69,9 @@ export type Post = {
   /** Service page ids (lib/service-pages.ts) this article supports; shown in the sidebar. */
   services: string[];
   body: Block[];
+  /**
+   * Question-and-answer pairs shown after the body as "Frequently asked questions" and emitted as FAQPage JSON-LD.
+   * Write each answer so it makes sense on its own (search snippets and AI assistants quote them out of context).
+   */
+  faq?: { q: string; a: string }[];
 };
