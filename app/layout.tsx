@@ -1,27 +1,40 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Besley, Geist_Mono, Poppins, Schibsted_Grotesk } from 'next/font/google';
+import localFont from 'next/font/local';
 import { site } from '@/lib/content';
 
-const display = Besley({
-  subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+/**
+ * Fonts are self-hosted (latin subset, downloaded from Google Fonts, SIL Open Font License) so the Docker build never
+ * has to reach fonts.googleapis.com; a failed download there broke a deploy on 2026-11-06. Besley, Schibsted Grotesk
+ * and Geist Mono are variable fonts, so one file covers every weight.
+ */
+const display = localFont({
+  src: './fonts/besley-latin-var.woff2',
+  weight: '400 900',
   variable: '--font-display',
   display: 'swap',
 });
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['500', '600', '700'],
+const poppins = localFont({
+  src: [
+    { path: './fonts/poppins-latin-500.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/poppins-latin-600.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/poppins-latin-700.woff2', weight: '700', style: 'normal' },
+  ],
   variable: '--font-poppins',
   display: 'swap',
 });
-const sans = Schibsted_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+const sans = localFont({
+  src: './fonts/schibsted-grotesk-latin-var.woff2',
+  weight: '400 900',
   variable: '--font-sans',
   display: 'swap',
 });
-const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
+const mono = localFont({
+  src: './fonts/geist-mono-latin-var.woff2',
+  weight: '100 900',
+  variable: '--font-mono',
+  display: 'swap',
+});
 const title = 'Agentiq BD — AI & Software Company in Bangladesh';
 
 export const metadata: Metadata = {
