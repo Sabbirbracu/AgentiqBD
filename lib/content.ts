@@ -15,8 +15,7 @@ export const site = {
     'Agentiq BD is an AI engineering and software company in Dhaka, Bangladesh. We build intelligent software, automate business workflows and integrate AI into everyday operations — connected to the tools you already run.',
   /** International format, digits only (01304867542 → +880 1304 867542). */
   whatsapp: '8801304867542',
-  /** TODO(owner): PLACEHOLDER — replace with the real Calendly / Cal.com / Google appointment link. Empty → "Book a discovery call" opens a pre-filled email. */
-  bookingUrl: 'https://calendly.com/agentiqbd/discovery-call',
+  bookingUrl: 'https://calendly.com/sabbirahmad653/agentiqbd-discovery-call',
   /** TODO(owner): link for the "AI Business Audit" button (a booking page or form). Empty → opens a pre-filled email to `email`. */
   auditUrl: '',
   /** TODO(owner): PLACEHOLDER links ('#') — replace with the real profile URLs. */
