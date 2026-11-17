@@ -91,6 +91,22 @@ Search Console (2026-11-06): US = 52 impressions / 0 clicks, Bangladesh = 56 / 1
 | 2026-11-11 | how to choose an AI development company | `/blog/how-to-choose-an-ai-development-company` |
 | 2026-11-12 | AI receptionist for small business | `/blog/ai-receptionist-small-business` |
 
+### Blog cluster: US clicks (added 2026-11-16, scheduled daily)
+US had impressions but ~0 clicks: the site sits on page 2 for broad terms that big sites own. This batch targets long-tail, practical queries where a new domain can reach the top 5 and where the searcher needs to click (templates, code, comparisons, checklists), and deepens the testing cluster that already earns most US impressions. Every post has a short-answer first paragraph, question H2s, a `faq` block and cross-links that turn live on their day.
+
+| Live date | Target phrase | Page |
+|---|---|---|
+| 2026-11-16 | AI agent testing tools / LLM evaluation tools / promptfoo vs DeepEval / LangSmith vs Langfuse | `/blog/ai-agent-testing-tools` |
+| 2026-11-17 | LLM-as-a-judge / LLM judge prompt | `/blog/llm-as-a-judge` |
+| 2026-11-18 | n8n vs Zapier vs Make (for AI agents) | `/blog/n8n-vs-zapier-vs-make-ai-agents` |
+| 2026-11-19 | prompt injection testing / indirect prompt injection | `/blog/prompt-injection-testing` |
+| 2026-11-20 | how to reduce AI hallucinations / stop chatbot hallucinations | `/blog/how-to-reduce-ai-hallucinations` |
+| 2026-11-21 | AI agents vs RPA / agentic automation | `/blog/ai-agents-vs-rpa` |
+| 2026-11-22 | AI answering service for HVAC / plumbers / contractors | `/blog/ai-answering-service-home-services` |
+| 2026-11-23 | golden dataset / AI evaluation dataset | `/blog/golden-dataset-ai-evaluation` |
+| 2026-11-24 | voice AI latency / reduce voice agent latency | `/blog/voice-ai-agent-latency` |
+| 2026-11-25 | how to build an MCP server / MCP server TypeScript tutorial | `/blog/build-mcp-server-typescript` |
+
 ### Blog cluster: business solutions (added 2026-11-06)
 Owner asked for a post on every day and chose to **backdate** six of these to the empty days (30 Oct–5 Nov); all went live 2026-11-06.
 

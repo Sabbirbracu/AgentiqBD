@@ -30,6 +30,16 @@ import { post as reporting } from './posts/automated-business-reporting';
 import { post as supportAutomation } from './posts/ai-customer-support-automation';
 import { post as customVsSaas } from './posts/custom-software-vs-saas';
 import { post as processes } from './posts/business-processes-to-automate';
+import { post as testingTools } from './posts/ai-agent-testing-tools';
+import { post as llmJudge } from './posts/llm-as-a-judge';
+import { post as automationTools } from './posts/n8n-vs-zapier-vs-make-ai-agents';
+import { post as promptInjection } from './posts/prompt-injection-testing';
+import { post as hallucinations } from './posts/how-to-reduce-ai-hallucinations';
+import { post as agentsVsRpa } from './posts/ai-agents-vs-rpa';
+import { post as homeServices } from './posts/ai-answering-service-home-services';
+import { post as goldenDataset } from './posts/golden-dataset-ai-evaluation';
+import { post as voiceLatency } from './posts/voice-ai-agent-latency';
+import { post as mcpServer } from './posts/build-mcp-server-typescript';
 
 export type { Block, BlogArtId, BlogCategory, Post } from './types';
 
@@ -38,7 +48,17 @@ export type { Block, BlogArtId, BlogCategory, Post } from './types';
  * (newest first) and posts sharing a date keep this order. The first live post is the wide featured card.
  */
 const allPosts: Post[] = [
-  // One post per day from 2026-10-29; 2026-11-07 → 2026-11-12 are scheduled (see `date` in each file).
+  // One post per day from 2026-10-29. US click-focused batch: 2026-11-16 → 2026-11-25 (see `date` in each file).
+  mcpServer,
+  voiceLatency,
+  goldenDataset,
+  homeServices,
+  agentsVsRpa,
+  hallucinations,
+  promptInjection,
+  automationTools,
+  llmJudge,
+  testingTools,
   receptionist,
   chooseVendor,
   roi,
