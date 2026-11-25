@@ -102,11 +102,30 @@ function ProductsArt() {
   );
 }
 
+function CareersArt() {
+  return (
+    <svg viewBox="0 0 300 130" className="h-full w-full" fill="none">
+      <rect x="58" y="16" width="184" height="98" rx="14" className="fill-paper stroke-ink/20" />
+      <circle cx="88" cy="46" r="14" className="fill-ink/10" />
+      <circle cx="88" cy="42" r="5" className="fill-ink/30" />
+      <path d="M79 54 a9 7 0 0 1 18 0" className="fill-ink/30" />
+      <rect x="112" y="36" width="70" height="7" rx="3.5" className="fill-ink/25" />
+      <rect x="112" y="50" width="48" height="5" rx="2.5" className="fill-ink/15" />
+      <rect x="190" y="32" width="40" height="16" rx="8" className="fill-signal" />
+      <text x="210" y="43.5" textAnchor="middle" fontSize="8.5" className="font-mono fill-paper">Hiring</text>
+      <path d="M74 74 H226" className="stroke-ink/10" />
+      <path d="M78 102 L112 92 L140 96 L176 84 L214 80" className="stroke-signal" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="214" cy="80" r="4.5" className="fill-signal" />
+    </svg>
+  );
+}
+
 export const moreArt: Record<string, () => ReactNode> = {
   'case-studies': () => <CaseArt />,
   partner: () => <PartnerArt />,
   blog: () => <BlogArt />,
   rnd: () => <RndArt />,
+  careers: () => <CareersArt />,
   products: () => <ProductsArt />,
 };
 

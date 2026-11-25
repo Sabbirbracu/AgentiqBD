@@ -3,6 +3,7 @@ import { packagePages } from '@/lib/package-pages';
 import { productPageById } from '@/lib/product-pages';
 import { servicePages } from '@/lib/service-pages';
 import { getPosts } from '@/lib/blog';
+import { jobs, type JobPost } from '@/lib/careers';
 
 /**
  * Search and AI-assistant visibility helpers: canonical URLs, the sitemap route list and JSON-LD builders.
@@ -15,7 +16,7 @@ export const absoluteUrl = (path = '/') => new URL(path, site.url).toString();
  * Date the sitemap reports as "last modified". Search engines ignore lastmod when it is always "today", so
  * bump this only when page content really changes.
  */
-export const contentUpdated = '2026-11-04';
+export const contentUpdated = '2026-11-25';
 
 /**
  * Every public, indexable route. /brand/* is internal and is excluded here and in robots.ts. A function, so scheduled
@@ -35,6 +36,8 @@ export const sitemapRoutes = (): { path: string; priority: number; lastModified?
   { path: '/agenticore', priority: 0.6 },
   { path: '/ai-employees', priority: 0.6 },
   { path: '/workflows', priority: 0.5 },
+  { path: '/careers', priority: 0.6 },
+  ...jobs.filter((j) => j.open).map((j) => ({ path: `/careers/${j.id}`, priority: 0.6, lastModified: j.datePosted })),
   { path: '/privacy', priority: 0.2 },
   { path: '/terms', priority: 0.2 },
 ];
@@ -183,6 +186,40 @@ export function webPageJsonLd(p: { name: string; description: string; path: stri
     isPartOf: { '@id': websiteId },
     about: { '@id': orgId },
     publisher: { '@id': orgId },
+  };
+}
+
+/** Google for Jobs listing. Only call for open roles; a filled role must drop this so it leaves job search. */
+export function jobPostingJsonLd(job: JobPost) {
+  const html = [
+    ...job.intro.map((p) => `<p>${p}</p>`),
+    ...job.responsibilities.map((r) => `<p><strong>${r.title}</strong></p><ul>${r.items.map((i) => `<li>${i}</li>`).join('')}</ul>`),
+    `<p><strong>You must have</strong></p><ul>${job.mustHave.map((i) => `<li>${i}</li>`).join('')}</ul>`,
+    `<p><strong>Nice to have</strong></p><ul>${job.niceToHave.map((i) => `<li>${i}</li>`).join('')}</ul>`,
+    `<p><strong>Salary:</strong> ${job.salary.label}. ${job.salary.note}</p>`,
+  ].join('');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: `${job.title} (${job.team})`,
+    description: html,
+    datePosted: job.datePosted,
+    ...(job.validThrough ? { validThrough: `${job.validThrough}T23:59:59+06:00` } : {}),
+    employmentType: job.employmentType,
+    totalJobOpenings: job.vacancies,
+    hiringOrganization: { '@type': 'Organization', '@id': orgId, name: site.name, sameAs: site.url, logo: absoluteUrl('/brand/agentiqbd-mark.png') },
+    jobLocation: {
+      '@type': 'Place',
+      address: { '@type': 'PostalAddress', streetAddress: site.address, addressLocality: 'Dhaka', addressRegion: 'Dhaka', addressCountry: 'BD' },
+    },
+    baseSalary: {
+      '@type': 'MonetaryAmount',
+      currency: job.salary.currency,
+      value: { '@type': 'QuantitativeValue', minValue: job.salary.min, maxValue: job.salary.max, unitText: 'MONTH' },
+    },
+    experienceRequirements: { '@type': 'OccupationalExperienceRequirements', monthsOfExperience: job.experienceMonths },
+    directApply: false,
+    url: absoluteUrl(`/careers/${job.id}`),
   };
 }
 

@@ -4,6 +4,7 @@ import { absoluteUrl, contentUpdated } from '@/lib/seo';
 import { serviceLanding } from '@/lib/service-landing';
 import { packagePages } from '@/lib/package-pages';
 import { servicePages } from '@/lib/service-pages';
+import { openJobs } from '@/lib/careers';
 
 /**
  * Plain-text / markdown summaries for AI assistants (llms.txt and llms-full.txt), built from the same data as
@@ -61,6 +62,7 @@ export function buildLlmsTxt() {
     `- [Home](${absoluteUrl('/')}): overview, FAQ and contact options`,
     `- [Services hub](${absoluteUrl('/services')})`,
     `- [Packages & pricing](${absoluteUrl('/packages')})`,
+    `- [Careers](${absoluteUrl('/careers')}): open roles, salary ranges and how to apply`,
     `- [Privacy policy](${absoluteUrl('/privacy')})`,
     `- [Terms & conditions](${absoluteUrl('/terms')})`,
     `- [Sitemap](${absoluteUrl('/sitemap.xml')})`,
@@ -163,6 +165,27 @@ export function buildLlmsFullTxt() {
   for (const p of getPosts()) {
     out.push(`### ${p.title}`, `URL: ${absoluteUrl(`/blog/${p.slug}`)}`, `Topic: ${p.category}. Published: ${p.date}.`, '', p.excerpt, '', 'In short:', ...p.takeaways.map((t) => `- ${t}`), '');
     if (p.faq?.length) out.push(...p.faq.flatMap((f) => [`**${f.q}**`, plain(f.a), '']));
+  }
+
+  const jobs = openJobs();
+  if (jobs.length) {
+    out.push('## Careers', '');
+    for (const j of jobs) {
+      out.push(
+        `### ${j.title} (${j.team})`,
+        `URL: ${absoluteUrl(`/careers/${j.id}`)}`,
+        `${j.employmentLabel}, ${j.location}. ${j.salary.label}. Experience: ${j.experience}. Openings: ${j.vacancies}.`,
+        '',
+        j.summary,
+        '',
+        ...j.responsibilities.flatMap((r) => [`${r.title}:`, ...r.items.map((x) => `- ${x}`), '']),
+        'Requirements:',
+        ...j.mustHave.map((x) => `- ${x}`),
+        '',
+        `How to apply: email ${site.email} with the subject "${j.apply.subject} – Your Name".`,
+        '',
+      );
+    }
   }
 
   out.push('## Frequently asked questions', '', ...faqs.flatMap((f) => [`**${f.q}**`, f.a, '']));

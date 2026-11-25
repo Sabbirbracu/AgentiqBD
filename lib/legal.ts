@@ -38,7 +38,7 @@ export const privacyPolicy: LegalDoc = {
   description:
     'How Agentiq BD collects, uses, shares and protects personal information when you visit agentiqbd.com, contact us, book a call or work with us.',
   effective: '2026-10-30',
-  updated: '2026-10-30',
+  updated: '2026-11-25',
   intro:
     'This policy explains what personal information Agentiq BD collects, why we collect it, who we share it with and the choices you have. It covers our website at agentiqbd.com, enquiries, discovery calls, the free AI Business Audit and the projects we deliver for clients.',
   summary: [
@@ -70,6 +70,7 @@ export const privacyPolicy: LegalDoc = {
             'information about your business, workflows and tools that you share for an audit, proposal or project',
           ],
         },
+        'Job applications. If you apply for a role, we receive your CV, your note and anything else you send, such as work samples or a voice or video recording. We use these only to assess your application.',
         'Bookings. If you book a discovery call through our scheduling link, the scheduling provider shares your name, email address, the time you chose and any answers you give with us.',
         'Information collected automatically. Like almost every website, our server records basic technical details for each request: IP address, browser and device type, the page requested, the referring page, and the date and time. We use these logs to keep the site secure and to fix problems, not to build profiles of visitors.',
         // TODO(owner): confirm this matches how outreach is done.
@@ -168,6 +169,7 @@ export const privacyPolicy: LegalDoc = {
         {
           list: [
             'Enquiries that do not lead to a project: up to 24 months after our last contact.',
+            'Job applications that do not lead to a hire: up to 12 months after the role is filled, so we can contact you about future roles. Ask us and we will delete yours sooner.',
             'Client and project records: for the length of the relationship, and afterwards for as long as tax, accounting or other laws require.',
             'Server logs: normally no longer than 90 days, unless needed to investigate a security issue.',
           ],

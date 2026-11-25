@@ -4,8 +4,7 @@ import { SocialIcon } from '@/components/ui/social-icon';
 import { coreServices, navLinks, packages, site } from '@/lib/content';
 
 const partnerHref = `mailto:${site.email}?subject=${encodeURIComponent('Partnership enquiry')}`;
-const careersHref = `mailto:${site.email}?subject=${encodeURIComponent('Career enquiry')}`;
-const companyLinks = [...navLinks, { label: 'Blog', href: '/blog' }, { label: 'Become a partner', href: partnerHref }, { label: 'Careers', href: careersHref }];
+const companyLinks = [...navLinks, { label: 'Blog', href: '/blog' }, { label: 'Become a partner', href: partnerHref }, { label: 'Careers', href: '/careers' }];
 
 export function Footer() {
   return (

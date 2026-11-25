@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import {
   ArrowUpRight,
+  BriefcaseBusiness,
   Building2,
   ChevronDown,
   FlaskConical,
@@ -43,6 +44,7 @@ const moreIcons: Record<string, LucideIcon> = {
   partner: Handshake,
   blog: Newspaper,
   rnd: FlaskConical,
+  careers: BriefcaseBusiness,
   products: Package,
 };
 

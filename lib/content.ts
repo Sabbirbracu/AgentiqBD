@@ -390,6 +390,14 @@ export const moreMenu = [
     tags: ['Experiments', 'Agents', 'Tooling'],
   },
   {
+    id: 'careers',
+    label: 'Careers',
+    text: 'We are hiring a Junior Executive',
+    description: 'Join a small team building AI systems and software for clients at home and abroad. See open roles and how to apply.',
+    tags: ['Hiring', 'Dhaka', 'Junior role'],
+    href: '/careers',
+  },
+  {
     id: 'products',
     label: 'Products',
     text: 'Software we build ourselves',
